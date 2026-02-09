@@ -1,0 +1,235 @@
+/* === Reset === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* === Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500&display=swap');
+
+/* === Variables === */
+:root {
+    --bg: #f5f0e8;
+    --text: #2c2c2c;
+    --text-light: #666;
+    --accent: #1a3a5c;
+    --border: #d4cec4;
+    --code-bg: #eae5dc;
+    --max-width: 720px;
+    --font-body: 'Manrope', sans-serif;
+    --font-mono: 'Fira Code', 'Space Mono', monospace;
+    --font-heading: 'Space Mono', monospace;
+}
+
+/* === Base === */
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+/* === Layout === */
+.site-header {
+    padding: 2rem 1.5rem 1rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.site-title {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+.site-title a { color: var(--text); text-decoration: none; }
+.site-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.1rem;
+}
+
+nav {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+nav a {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-decoration: none;
+}
+nav a:hover { text-decoration: underline; }
+nav a.active { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.site-main {
+    flex: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    width: 100%;
+}
+
+.site-footer {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+}
+
+/* === Post list (homepage) === */
+.post-list { list-style: none; }
+.post-list li {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.post-list li:first-child { padding-top: 0; }
+.post-list .post-date {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-light);
+    display: block;
+    margin-bottom: 0.3rem;
+}
+.post-list .post-link {
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+}
+.post-list .post-link:hover { color: var(--accent); }
+.post-categories {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.3rem;
+}
+.post-categories span {
+    background: var(--code-bg);
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+}
+
+/* === Single post === */
+.post-header { margin-bottom: 2rem; }
+.post-header h1 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+}
+.post-meta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+/* === Page header === */
+.page-header h1 {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+}
+
+/* === Content === */
+.post-content h2, .page-content h2 { font-size: 1.3rem; margin: 2rem 0 0.8rem; font-family: var(--font-heading); }
+.post-content h3, .page-content h3 { font-size: 1.1rem; margin: 1.5rem 0 0.6rem; font-family: var(--font-heading); }
+.post-content p, .page-content p { margin-bottom: 1rem; }
+.post-content ul, .post-content ol,
+.page-content ul, .page-content ol { margin: 0 0 1rem 1.5rem; }
+.post-content li, .page-content li { margin-bottom: 0.3rem; }
+
+.post-content img, .page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1rem 0;
+    display: block;
+}
+
+.post-content figure {
+    margin: 1.5rem 0;
+}
+.post-content figcaption, .page-content figcaption {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* Code blocks */
+.post-content pre, .page-content pre {
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+.post-content code, .page-content code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+.post-content p code, .page-content p code {
+    background: var(--code-bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+}
+
+/* Blockquote */
+.post-content blockquote, .page-content blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* === 404 === */
+.not-found {
+    text-align: center;
+    padding: 4rem 0;
+}
+.not-found h2 {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.not-found p { margin-bottom: 1rem; }
+
+/* === Back link === */
+.back-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+}
+
+/* === Responsive === */
+@media (max-width: 600px) {
+    .site-header { padding: 1.5rem 1rem 0.8rem; }
+    .site-main { padding: 1.5rem 1rem; }
+    .site-footer { padding: 1.5rem 1rem; }
+    .post-header h1, .page-header h1 { font-size: 1.3rem; }
+    nav { gap: 1rem; }
+}

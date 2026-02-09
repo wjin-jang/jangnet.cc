@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC/W3 – Flowers – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+        <a href="/about/">About Me</a>
+        <a href="/archive/">Index</a>
+        <a href="/vinyls/">My Vinyls</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <a href="/" class="back-link">&larr; back to posts</a>
+        <article>
+            <div class="post-header">
+                <h1>Y0/FMCC/W3 – Flowers</h1>
+                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0, art, coding, p5</span></div>
+            </div>
+            <div class="post-content">
+                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+<p>I tried using p5’s image library and WEBGL to create expressive scenes in 3D. </p>
+<p>The first thing I did was to load my images into an array.</p>
+<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" fetchpriority="high" height="720" sizes="(max-width: 960px) 100vw, 960px" src="../../assets/images/e7c8b973e39a_collage-1.png" width="960"/><figcaption class="wp-element-caption">Made using Aseprite</figcaption></figure>
+<p>I imported a few transparent images I found of flowers from Google into Aseprite and converted them to indexed colour using the EDG32 palette by <a href="https://x.com/ENDESGA">ENDESGA</a>. This makes the flowers look like a cohesive set.</p>
+<pre class="wp-block-code"><code>let flowers = [];
+
+function preload(){
+  flowers[0] = loadImage('./flowers/green1.png');
+  flowers[1] = loadImage('./flowers/orange1.png');
+  flowers[2] = loadImage('./flowers/pink1.png');
+  flowers[3] = loadImage('./flowers/purple1.png');
+  flowers[4] = loadImage('./flowers/red1.png');
+  flowers[5] = loadImage('./flowers/red2.png');
+  flowers[6] = loadImage('./flowers/red3.png');
+  flowers[7] = loadImage('./flowers/white1.png');
+  flowers[8] = loadImage('./flowers/white2.png');
+  flowers[9] = loadImage('./flowers/yellow1.png');
+}</code></pre>
+<p>Then I set the canvas to use WEBGL.</p>
+<pre class="wp-block-code"><code>createCanvas(800, 800, WEBGL);</code></pre>
+<p>I use nested loops to draw a bunch of concentric spinning rings of flowers. I disabled the depth mask so I didn’t have to deal with draw order.</p>
+<pre class="wp-block-code"><code>function draw() {
+  
+  background('#e43b44');
+  
+  const gl = this._renderer.GL;
+  gl.depthMask(false);
+  
+  orbitControl();
+  
+  let ringCount = 64;
+  for(var r = ringCount; r &gt; 0; r--){
+    let pulse = (r*0.1*frameCount);
+    for(var i = 0; i &lt; flowers.length; i++){
+      push();
+      translate((50*r)*cos(i*36+pulse), (60*r), (50*r)*sin(i*36+pulse));
+      rotateY((i*-36-pulse)+90);
+      rotateX(45);
+      texture(flowers[i]);
+      plane(flowers[i].width*(0.2*r),flowers[i].height*(0.2*r));
+      pop();
+    }
+  }
+}</code></pre>
+<h2 class="wp-block-heading">Final</h2>
+<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="1024" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/e5cc26b149fc_y0fmccw3-1.png" width="1024"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
+<p><a href="https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi">https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi</a></p>
+<pre class="wp-block-code"><code>let flowers = [];
+const notzero = 0.000000001; //wanted 0 but 0 makes the maths go wrong.
+
+function preload(){
+  flowers[0] = loadImage('./flowers/green1.png');
+  flowers[1] = loadImage('./flowers/orange1.png');
+  flowers[2] = loadImage('./flowers/pink1.png');
+  flowers[3] = loadImage('./flowers/purple1.png');
+  flowers[4] = loadImage('./flowers/red1.png');
+  flowers[5] = loadImage('./flowers/red2.png');
+  flowers[6] = loadImage('./flowers/red3.png');
+  flowers[7] = loadImage('./flowers/white1.png');
+  flowers[8] = loadImage('./flowers/white2.png');
+  flowers[9] = loadImage('./flowers/yellow1.png');
+}
+
+function setup() {
+  createCanvas(800, 800, WEBGL);
+  
+  cam = createCamera();
+  
+  imageMode(CENTER);
+  angleMode(DEGREES);
+  noStroke();
+
+  cam.setPosition(notzero,2400,notzero);
+  cam.lookAt(0,0,0);
+  
+  frameCount = random(5000);
+}
+
+function keyPressed(){
+  saveCanvas();
+}
+
+function draw() {
+  
+  background('#e43b44');
+  
+  const gl = this._renderer.GL;
+  gl.depthMask(false);
+  
+  orbitControl();
+  
+  let ringCount = 64;
+  for(var r = ringCount; r &gt; 0; r--){
+    let pulse = (r*0.1*frameCount);
+    for(var i = 0; i &lt; flowers.length; i++){
+      push();
+      translate((50*r)*cos(i*36+pulse), (60*r), (50*r)*sin(i*36+pulse));
+      rotateY((i*-36-pulse)+90);
+      rotateX(45);
+      texture(flowers[i]);
+      plane(flowers[i].width*(0.2*r),flowers[i].height*(0.2*r));
+      pop();
+    }
+  }
+}</code></pre>
+<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+</body>
+</html>

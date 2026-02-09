@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC/W8 – Winter – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+        <a href="/about/">About Me</a>
+        <a href="/archive/">Index</a>
+        <a href="/vinyls/">My Vinyls</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <a href="/" class="back-link">&larr; back to posts</a>
+        <article>
+            <div class="post-header">
+                <h1>Y0/FMCC/W8 – Winter</h1>
+                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0</span></div>
+            </div>
+            <div class="post-content">
+                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+<p>I created a star class in p5, using the beginShape(), vertex() and endShape() functions. My main aim was to parameterise everything.</p>
+<h2 class="wp-block-heading">Star Generator</h2>
+<p>A star can be constructed by alternating points between two circles, one inner and one outer. The inner circle needs to be offset by half the angle of the difference between outer points.</p>
+<pre class="wp-block-code"><code>constructor(position,radius,points,diff,col){
+  this.position = position;
+  this.radius = radius;
+  this.points = points;
+  this.diff = diff;
+  this.col = col;
+}</code></pre>
+<p>I construct a star object giving it a position (Vector), radius, number of points, difference between the inner/outer circle and colour.</p>
+<pre class="wp-block-code"><code>drawself(){
+  let pointsOuter = [];
+  let pointsInner = [];
+  
+  let angleSpacing = 2*PI/this.points;
+    
+  for(let i = 0; i &lt; this.points; i++){
+    let x = this.position.x + this.radius*cos(i*angleSpacing);
+    let y = this.position.y + this.radius*sin(i*angleSpacing);
+    pointsOuter.push(createVector(x,y));
+      
+    x = this.position.x + (this.radius-this.diff)*cos((i+0.5)*angleSpacing);
+    y = this.position.y + (this.radius-this.diff)*sin((i+0.5)*angleSpacing);
+    pointsInner.push(createVector(x,y));
+  }
+  
+  fill(this.col);
+  beginShape();
+  for(let i = 0; i &lt; pointsOuter.length; i++){
+    vertex(pointsOuter[i].x,pointsOuter[i].y);
+    vertex(pointsInner[i].x,pointsInner[i].y);
+  }
+  vertex(pointsOuter[0].x,pointsOuter[0].y);
+  endShape();
+}</code></pre>
+<p>I use two arrays to make it easier to organise the points. I define points on the inner and outer circles. The inner circle points are offset by half.</p>
+<p>I use sliders to be able to change parameters while the sketch is running.</p>
+<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" fetchpriority="high" height="992" sizes="(max-width: 907px) 100vw, 907px" src="../../assets/images/82615e106cd9_image-1.png" width="907"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
+<p>I have a program that can generate stars with an arbitary number of points, radius and difference (pointiness).</p>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw">https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw</a></p>
+<h2 class="wp-block-heading">Making a Scene</h2>
+<p>I can export this object and use it in a new project. I want to create a scene/wallpaper using multiple stars. </p>
+<p>The first thing I do is create an array of star objects.</p>
+<pre class="wp-block-code"><code>let stars = [];
+const starsCount = 300;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  for(let i = 0; i &lt; starsCount; i++){
+    let pos = createVector(i*(width/starsCount),random(height));
+    let radius = random(5,30);
+    let points = 8;
+    let diff = radius*0.95;
+    let col = 'white'
+
+    stars.push(new Star(pos,radius,points,diff,col,radius*0.1));
+  }
+}</code></pre>
+<p>I give them a random position on the y axis but spread them evenly on the x axis, this makes it stops stars from clumping together too much and becoming distracting. </p>
+<p>I set the radius to a random value and tie the speed to the radius, creating a parallax effect.</p>
+<p>I then add a new method to the star to move it.</p>
+<pre class="wp-block-code"><code>step(){
+  this.position.y += this.speed;
+  if(this.position.y &gt; height+this.radius*2){
+    this.position.y = -this.radius*2;
+  }
+}</code></pre>
+<p>When wrapping the star around, I ensure that it is fully off the screen. This stops the stars from ‘popping’ in and out of the scene.</p>
+<p>I also add a bit of variance in the inner size of the star using a sin function, creating a sparkling effect.</p>
+<pre class="wp-block-code"><code>let shine = sin(frameCount*0.1)*0.3;</code></pre>
+<h2 class="wp-block-heading">Final Product</h2>
+<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="547" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/d72c9eb9ec4e_y0fmccw5-0.png" width="1024"/></figure>
+<p>I set the background to a calming, wintery blue.</p>
+<p><a href="https://editor.p5js.org/woojinJang_/full/Kcq3kNo04">https://editor.p5js.org/woojinJang_/full/Kcq3kNo04</a></p>
+<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+</body>
+</html>
