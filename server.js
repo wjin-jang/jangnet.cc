@@ -43,12 +43,8 @@ app.use(helmet({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// CSRF: sameSite:strict cookies handle cross-origin POST protection
-
-// ── Player routes (all before static blog) ──
-
-// Session — only for /player routes
-const sessionMiddleware = session({
+// Session
+app.use(session({
   name: 'jn_sid',
   secret: crypto.randomBytes(32).toString('hex'),
   resave: false,
@@ -59,9 +55,7 @@ const sessionMiddleware = session({
     secure: IS_PROD,
     maxAge: 4 * 60 * 60 * 1000, // 4 hours
   },
-});
-
-app.use('/player', sessionMiddleware);
+}));
 
 // Login rate limiter
 const loginLimiter = rateLimit({
@@ -73,37 +67,44 @@ const loginLimiter = rateLimit({
   keyGenerator: req => req.ip,
 });
 
-// Public player routes
-app.get('/player/login', (req, res) => {
+// ── Public routes ──
+
+app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'player', 'login.html'));
 });
 
-app.post('/player/login', loginLimiter, handleLogin);
+app.post('/login', loginLimiter, handleLogin);
 
-// Auth gate for everything else under /player
-app.use('/player', requireAuth);
+// ── Auth gate ──
 
-// Authenticated player routes
-app.get('/player/player.css', (req, res) => {
-  res.sendFile(path.join(__dirname, 'player', 'player.css'));
-});
-app.get('/player/player.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'player', 'player.js'));
-});
-app.get('/player/', (req, res) => {
+app.use(requireAuth);
+
+// ── Authenticated routes ──
+
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'player', 'index.html'));
 });
 
-// Logout
-app.post('/player/logout', handleLogout);
+app.get('/player.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'player', 'player.css'));
+});
+
+app.get('/player.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'player', 'player.js'));
+});
+
+// Static assets (blog CSS/fonts needed by player pages)
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+app.post('/logout', handleLogout);
 
 // ── API routes ──
 
-app.get('/player/api/library', (req, res) => {
+app.get('/api/library', (req, res) => {
   res.json(clientLibrary);
 });
 
-app.get('/player/api/cover/:artistIdx/:albumIdx', (req, res) => {
+app.get('/api/cover/:artistIdx/:albumIdx', (req, res) => {
   const ai = parseInt(req.params.artistIdx, 10);
   const ali = parseInt(req.params.albumIdx, 10);
 
@@ -124,7 +125,7 @@ app.get('/player/api/cover/:artistIdx/:albumIdx', (req, res) => {
   res.sendFile(coverPath);
 });
 
-app.get('/player/api/stream/:artistIdx/:albumIdx/:trackIdx', (req, res) => {
+app.get('/api/stream/:artistIdx/:albumIdx/:trackIdx', (req, res) => {
   const ai = parseInt(req.params.artistIdx, 10);
   const ali = parseInt(req.params.albumIdx, 10);
   const ti = parseInt(req.params.trackIdx, 10);
@@ -178,14 +179,6 @@ app.get('/player/api/stream/:artistIdx/:albumIdx/:trackIdx', (req, res) => {
     fs.createReadStream(track.absolutePath).pipe(res);
   }
 });
-
-// ── Static blog (after player routes, excludes player/) ──
-
-app.use(express.static(path.join(__dirname), {
-  index: 'index.html',
-  extensions: ['html'],
-  dotfiles: 'ignore',
-}));
 
 // Global error handler
 app.use((err, req, res, _next) => {

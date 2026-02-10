@@ -39,11 +39,11 @@
   }
 
   function coverUrl(ai, ali) {
-    return '/player/api/cover/' + ai + '/' + ali;
+    return '/api/cover/' + ai + '/' + ali;
   }
 
   function streamUrl(ai, ali, ti) {
-    return '/player/api/stream/' + ai + '/' + ali + '/' + ti;
+    return '/api/stream/' + ai + '/' + ali + '/' + ti;
   }
 
   // ── Logout ──
@@ -52,14 +52,14 @@
     e.preventDefault();
     var form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/player/logout';
+    form.action = '/logout';
     document.body.appendChild(form);
     form.submit();
   });
 
   // ── Fetch library ──
 
-  fetch('/player/api/library')
+  fetch('/api/library')
     .then(function (r) {
       if (!r.ok) throw new Error('Unauthorized');
       return r.json();
@@ -69,7 +69,7 @@
       renderArtists();
     })
     .catch(function () {
-      content.innerHTML = '<div class="content-placeholder"><p>Failed to load library. <a href="/player/login">Login again</a>.</p></div>';
+      content.innerHTML = '<div class="content-placeholder"><p>Failed to load library. <a href="/login">Login again</a>.</p></div>';
     });
 
   // ── Render artists sidebar ──

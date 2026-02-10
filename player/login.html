@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login – woojin's blog</title>
+    <title>Login – woojin's music</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         .login-form {
@@ -63,22 +63,19 @@
 </head>
 <body>
     <header class="site-header">
-        <div class="site-title"><a href="/">woojin's blog</a></div>
-        <div class="site-subtitle">my creative works</div>
+        <div class="site-title"><a href="/">woojin's music</a></div>
+        <div class="site-subtitle">private player</div>
         <nav>
-            <a href="/">Home</a>
-            <a href="/about/">About Me</a>
-            <a href="/archive/">Index</a>
-            <a href="/vinyls/">My Music</a>
+            <a href="https://blog.jangnet.cc/">Blog</a>
         </nav>
     </header>
     <main class="site-main">
         <div class="page-header">
-            <h1>Player Login</h1>
+            <h1>Login</h1>
         </div>
         <div class="page-content">
             <div id="login-error" class="login-error" style="display:none; border-bottom: var(--cell);">Invalid username or password</div>
-            <form class="login-form" method="POST" action="/player/login" style="border-bottom: var(--cell);">
+            <form class="login-form" method="POST" action="/login" style="border-bottom: var(--cell);">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" autocomplete="username" required>
                 <label for="password">Password</label>
