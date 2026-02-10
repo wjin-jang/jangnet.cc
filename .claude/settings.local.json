@@ -10,7 +10,10 @@
       "WebFetch(domain:24000068.myblog.arts.ac.uk)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(ssh:*)",
+      "WebFetch(domain:blog.jangnet.cc)",
+      "Bash(curl:*)"
     ]
   }
 }
