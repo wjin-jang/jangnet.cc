@@ -67,6 +67,10 @@ const loginLimiter = rateLimit({
   keyGenerator: req => req.ip,
 });
 
+// ── Public static assets (before auth) ──
+
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
 // ── Public routes ──
 
 app.get('/login', (req, res) => {
@@ -92,9 +96,6 @@ app.get('/player.css', (req, res) => {
 app.get('/player.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'player', 'player.js'));
 });
-
-// Static assets (blog CSS/fonts needed by player pages)
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.post('/logout', handleLogout);
 
