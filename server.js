@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 
-const { requireAuth, checkOrigin, handleLogin, handleLogout } = require('./lib/auth');
+const { requireAuth, handleLogin, handleLogout } = require('./lib/auth');
 const { scanLibrary, buildClientLibrary, validatePath } = require('./lib/scanner');
 
 const MUSIC_ROOT = path.resolve(process.env.MUSIC_ROOT || 'C:\\Users\\woojin\\Music\\flac');
@@ -43,8 +43,7 @@ app.use(helmet({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Origin check on POSTs
-app.use(checkOrigin);
+// CSRF: sameSite:strict cookies handle cross-origin POST protection
 
 // ── Player routes (all before static blog) ──
 
