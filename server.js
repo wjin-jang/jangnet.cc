@@ -9,7 +9,7 @@ const fs = require('fs');
 const { requireAuth, checkOrigin, handleLogin, handleLogout } = require('./lib/auth');
 const { scanLibrary, buildClientLibrary, validatePath } = require('./lib/scanner');
 
-const MUSIC_ROOT = path.resolve('C:\\Users\\woojin\\Music\\flac');
+const MUSIC_ROOT = path.resolve(process.env.MUSIC_ROOT || 'C:\\Users\\woojin\\Music\\flac');
 const PORT = process.env.PORT || 3000;
 const IS_PROD = process.env.NODE_ENV === 'production';
 
