@@ -12,37 +12,36 @@
         <div class="site-subtitle">my creative works</div>
         <nav>
             <a href="/">Home</a>
-        <a href="/about/">About Me</a>
-        <a href="/archive/">Index</a>
-        <a href="/vinyls/">My Vinyls</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
         </nav>
     </header>
     <main class="site-main">
-        <a href="/" class="back-link">&larr; back to posts</a>
         <article>
             <div class="post-header">
+                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W4 – Bee Game</h1>
-                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0, art, coding, p5</span></div>
+                <div class="post-meta">October 30, 2025 · FMCC, UAL, Year 0, art, coding, p5</div>
             </div>
             <div class="post-content">
-                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-<p>I’m going to attempt a more complex game in p5.js using sprites and multiple levels. My game will be about a bee who needs to collect honey from flowers before they go back to their hive. It will be played on a grid.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="48" sizes="(max-width: 384px) 100vw, 384px" src="../../assets/images/e055723ca69f_y0fmccw4-2.png" width="384"/><figcaption class="wp-element-caption">Made using Aseprite</figcaption></figure>
-<p>The first thing I did was prepare a set of sprites.</p>
-<h2 class="wp-block-heading">Grid Setup</h2>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" fetchpriority="high" height="789" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/74bfaa0d0a49_image-5.png" width="1024"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>I first set up a grid using nested (or two dimensional) arrays. And tested drawing sprites to the screen, aligned to the grid.</p>
-<p>The flowers seen in the image are generated using p5’s noise function. I made it scroll by shifting the noise coordinates by the frameCount. It makes a cool effect but I’m not going to use it for my game.</p>
-<h2 class="wp-block-heading">Input Setup</h2>
-<p>p5 has a built-in KeyIsPressed() function but I won’t be able to use it within a class method. So I’ve decided to make my own input variables keypress and <code>keydown</code> </p>
-<pre class="wp-block-code"><code>//declare variables
+                <p>I'm going to attempt a more complex game in p5.js using sprites and multiple levels. My game will be about a bee who needs to collect honey from flowers before they go back to their hive. It will be played on a grid.</p>
+                <figure><img src="../../assets/images/posts/e055723ca69f_y0fmccw4-2.png" alt="Bee game sprites"><figcaption>Made using Aseprite</figcaption></figure>
+                <p>The first thing I did was prepare a set of sprites.</p>
+                <h2>Grid Setup</h2>
+                <figure><img src="../../assets/images/posts/74bfaa0d0a49_image-5.png" alt="Grid setup"><figcaption>Made using p5.js</figcaption></figure>
+                <p>I first set up a grid using nested (or two dimensional) arrays. And tested drawing sprites to the screen, aligned to the grid.</p>
+                <p>The flowers seen in the image are generated using p5's noise function. I made it scroll by shifting the noise coordinates by the frameCount. It makes a cool effect but I'm not going to use it for my game.</p>
+                <h2>Input Setup</h2>
+                <p>p5 has a built-in KeyIsPressed() function but I won't be able to use it within a class method. So I've decided to make my own input variables keypress and <code>keydown</code></p>
+<pre><code>//declare variables
 let keydown = false;
 let keypress = false;
 
 function draw(){
   [...]
   keypress = false;
-  
+
   if(keyIsPressed &amp;&amp; !keydown){
     keydown = true;
     keypress = true;
@@ -50,11 +49,11 @@ function draw(){
   if(!keyIsPressed){ keydown = false; }
   [...]
 }</code></pre>
-<p><code>keypress</code> is true on the first frame the key is registered whilst <code>keydown</code> is true while the key is held down.</p>
-<h2 class="wp-block-heading">Player Object</h2>
-<p>I’m using a familiar structure for game objects with constructor, step and drawself methods. These mirror ‘Events’ in GameMaker Studio. </p>
-<p>I declare the Player object as a class with x, y, and moves. x and y represent the player’s grid coordinates not the screen coordinates.</p>
-<pre class="wp-block-code"><code>class player {
+                <p><code>keypress</code> is true on the first frame the key is registered whilst <code>keydown</code> is true while the key is held down.</p>
+                <h2>Player Object</h2>
+                <p>I'm using a familiar structure for game objects with constructor, step and drawself methods. These mirror 'Events' in GameMaker Studio.</p>
+                <p>I declare the Player object as a class with x, y, and moves. x and y represent the player's grid coordinates not the screen coordinates.</p>
+<pre><code>class player {
   constructor(x,y,moves){
     this.x = x;
     this.y = y;
@@ -63,56 +62,56 @@ function draw(){
     this.moves = moves;
   }
 }</code></pre>
-<p>I can then use the step event to let the user move the player character around by pressing the arrow keys on their keyboard.</p>
-<pre class="wp-block-code"><code>step(){
+                <p>I can then use the step event to let the user move the player character around by pressing the arrow keys on their keyboard.</p>
+<pre><code>step(){
   //handle inputs
   let keyUp = keypress &amp;&amp; keyCode == 38;
   let keyDown = keypress &amp;&amp; keyCode == 40;
   let keyLeft = keypress &amp;&amp; keyCode == 37;
   let keyRight = keypress &amp;&amp; keyCode == 39;
-  
+
   this.x += keyRight - keyLeft;
   this.y += keyDown - keyUp;
-  
+
   this.drawself();
 }</code></pre>
-<p>I then draw the character to the screen, translating the grid coordinates to screen coordinates.</p>
-<pre class="wp-block-code"><code>drawself(){
+                <p>I then draw the character to the screen, translating the grid coordinates to screen coordinates.</p>
+<pre><code>drawself(){
   image(img_bee,this.x*gridElW,this.y*gridElH-hover);
 }</code></pre>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="1024" src="../../assets/images/05b1004faacf_y0fmccw4-0.gif" width="1024"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>The player now moves around the screen, but it feels very jumpy. I’m adding two new variables to solve this target x and target y. Instead of directly changing the bee’s x and y coordinates we will change their target and interpolate them to make a smooth animation.</p>
-<pre class="wp-block-code"><code>[...]
+                <figure><img src="../../assets/images/posts/05b1004faacf_y0fmccw4-0.gif" alt="Bee movement"><figcaption>Made using p5.js</figcaption></figure>
+                <p>The player now moves around the screen, but it feels very jumpy. I'm adding two new variables to solve this target x and target y. Instead of directly changing the bee's x and y coordinates we will change their target and interpolate them to make a smooth animation.</p>
+<pre><code>[...]
 this.tx += keyRight - keyLeft;
 this.ty += keyDown - keyUp;
-    
+
 this.x = lerp(this.x,this.tx,0.5);
 this.y = lerp(this.y,this.ty,0.5);
 [...]</code></pre>
-<p>I will also add a slight hover to the bee so that it ‘flies’ over the ground. This is purely visual so it can go directly into the <code>drawself()</code> method.</p>
-<pre class="wp-block-code"><code>drawself(){
+                <p>I will also add a slight hover to the bee so that it 'flies' over the ground. This is purely visual so it can go directly into the <code>drawself()</code> method.</p>
+<pre><code>drawself(){
   let hover = sin(frameCount*0.1)*2+2
   image(img_bee,this.x*gridElW,this.y*gridElH-hover);
 }</code></pre>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="1024" loading="lazy" src="../../assets/images/44ada471b13f_y0fmccw40.gif" width="1024"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>The bee’s movement is now far smoother and much more pleasing to look at. This also helps the player track their character as well.</p>
-<h2 class="wp-block-heading">Collision Checks</h2>
-<p>I want to implement a quick and simple collision check when the player inputs a movement key. This can be done by checking the grid element the player is attempting to move to to see if it’s collidable.</p>
-<pre class="wp-block-code"><code>let checkX = min(max(0,floor(this.tx)+dx),grid.length-1);
+                <figure><img src="../../assets/images/posts/44ada471b13f_y0fmccw40.gif" alt="Smooth bee movement" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <p>The bee's movement is now far smoother and much more pleasing to look at. This also helps the player track their character as well.</p>
+                <h2>Collision Checks</h2>
+                <p>I want to implement a quick and simple collision check when the player inputs a movement key. This can be done by checking the grid element the player is attempting to move to to see if it's collidable.</p>
+<pre><code>let checkX = min(max(0,floor(this.tx)+dx),grid.length-1);
 let checkY = min(max(0,floor(this.ty)+dy),grid[checkX].length-1);</code></pre>
-<p>I need to clamp the checked values so that I don’t try to access values outside the grid array.</p>
-<pre class="wp-block-code"><code>let collisionCheck = grid[checkX][checkY];
+                <p>I need to clamp the checked values so that I don't try to access values outside the grid array.</p>
+<pre><code>let collisionCheck = grid[checkX][checkY];
 
 if(collisionCheck == img_rock || collisionCheck == img_rock1){
   dx = 0;
   dy = 0;
 }</code></pre>
-<p>If the position checked is a rock, then it stops the movement from happening.</p>
-<h2 class="wp-block-heading">Loading Levels</h2>
-<p>As a side-project I did some more tinkering with using the p5 noise function to generate levels. </p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="1024" loading="lazy" sizes="auto, (max-width: 936px) 100vw, 936px" src="../../assets/images/28f2f389400f_y0fmccw4-5.png" width="936"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>I used different values of perlin noise to decide whether to generate grass, flowers, water or rocks.</p>
-<pre class="wp-block-code"><code>for(let x = 0; x &lt; gridSizeX; x++){
+                <p>If the position checked is a rock, then it stops the movement from happening.</p>
+                <h2>Loading Levels</h2>
+                <p>As a side-project I did some more tinkering with using the p5 noise function to generate levels.</p>
+                <figure><img src="../../assets/images/posts/28f2f389400f_y0fmccw4-5.png" alt="Procedural level" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <p>I used different values of perlin noise to decide whether to generate grass, flowers, water or rocks.</p>
+<pre><code>for(let x = 0; x &lt; gridSizeX; x++){
   grid[x] = [];
   for(let y = 0; y &lt; gridSizeY; y++){
     grid[x][y] = img_grass;
@@ -121,19 +120,25 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
     if(noise(x*0.2,y*0.2) &gt; 0.60){ grid[x][y] = img_water; }
   }
 }</code></pre>
-<p>Actually loading a level is far simpler. I wrote a function to match a pixel to an array.</p>
-<pre class="wp-block-code"><code>function matchPixel(arr1,arr2) {
+                <p>Actually loading a level is far simpler. I wrote a function to match a pixel to an array.</p>
+<pre><code>function matchPixel(arr1,arr2) {
   return (arr1[0] == arr2[0] &amp;&amp; arr1[1] == arr2[1] &amp;&amp; arr1[2] == arr2[2] &amp;&amp; arr1[3] == arr2[3])
 }</code></pre>
-<p>This has to be done because JavaScript does not allow for comparing two arrays directly.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="64" loading="lazy" src="../../assets/images/7d4b91a46339_lvl1literal.png" width="64"/></figure>
-<p>Levels are stored as images with each pixel representing a tile on the grid. </p>
-<figure class="wp-block-table is-style-regular"><table class="has-fixed-layout"><tbody><tr><td><strong>Colour</strong></td><td><strong>Tile</strong></td></tr><tr><td>GREEN (‘#00FF00’)</td><td>Grass</td></tr><tr><td>WHITE (‘#FFFFFF’)</td><td>Flower</td></tr><tr><td>BLACK (‘#000000’)</td><td>Rock</td></tr><tr><td>YELLOW (‘#FFFF00’)</td><td>Hive</td></tr></tbody></table></figure>
-<p>I use a row of if statements to load the correct tile for each pixel.</p>
-<pre class="wp-block-code"><code>function loadLevel(level) {
+                <p>This has to be done because JavaScript does not allow for comparing two arrays directly.</p>
+                <figure><img src="../../assets/images/posts/7d4b91a46339_lvl1literal.png" alt="Level as pixel image" loading="lazy"></figure>
+                <p>Levels are stored as images with each pixel representing a tile on the grid.</p>
+                <table>
+                    <tr><td><strong>Colour</strong></td><td><strong>Tile</strong></td></tr>
+                    <tr><td>GREEN ('#00FF00')</td><td>Grass</td></tr>
+                    <tr><td>WHITE ('#FFFFFF')</td><td>Flower</td></tr>
+                    <tr><td>BLACK ('#000000')</td><td>Rock</td></tr>
+                    <tr><td>YELLOW ('#FFFF00')</td><td>Hive</td></tr>
+                </table>
+                <p>I use a row of if statements to load the correct tile for each pixel.</p>
+<pre><code>function loadLevel(level) {
   let gridSizeX = level.width;
   let gridSizeY = level.height;
-  
+
   for(let x = 0; x &lt; gridSizeX; x++){
     grid[x] = [];
     for(let y = 0; y &lt; gridSizeY; y++){
@@ -154,16 +159,15 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
     }
   }
 }</code></pre>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="608" loading="lazy" sizes="auto, (max-width: 512px) 100vw, 512px" src="../../assets/images/1a1beb52d458_y0fmccw4-6.png" width="512"/></figure>
-<p>This makes it very easy to create new levels and new tile types can be created (up to 16.7 million tile types).</p>
-<h2 class="wp-block-heading">Interacting with Tiles</h2>
-<p>I already check the tile the player is moving to and store it in the <code>collisionCheck</code> variable. I can use an if statement to check when the player moves to interact with tiles that the player character moves on to.</p>
-<pre class="wp-block-code"><code>if(dx+dy != 0){
-  if(collisionCheck == img_flower){ 
-    this.moves += 4; 
+                <figure><img src="../../assets/images/posts/1a1beb52d458_y0fmccw4-6.png" alt="Loaded level" loading="lazy"></figure>
+                <p>This makes it very easy to create new levels and new tile types can be created (up to 16.7 million tile types).</p>
+                <h2>Interacting with Tiles</h2>
+<pre><code>if(dx+dy != 0){
+  if(collisionCheck == img_flower){
+    this.moves += 4;
   }
-  if(this.moves &lt;= 0){ 
-    this.die(); 
+  if(this.moves &lt;= 0){
+    this.die();
     dx = 0;
     dy = 0;
   }
@@ -175,25 +179,24 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
     dy = 0;
   }
 }</code></pre>
-<p>I check if the player is on a flower and add 5 movement points,</p>
-<p>I check if the player has 0 or less moves remaining and kill it, as well as stopping it from moving.</p>
-<p>I check if the player is on a hive and load the next level.</p>
-<pre class="wp-block-code"><code>die(){
+                <p>I check if the player is on a flower and add 5 movement points, if the player has 0 or less moves remaining and kill it, and if the player is on a hive and load the next level.</p>
+<pre><code>die(){
   this.tx = 1;
   this.ty = 1;
   this.moves = 5;
 }</code></pre>
-<p>The death function simply resets the bee’s position and movement points.</p>
-<h2 class="wp-block-heading">Final Game</h2>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="950" loading="lazy" src="../../assets/images/e1e7eb595fb1_y0fmccw4-7.gif" width="800"/></figure>
-<p>There are many areas of potential improvement, but the game is basically complete. I used just a few simple levels to show off the basic gameplay but more complex features and better designed levels can easily be added in.</p>
-<p><a href="https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar">https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar</a></p>
-<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+                <p>The death function simply resets the bee's position and movement points.</p>
+                <h2>Final Game</h2>
+                <figure><img src="../../assets/images/posts/e1e7eb595fb1_y0fmccw4-7.gif" alt="Final bee game" loading="lazy"></figure>
+                <p>There are many areas of potential improvement, but the game is basically complete. I used just a few simple levels to show off the basic gameplay but more complex features and better designed levels can easily be added in.</p>
+                <p><a href="https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar">https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar</a></p>
+                <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>
     <footer class="site-footer">
         &copy; 2026 woojin jang
     </footer>
+    <script src="/assets/js/code.js"></script>
 </body>
 </html>

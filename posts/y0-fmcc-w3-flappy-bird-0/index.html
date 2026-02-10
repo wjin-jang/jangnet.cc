@@ -12,24 +12,23 @@
         <div class="site-subtitle">my creative works</div>
         <nav>
             <a href="/">Home</a>
-        <a href="/about/">About Me</a>
-        <a href="/archive/">Index</a>
-        <a href="/vinyls/">My Vinyls</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
         </nav>
     </header>
     <main class="site-main">
-        <a href="/" class="back-link">&larr; back to posts</a>
         <article>
             <div class="post-header">
+                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W2 – Flappy Bird 0</h1>
-                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0, coding, p5</span></div>
+                <div class="post-meta">October 12, 2025 · FMCC, UAL, Year 0, coding, p5</div>
             </div>
             <div class="post-content">
-                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-<p>This week I am looking at interaction in p5. I wanted to code a simple ‘jump’ game. Something that could be done in less than an hour so: Flappy Bird.</p>
-<h2 class="wp-block-heading">Setup</h2>
-<p>I first declare some needed variables:</p>
-<pre class="wp-block-code"><code>const speed = 3;
+                <p>This week I am looking at interaction in p5. I wanted to code a simple 'jump' game. Something that could be done in less than an hour so: Flappy Bird.</p>
+                <h2>Setup</h2>
+                <p>I first declare some needed variables:</p>
+<pre><code>const speed = 3;
 let score = 0;
 let highscore = 0;
 
@@ -37,15 +36,15 @@ function setup() {
   createCanvas(400, 400);
   strokeWeight(0);
   textAlign(CENTER,CENTER)
-  
+
   thefloor = height;
   theceiling = 0;
 }</code></pre>
-<p>Speed will be used to determine the difficulty of the game. Pipes will move at this speed. I set it as a constant but if I wanted to make the difficulty variable I could declare it using ‘let’.</p>
-<h2 class="wp-block-heading">player object</h2>
-<p>I first created the player object. I called it ‘frog’ because it jumps though I should have probably called it bird.</p>
-<p>To create an object in JavaScript is simple. I simply need to declare it as a class and write the constructor method.</p>
-<pre class="wp-block-code"><code>class freg{
+                <p>Speed will be used to determine the difficulty of the game. Pipes will move at this speed. I set it as a constant but if I wanted to make the difficulty variable I could declare it using 'let'.</p>
+                <h2>Player Object</h2>
+                <p>I first created the player object. I called it 'frog' because it jumps though I should have probably called it bird.</p>
+                <p>To create an object in JavaScript is simple. I simply need to declare it as a class and write the constructor method.</p>
+<pre><code>class freg{
   constructor(){
     this.x = width/2;
     this.y = height/2;
@@ -53,13 +52,13 @@ function setup() {
     this.pressed = false;
   }
 }</code></pre>
-<p>I am giving my player a position (x,y) and y-velocity. I am also setting a variable to determine whether an input was given.</p>
-<p>I will next add a drawself() method</p>
-<pre class="wp-block-code"><code>drawself(){
+                <p>I am giving my player a position (x,y) and y-velocity. I am also setting a variable to determine whether an input was given.</p>
+                <p>I will next add a drawself() method</p>
+<pre><code>drawself(){
   circle(this.x,this.y,32);
 }</code></pre>
-<p>and a step() method. This will run every frame.</p>
-<pre class="wp-block-code"><code>step(){
+                <p>and a step() method. This will run every frame.</p>
+<pre><code>step(){
   this.yvel -= 0.2; //gravity
   if(keyIsPressed &amp;&amp; !this.pressed){
     this.pressed = true;
@@ -70,16 +69,16 @@ function setup() {
   if(!keyIsPressed){ this.pressed = false; }
 
   this.y = (this.y - this.yvel) //apply movement
-  
+
   if(this.y &lt; theceiling || this.y &gt;= thefloor){
     this.die();
   };
   this.drawself(); //draw
 }</code></pre>
-<p>The step method includes gravity calculation and input handling. When a key is being pressed and the flag for already having pressed that key is not set, it will grant the player some upwards velocity.</p>
-<p>The step method also handles crashing into the ceiling and floor.</p>
-<p>The final thing it does is call the ‘die’ method.</p>
-<pre class="wp-block-code"><code>die(){
+                <p>The step method includes gravity calculation and input handling. When a key is being pressed and the flag for already having pressed that key is not set, it will grant the player some upwards velocity.</p>
+                <p>The step method also handles crashing into the ceiling and floor.</p>
+                <p>The final thing it does is call the 'die' method.</p>
+<pre><code>die(){
   score = 0;
   this.y = height/2;
   this.yvel = 0;
@@ -88,87 +87,88 @@ function setup() {
   pipes.hei = random(height);
   pipes.cleared = false;
 }</code></pre>
-<p>Dying will reset the score and position of the player/pipes.</p>
-<h2 class="wp-block-heading">Pipes</h2>
-<p>I’m defining pipes as a single object with height, width and gap. These will affect the pipe object as such:</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" fetchpriority="high" height="720" sizes="(max-width: 768px) 100vw, 768px" src="../../assets/images/91f1e8424443_pipes.png" width="768"/><figcaption class="wp-element-caption">Made using Aseprite</figcaption></figure>
-<pre class="wp-block-code"><code>class pipe{
+                <p>Dying will reset the score and position of the player/pipes.</p>
+                <h2>Pipes</h2>
+                <p>I'm defining pipes as a single object with height, width and gap. These will affect the pipe object as such:</p>
+                <figure><img src="../../assets/images/posts/91f1e8424443_pipes.png" alt="Pipe diagram"><figcaption>Made using Aseprite</figcaption></figure>
+<pre><code>class pipe{
   constructor(hei,gap){
     this.hei = hei;
     this.gap = gap;
     this.x = width;
-    
+
     this.wid = 64;
     this.cleared = false;
   }
 }</code></pre>
-<p>The draw function is slightly more involved than drawing the player. It draws two rectangles for each pipe (top and bottom).</p>
-<pre class="wp-block-code"><code>drawself(){
+                <p>The draw function is slightly more involved than drawing the player. It draws two rectangles for each pipe (top and bottom).</p>
+<pre><code>drawself(){
   rect(this.x,0,this.wid,this.hei-this.gap/2);
   rect(this.x,this.hei+this.gap/2,this.wid,height);
 }</code></pre>
-<p>The step function handles collision checking and increasing the score when the player successfully flies through the gap. It also moves the pipe to the right of the canvas when it is fully off-screen to the left.</p>
-<pre class="wp-block-code"><code>step(){
+                <p>The step function handles collision checking and increasing the score when the player successfully flies through the gap. It also moves the pipe to the right of the canvas when it is fully off-screen to the left.</p>
+<pre><code>step(){
   this.drawself(); //draw
   this.x -= speed;
-    
+
   if(this.x &lt; -64){
     this.x = width;
     this.hei = random(height);
     this.cleared = false;
   }
-  
+
   if(frog.x &gt; this.x &amp;&amp;
     frog.x &lt; this.x + this.wid &amp;&amp;
     frog.y &gt; 0 &amp;&amp;
     frog.y &lt; this.hei-(this.gap/2)){
-    
+
     frog.die();
   }
   if(frog.x &gt; this.x &amp;&amp;
     frog.x &lt; this.x + this.wid &amp;&amp;
     frog.y &gt; this.hei+this.gap/2 &amp;&amp;
     frog.y &lt; height){
-    
+
     frog.die();
   }
-    
-  if(this.x+this.wid &lt; frog.x &amp;&amp; this.cleared == false){ 
-    this.cleared = true; 
+
+  if(this.x+this.wid &lt; frog.x &amp;&amp; this.cleared == false){
+    this.cleared = true;
     score++;
   }
 }</code></pre>
-<p>Causing the pipes to wrap around means that there doesn’t need to be multiple pipe objects, just one which reduces memory usage and lag.</p>
-<h2 class="wp-block-heading">Final Steps</h2>
-<p>All that remains is to assign the two objects to variables in the setup function</p>
-<pre class="wp-block-code"><code>function setup() {
+                <p>Causing the pipes to wrap around means that there doesn't need to be multiple pipe objects, just one which reduces memory usage and lag.</p>
+                <h2>Final Steps</h2>
+                <p>All that remains is to assign the two objects to variables in the setup function</p>
+<pre><code>function setup() {
   ...
   frog = new freg();
-  pipes = new pipe(200,128); 
+  pipes = new pipe(200,128);
 }</code></pre>
-<p>And step them in the draw function. I will also add some logic to deal with scoring.</p>
-<pre class="wp-block-code"><code>function draw() {
+                <p>And step them in the draw function. I will also add some logic to deal with scoring.</p>
+<pre><code>function draw() {
   background(220);
-  
+
   highscore = max(score,highscore);
   textSize(100);
   text(score,width/2,64);
   textSize(32);
   text("HI: "+highscore,width/2,128)
-  
+
   frog.step();
   pipes.step();
 }</code></pre>
-<p>The game is complete.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" sizes="(max-width: 800px) 100vw, 800px" src="../../assets/images/d48e18c6720a_y0fmccw3.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<h2 class="wp-block-heading">Link to Project/ Code</h2>
-<p><a href="https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h">https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h</a></p>
-<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+                <p>The game is complete.</p>
+                <figure><img src="../../assets/images/posts/d48e18c6720a_y0fmccw3.png" alt="Flappy Bird game"><figcaption>Made using p5.js</figcaption></figure>
+                <h2>Link to Project/Code</h2>
+                <p><a href="https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h">https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h</a></p>
+                <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>
     <footer class="site-footer">
         &copy; 2026 woojin jang
     </footer>
+    <script src="/assets/js/code.js"></script>
 </body>
 </html>

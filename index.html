@@ -12,67 +12,35 @@
         <div class="site-subtitle">my creative works</div>
         <nav>
             <a href="/" class="active">Home</a>
-        <a href="/about/">About Me</a>
-        <a href="/archive/">Index</a>
-        <a href="/vinyls/">My Vinyls</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
         </nav>
     </header>
     <main class="site-main">
-        <ul class="post-list">
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/hello-world/">My first blog post is about making a blog.</a>
-        <div class="post-categories"><span>Uncategorised</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w1-ferns/">Y0/FMCC/W1 – Ferns</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span><span>coding</span><span>p5</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/personal-nes-os/">Personal/Art/NES OS</a>
-        <div class="post-categories"><span>Personal</span><span>art</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/personal-life-n-flying-con4full-circle/">Personal/Life/N.Flying &CON4:FULL CIRCLE</a>
-        <div class="post-categories"><span>Life</span><span>Personal</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w3-flappy-bird-0/">Y0/FMCC/W2 – Flappy Bird 0</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span><span>coding</span><span>p5</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w3-flowers/">Y0/FMCC/W3 – Flowers</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span><span>art</span><span>coding</span><span>p5</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-icp-w3-speculative-futures/">Y0/ICP/W3 – Speculative Futures</a>
-        <div class="post-categories"><span>Introducting Creative Practice</span><span>UAL</span><span>Year 0</span><span>reflection</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w4-bee-game/">Y0/FMCC/W4 – Bee Game</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span><span>art</span><span>coding</span><span>p5</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w6-tempus-fugit/">Y0/FMCC/W6 – Tempus Fugit</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span></div>
-    </li>
-    <li>
-        <span class="post-date">November 17, 2025</span>
-        <a class="post-link" href="/posts/y0-fmcc-w8-winter/">Y0/FMCC/W8 – Winter</a>
-        <div class="post-categories"><span>Foundational Methods for Creative Computing</span><span>UAL</span><span>Year 0</span></div>
-    </li>
-</ul>
+        <ul class="post-list"></ul>
     </main>
     <footer class="site-footer">
         &copy; 2026 woojin jang
     </footer>
+    <script>
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function formatDate(iso) {
+        var d = iso.split('-');
+        return MONTHS[parseInt(d[1], 10) - 1] + ' ' + parseInt(d[2], 10) + ', ' + d[0];
+    }
+    fetch('/assets/data/posts.json').then(function (r) { return r.json(); }).then(function (posts) {
+        var ul = document.querySelector('.post-list');
+        posts.forEach(function (p) {
+            var li = document.createElement('li');
+            li.innerHTML =
+                '<span class="post-date">' + formatDate(p.date) + '</span>' +
+                '<a class="post-link" href="/posts/' + p.slug + '/">' + p.title.replace(/&/g, '&amp;') + '</a>' +
+                '<div class="post-categories">' + p.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>';
+            ul.appendChild(li);
+        });
+    });
+    </script>
+    <script src="/assets/js/code.js"></script>
 </body>
 </html>

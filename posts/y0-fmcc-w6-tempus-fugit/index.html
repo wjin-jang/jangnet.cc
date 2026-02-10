@@ -12,72 +12,63 @@
         <div class="site-subtitle">my creative works</div>
         <nav>
             <a href="/">Home</a>
-        <a href="/about/">About Me</a>
-        <a href="/archive/">Index</a>
-        <a href="/vinyls/">My Vinyls</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
         </nav>
     </header>
     <main class="site-main">
-        <a href="/" class="back-link">&larr; back to posts</a>
         <article>
             <div class="post-header">
+                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W6 – Tempus Fugit</h1>
-                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0</span></div>
+                <div class="post-meta">November 10, 2025 · FMCC, UAL, Year 0</div>
             </div>
             <div class="post-content">
-                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-<p>This week we looked at the modulo operator with respect to creating repeating patterns.</p>
-<p>The modulo operator returns the remainder of a division. This is useful for transforming a linear count into a repeating sequence.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" fetchpriority="high" height="568" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/75fc2902e37c_image.png" width="1024"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>Following the demo, I created an interesting pattern, it transforms the index number of the grid to a repeating set of colours.</p>
-<h2 class="wp-block-heading">Angels</h2>
-<p>I was tasked with making a pattern with a central composition so I decided to make an angel. Creating eyes would be an interesting challenge with primitives.</p>
-<p>I decided I would draw a circular eyeball, the pupil and then two eyelids on top. The eyelids would be the most difficult part.</p>
-<pre class="wp-block-code"><code>function drawEye(eyeX,eyeY,eyeWidth,pupilWidth,pupil,sclera,eyelid){
+                <p>This week we looked at the modulo operator with respect to creating repeating patterns.</p>
+                <p>The modulo operator returns the remainder of a division. This is useful for transforming a linear count into a repeating sequence.</p>
+                <figure><img src="../../assets/images/posts/75fc2902e37c_image.png" alt="Modulo pattern"><figcaption>Made using p5.js</figcaption></figure>
+                <p>Following the demo, I created an interesting pattern, it transforms the index number of the grid to a repeating set of colours.</p>
+                <h2>Angels</h2>
+                <p>I was tasked with making a pattern with a central composition so I decided to make an angel. Creating eyes would be an interesting challenge with primitives.</p>
+                <p>I decided I would draw a circular eyeball, the pupil and then two eyelids on top. The eyelids would be the most difficult part.</p>
+<pre><code>function drawEye(eyeX,eyeY,eyeWidth,pupilWidth,pupil,sclera,eyelid){
   ellipseMode(CENTER);
   let lookAtMouse = createVector(mouseX-eyeX,mouseY-eyeY);
   lookAtMouse.mult(0.1);
   lookAtMouse.limit((eyeWidth*0.5)-(pupilWidth*0.5));
-  
+
   fill(sclera);
   circle(eyeX,eyeY,eyeWidth);
   fill(pupil);
   circle(eyeX+lookAtMouse.x,eyeY+lookAtMouse.y,pupilWidth);
-  
+
   let radius = eyeWidth*0.6;
   let start = createVector(eyeX-radius,eyeY);
   let end = createVector(eyeX+radius,eyeY);
-  
-  //line(start.x, start.y, end.x, end.y)
+
   drawArc(start,end,radius,1,eyelid);
   drawArc(end,start,radius,-1,eyelid);
 }</code></pre>
-<p>The drawEye() function takes x,y coordinates, eye and pupil width, and colour values for the pupil, sclera and eyelids.</p>
-<p>I separated drawing the eyelids into a new function which I repurposed from an old project.</p>
-<pre class="wp-block-code"><code>function drawArc(start,end,radius,flip,col){
-  //get distance components
+                <p>The drawEye() function takes x,y coordinates, eye and pupil width, and colour values for the pupil, sclera and eyelids.</p>
+                <p>I separated drawing the eyelids into a new function which I repurposed from an old project.</p>
+<pre><code>function drawArc(start,end,radius,flip,col){
   let x = end.x-start.x;
   let y = end.y-start.y;
-  //get angle
   let angle = atan2(y,x);
-  //get distance
   let distance = sqrt(x*x+y*y);
-  
+
   let sweep, centre;
   if((2*radius)+0.1&gt;=distance){
-    //find sweep angle
     sweep = asin(distance/(2.4*radius));
-    //height from chord to centre
     let hei = radius*cos(sweep);
-    //get centre point
     centre = createVector(
       start.x + x/2 - hei*(y/distance),
       start.y + y/2 + hei*(x/distance));
   }
   let startangle = angle - sweep - (90 * (PI / 180));
   let stopangle = angle + sweep - (90 * (PI / 180));
-  
-  //draw eyelid:
+
   noStroke();
   fill(col);
   beginShape();
@@ -93,18 +84,18 @@
   endShape();
   strokeWeight(1);
 }</code></pre>
-<p>Drawing the eyelid is complicated because I have to define a curve that matches the width of the eye and then create a shape that follows that curve.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="99" src="../../assets/images/7bcdd28107b9_image-2.png" width="102"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>Drawing an eye now gives this. The eyelid colour can be matched to the background.</p>
-<h2 class="wp-block-heading">Tempus Fugit</h2>
-<p>After experimenting with drawing rings of eyes, I decided to make a clock.</p>
-<pre class="wp-block-code"><code>//seconds
+                <p>Drawing the eyelid is complicated because I have to define a curve that matches the width of the eye and then create a shape that follows that curve.</p>
+                <figure><img src="../../assets/images/posts/7bcdd28107b9_image-2.png" alt="Eye drawing"><figcaption>Made using p5.js</figcaption></figure>
+                <p>Drawing an eye now gives this. The eyelid colour can be matched to the background.</p>
+                <h2>Tempus Fugit</h2>
+                <p>After experimenting with drawing rings of eyes, I decided to make a clock.</p>
+<pre><code>//seconds
 let eyesCount = 60;
 for(let i = 0; i &lt; eyesCount; i++){
   let rad = 390;
   let cx = width/2 + rad*cos(i*(2*PI/eyesCount)-PI*0.5);
   let cy = height/2 + rad*sin(i*(2*PI/eyesCount)-PI*0.5);
-  
+
   drawEye(cx,cy,30,18,second() == i ? pupilActive:pupilDormant,sclera,bg);
 }
 //minutes
@@ -112,13 +103,13 @@ for(let i = 0; i &lt; eyesCount; i++){
   let rad = 340;
   let cx = width/2 + rad*cos(i*(2*PI/eyesCount)-PI*0.5);
   let cy = height/2 + rad*sin(i*(2*PI/eyesCount)-PI*0.5);
-  
+
   drawEye(cx,cy,30,18,minute() == i ? pupilActive:pupilDormant,sclera,bg);
 }...</code></pre>
-<p>I used for loops to draw eyes for every second, minute, hour, day and month in rings.</p>
-<h2 class="wp-block-heading">Styles</h2>
-<p>I defined a set of palettes that the user could swap through by clicking the screen. (This is where I incorporated the modulo operator).</p>
-<pre class="wp-block-code"><code>class style{
+                <p>I used for loops to draw eyes for every second, minute, hour, day and month in rings.</p>
+                <h2>Styles</h2>
+                <p>I defined a set of palettes that the user could swap through by clicking the screen. (This is where I incorporated the modulo operator).</p>
+<pre><code>class style{
   constructor(bg,txt,pupilDormant,pupilActive,sclera,phrase = 'Tempus Fugit',font = 'Georgia'){
     this.bg = bg;
     this.txt = txt;
@@ -133,32 +124,31 @@ for(let i = 0; i &lt; eyesCount; i++){
 const styles = [
   new style('#000000','#FFFFFF','#D5D5D5','#000000','#FFFFFF'),
   new style('#872F43','#EDB223','#D55A4F','#32D386','#EDB223','Eyes On The Time'),
-  new style('#195C64','#D44412','#39AAB9','#D44412','#F6BB27','Aquí y Ahora'),
+  new style('#195C64','#D44412','#39AAB9','#D44412','#F6BB27','Aqui y Ahora'),
   new style('#AEA66E','#252D2E','#868366','#252D2E','#F1F1D6','Memento Mori'),
   new style('#1B2315','#E42228','#E8962B','#E42228','#6B911F','The World Will Turn'),
   new style('#FFFFFF','#000000','#000000','#CD2E3A','#0F64CD','시간이 흘른다','Noto Serif KR'),
   new style('#FDF7FA','#D67AB1','#D67AB1','#A8DCD9','#E2A3C7','物の哀れ','Noto Serif JP'),
 ]
 let styleIndex = 0;</code></pre>
-<p>To choose colours I used <a href="https://coolors.co/generate">Coolers</a>, as well as designing some palettes of my own.</p>
-<h2 class="wp-block-heading">Final</h2>
-<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-2 is-layout-flex wp-block-gallery-is-layout-flex">
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="182" decoding="async" height="547" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/3ced93e3a639_tempus-fugit.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="181" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/70186eaa871c_mono-no-aware.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="179" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/b3e60388bcd0_sigani-heulleunda.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="184" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/41b8d7ce07ee_the-world-will-turn.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="180" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/3f0c3c87cc9e_memento-mori.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="183" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/f2af74febfba_aqui-y-hora.png" width="1024"/></figure>
-<figure class="wp-block-image size-large"><img alt="" class="" data-id="185" decoding="async" height="547" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/795c711bd7c3_eyes-on-the-time.png" width="1024"/></figure>
-</figure>
-<p>This clock is available here:</p>
-<p><a href="https://editor.p5js.org/woojinJang_/full/ZnOIVa_q7">https://editor.p5js.org/woojinJang_/full/ZnOIVa_q7</a></p>
-<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+                <p>To choose colours I used <a href="https://coolors.co/generate">Coolers</a>, as well as designing some palettes of my own.</p>
+                <h2>Final</h2>
+                <figure><img src="../../assets/images/posts/3ced93e3a639_tempus-fugit.png" alt="Tempus Fugit"></figure>
+                <figure><img src="../../assets/images/posts/70186eaa871c_mono-no-aware.png" alt="Mono no Aware" loading="lazy"></figure>
+                <figure><img src="../../assets/images/posts/b3e60388bcd0_sigani-heulleunda.png" alt="시간이 흘른다" loading="lazy"></figure>
+                <figure><img src="../../assets/images/posts/41b8d7ce07ee_the-world-will-turn.png" alt="The World Will Turn" loading="lazy"></figure>
+                <figure><img src="../../assets/images/posts/3f0c3c87cc9e_memento-mori.png" alt="Memento Mori" loading="lazy"></figure>
+                <figure><img src="../../assets/images/posts/f2af74febfba_aqui-y-hora.png" alt="Aqui y Ahora" loading="lazy"></figure>
+                <figure><img src="../../assets/images/posts/795c711bd7c3_eyes-on-the-time.png" alt="Eyes on the Time" loading="lazy"></figure>
+                <p>This clock is available here:</p>
+                <p><a href="https://editor.p5js.org/woojinJang_/full/ZnOIVa_q7">https://editor.p5js.org/woojinJang_/full/ZnOIVa_q7</a></p>
+                <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>
     <footer class="site-footer">
         &copy; 2026 woojin jang
     </footer>
+    <script src="/assets/js/code.js"></script>
 </body>
 </html>

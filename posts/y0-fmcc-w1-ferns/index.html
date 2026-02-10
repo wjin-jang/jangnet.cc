@@ -12,74 +12,74 @@
         <div class="site-subtitle">my creative works</div>
         <nav>
             <a href="/">Home</a>
-        <a href="/about/">About Me</a>
-        <a href="/archive/">Index</a>
-        <a href="/vinyls/">My Vinyls</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
         </nav>
     </header>
     <main class="site-main">
-        <a href="/" class="back-link">&larr; back to posts</a>
         <article>
             <div class="post-header">
+                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W1 – Ferns</h1>
-                <div class="post-meta">November 17, 2025 · <span>Foundational Methods for Creative Computing, UAL, Year 0, coding, p5</span></div>
+                <div class="post-meta">October 1, 2025 · FMCC, UAL, Year 0, coding, p5</div>
             </div>
             <div class="post-content">
-                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
-<p>So this was a fun test of my coding skills.<br/></p>
-<p>I wanted to try and generate fractal ferns using recursion and object-oriented programming. </p>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-6 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-6140bb1fd4ed8ea4799d1ff437855950 wp-container-content-2" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">STEP ONE</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-e9f1ca9165d46a9395391fe5b71c3233" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">The Stem</h2>
-</div>
-<p>The first step is to draw a line, then define points along that line that other stems can be created from.</p>
-<figure class="wp-block-image size-full is-style-default"><img alt="" class="" decoding="async" fetchpriority="high" height="800" sizes="(max-width: 800px) 100vw, 800px" src="../../assets/images/c45a3a777964_y0fmccw1stepone.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-7 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-9618b82c5a461ec5531e03973740e879 wp-container-content-4" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">STEP TWO</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-6831ca72066092f8681fce2da645520e" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">Defining The Leaf</h2>
-</div>
-<p>I need a function that will describe the shape of a fern’s leaves. A sin wave can be used here for now</p>
-<figure class="wp-block-image aligncenter size-full"><img alt="" class="" decoding="async" height="30" src="../../assets/images/938b0201f6d2_ql_5dbe407dfd570ead10b9db443cdee763_l3.png" style="box-shadow:none" width="185"/></figure>
-<p>W and L define the width and height of our leaf.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="347" sizes="(max-width: 1024px) 100vw, 1024px" src="../../assets/images/ecc88762b6fd_y0fmccw1steptwo.png" width="1024"/><figcaption class="wp-element-caption">Made using Desmos Graphing Calculator</figcaption></figure>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-8 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-a875b8f6b8d11783158a8db6e8b17336 wp-container-content-6" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">STEP THREE</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-3484fd5ea096a23ac044be7c6a9c0613" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">Drawing The Leaf</h2>
-</div>
-<p>Plugging in the length of our original stem and our desired stem width we can generate new stems that match the leaf shape.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/f04d0908b86e_y0fmccw1stepthree-1.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>I can quickly alternate the branches using a function:</p>
-<pre class="wp-block-code"><code>function alternate(num){
+                <p>So this was a fun test of my coding skills.</p>
+                <p>I wanted to try and generate fractal ferns using recursion and object-oriented programming.</p>
+                <div class="header-row">
+                    <h2>Step One</h2>
+                    <h2>The Stem</h2>
+                </div>
+                <p>The first step is to draw a line, then define points along that line that other stems can be created from.</p>
+                <figure><img src="../../assets/images/posts/c45a3a777964_y0fmccw1stepone.png" alt="Step one"><figcaption>Made using p5.js</figcaption></figure>
+                <div class="header-row">
+                    <h2>Step Two</h2>
+                    <h2>Defining The Leaf</h2>
+                </div>
+                <p>I need a function that will describe the shape of a fern's leaves. A sin wave can be used here for now</p>
+                <figure><img src="../../assets/images/posts/938b0201f6d2_ql_5dbe407dfd570ead10b9db443cdee763_l3.png" alt="Sin wave formula"></figure>
+                <p>W and L define the width and height of our leaf.</p>
+                <figure><img src="../../assets/images/posts/ecc88762b6fd_y0fmccw1steptwo.png" alt="Desmos graph"><figcaption>Made using Desmos Graphing Calculator</figcaption></figure>
+                <div class="header-row">
+                    <h2>Step Three</h2>
+                    <h2>Drawing The Leaf</h2>
+                </div>
+                <p>Plugging in the length of our original stem and our desired stem width we can generate new stems that match the leaf shape.</p>
+                <figure><img src="../../assets/images/posts/f04d0908b86e_y0fmccw1stepthree-1.png" alt="Step three" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <p>I can quickly alternate the branches using a function:</p>
+<pre><code>function alternate(num){
   return (num % 2 == 0) ? 1 : -1;
 }</code></pre>
-<p>this function uses a ternary operator! I just found out about them!</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/7755a717abdb_y0fmccw1stepthree2.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-9 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-20d3d9f0e88df0d07d9ef9b702212379 wp-container-content-8" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">STEP FOUR</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-7633b22864c0a8ec5285c893eb8d4dec" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">Recursion</h2>
-</div>
-<p>We can run this on each of the new branches, creating a full leaf.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/3bc050efb6fd_y0fmccw1stepfour.png" width="800"/><figcaption class="wp-element-caption">Second recursion with p5.js</figcaption></figure>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/1b351f7071ed_y0fmccw1stepfour2.png" width="800"/><figcaption class="wp-element-caption">Third recursion with p5.js</figcaption></figure>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-10 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-68a098dfbcd37fac7a212bef725eaf0c wp-container-content-10" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">STEP FIVE</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-1832d50a8c29e676872248aada3c9d3d" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">Polishing</h2>
-</div>
-<p>Changing the angle from 90° to 60° already makes the leaf look a lot more natural</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/cecc2a90f37b_y0fmccw1stepfive.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>The next thing to do is to make a more fern-y looking function to describe the curve of the leaf. This can be done using a parametric function.</p>
-<figure class="wp-block-image aligncenter size-full"><img alt="" class="" decoding="async" height="66" loading="lazy" src="../../assets/images/da742374af37_ql_1801f830fa2e9107a68228f1b17711e2_l3.png" style="box-shadow:none" width="241"/><figcaption class="wp-element-caption">via ChatGPT</figcaption></figure>
-<p>Two new variables (a and b) control the tapering on the top and bottom of the leaf. For a fern I’ll use an a value less than 0 and a high b value.</p>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="411" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="../../assets/images/6db25a859c54_y0fmccw1stepfive2.png" width="1024"/><figcaption class="wp-element-caption">Made using Desmos Graphing Calculator</figcaption></figure>
-<figure class="wp-block-image size-full"><img alt="" class="" decoding="async" height="800" loading="lazy" sizes="auto, (max-width: 800px) 100vw, 800px" src="../../assets/images/c097bfd9a892_y0fmccw1stepfive3.png" width="800"/><figcaption class="wp-element-caption">Made using p5.js</figcaption></figure>
-<p>There are many more improvements I could make, but I’m happy with this for now.</p>
-<div class="wp-block-group has-custom-ink-background-color has-background is-nowrap is-layout-flex wp-container-core-group-is-layout-11 wp-block-group-is-layout-flex" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0">
-<h2 class="wp-block-heading has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-0632952123fa940ebc02553bffb05528 wp-container-content-12" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">LINK</h2>
-<h2 class="wp-block-heading has-text-align-right has-custom-paper-color has-custom-ink-background-color has-text-color has-background has-link-color wp-elements-04e9b9528a6d9fde3a947515caad462f" style="padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--30)">FINAL PRODUCT</h2>
-</div>
-<p><a href="https://editor.p5js.org/woojinJang_/full/fZNqxPdnQ">https://editor.p5js.org/woojinJang_/full/fZNqxPdnQ</a></p>
-<p>Any key will add another recursion to the fern. Pressing enter will capture a full-resolution screenshot, which I have been using here.<br/><br/>The full code:</p>
-<pre class="wp-block-code"><code>function setup() {
+                <p>this function uses a ternary operator! I just found out about them!</p>
+                <figure><img src="../../assets/images/posts/7755a717abdb_y0fmccw1stepthree2.png" alt="Alternating branches" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <div class="header-row">
+                    <h2>Step Four</h2>
+                    <h2>Recursion</h2>
+                </div>
+                <p>We can run this on each of the new branches, creating a full leaf.</p>
+                <figure><img src="../../assets/images/posts/3bc050efb6fd_y0fmccw1stepfour.png" alt="Second recursion" loading="lazy"><figcaption>Second recursion with p5.js</figcaption></figure>
+                <figure><img src="../../assets/images/posts/1b351f7071ed_y0fmccw1stepfour2.png" alt="Third recursion" loading="lazy"><figcaption>Third recursion with p5.js</figcaption></figure>
+                <div class="header-row">
+                    <h2>Step Five</h2>
+                    <h2>Polishing</h2>
+                </div>
+                <p>Changing the angle from 90 degrees to 60 degrees already makes the leaf look a lot more natural</p>
+                <figure><img src="../../assets/images/posts/cecc2a90f37b_y0fmccw1stepfive.png" alt="60 degree angle" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <p>The next thing to do is to make a more fern-y looking function to describe the curve of the leaf. This can be done using a parametric function.</p>
+                <figure><img src="../../assets/images/posts/da742374af37_ql_1801f830fa2e9107a68228f1b17711e2_l3.png" alt="Parametric formula" loading="lazy"><figcaption>via ChatGPT</figcaption></figure>
+                <p>Two new variables (a and b) control the tapering on the top and bottom of the leaf. For a fern I'll use an a value less than 0 and a high b value.</p>
+                <figure><img src="../../assets/images/posts/6db25a859c54_y0fmccw1stepfive2.png" alt="Desmos parametric" loading="lazy"><figcaption>Made using Desmos Graphing Calculator</figcaption></figure>
+                <figure><img src="../../assets/images/posts/c097bfd9a892_y0fmccw1stepfive3.png" alt="Final fern" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+                <p>There are many more improvements I could make, but I'm happy with this for now.</p>
+                <div class="header-row">
+                    <h2>Link</h2>
+                    <h2>Final Product</h2>
+                </div>
+                <p><a href="https://editor.p5js.org/woojinJang_/full/fZNqxPdnQ">https://editor.p5js.org/woojinJang_/full/fZNqxPdnQ</a></p>
+                <p>Any key will add another recursion to the fern. Pressing enter will capture a full-resolution screenshot, which I have been using here.</p>
+                <p>The full code:</p>
+<pre><code>function setup() {
   angleMode(DEGREES);
   createCanvas(800, 800);
   seed = new stem(400,700,600,180,270,60);
@@ -112,10 +112,10 @@ class stem {
     this.y = y;
     this.length = length;
     this.angle = angle;
-    
+
     this.leaves = [];
   }
-  
+
   grow(){
     print('growing');
     let gap = this.length / 16;
@@ -140,15 +140,15 @@ class stem {
       }
     }
   }
-  
+
   drawself(){
     let xto = this.x+(this.length*cos(this.angle));
     let yto = this.y+(this.length*sin(this.angle));
-    
+
     stroke(90,this.col,60);
     strokeWeight(4);
     line(this.x,this.y,xto,yto);
-    
+
     for(var i = 0; i &lt; this.leaves.length; i++){
       if(this.leaves[i] != -1){
         this.leaves[i].drawself();
@@ -156,12 +156,13 @@ class stem {
     }
   }
 }</code></pre>
-<div class="wp-block-post-author"><div class="wp-block-post-author__content"><p class="wp-block-post-author__byline">Thanks,</p><p class="wp-block-post-author__name">Woojin Jang</p></div></div></div>
+                <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>
     <footer class="site-footer">
         &copy; 2026 woojin jang
     </footer>
+    <script src="/assets/js/code.js"></script>
 </body>
 </html>
