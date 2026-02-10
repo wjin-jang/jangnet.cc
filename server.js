@@ -19,6 +19,9 @@ const clientLibrary = buildClientLibrary(library);
 
 const app = express();
 
+// Trust reverse proxy (NPM/Cloudflare) for secure cookies + rate limiting
+if (IS_PROD) app.set('trust proxy', 1);
+
 // Helmet — CSP + security headers
 app.use(helmet({
   contentSecurityPolicy: {
