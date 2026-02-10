@@ -1,0 +1,13 @@
+{
+  "name": "jangnet-cc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static blog build tool for jangnet.cc",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.0"
+  }
+}

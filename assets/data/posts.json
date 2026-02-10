@@ -1,62 +1,109 @@
 [
     {
         "slug": "y0-fmcc-w8-winter",
-        "title": "Y0/FMCC/W8 \u2013 Winter",
+        "title": "Y0/FMCC/W8 – Winter",
         "date": "2025-11-17",
-        "tags": ["FMCC", "UAL", "Year 0"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0"
+        ]
     },
     {
         "slug": "y0-fmcc-w6-tempus-fugit",
-        "title": "Y0/FMCC/W6 \u2013 Tempus Fugit",
+        "title": "Y0/FMCC/W6 – Tempus Fugit",
         "date": "2025-11-10",
-        "tags": ["FMCC", "UAL", "Year 0"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0"
+        ]
     },
     {
         "slug": "y0-fmcc-w4-bee-game",
-        "title": "Y0/FMCC/W4 \u2013 Bee Game",
+        "title": "Y0/FMCC/W4 – Bee Game",
         "date": "2025-10-30",
-        "tags": ["FMCC", "UAL", "Year 0", "art", "coding", "p5"]
-    },
-    {
-        "slug": "y0-icp-w3-speculative-futures",
-        "title": "Y0/ICP/W3 \u2013 Speculative Futures",
-        "date": "2025-10-20",
-        "tags": ["ICP", "UAL", "Year 0", "reflection"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0",
+            "art",
+            "coding",
+            "p5"
+        ]
     },
     {
         "slug": "y0-fmcc-w3-flowers",
-        "title": "Y0/FMCC/W3 \u2013 Flowers",
+        "title": "Y0/FMCC/W3 – Flowers",
         "date": "2025-10-20",
-        "tags": ["FMCC", "UAL", "Year 0", "art", "coding", "p5"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0",
+            "art",
+            "coding",
+            "p5"
+        ]
+    },
+    {
+        "slug": "y0-icp-w3-speculative-futures",
+        "title": "Y0/ICP/W3 – Speculative Futures",
+        "date": "2025-10-20",
+        "tags": [
+            "ICP",
+            "UAL",
+            "Year 0",
+            "reflection"
+        ]
     },
     {
         "slug": "y0-fmcc-w3-flappy-bird-0",
-        "title": "Y0/FMCC/W2 \u2013 Flappy Bird 0",
+        "title": "Y0/FMCC/W2 – Flappy Bird 0",
         "date": "2025-10-12",
-        "tags": ["FMCC", "UAL", "Year 0", "coding", "p5"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0",
+            "coding",
+            "p5"
+        ]
     },
     {
         "slug": "personal-life-n-flying-con4full-circle",
         "title": "Personal/Life/N.Flying &CON4:FULL CIRCLE",
         "date": "2025-10-03",
-        "tags": ["Life", "Personal"]
+        "tags": [
+            "Life",
+            "Personal"
+        ]
     },
     {
         "slug": "personal-nes-os",
         "title": "Personal/Art/NES OS",
         "date": "2025-10-01",
-        "tags": ["Personal", "art"]
+        "tags": [
+            "Personal",
+            "art"
+        ]
     },
     {
         "slug": "y0-fmcc-w1-ferns",
-        "title": "Y0/FMCC/W1 \u2013 Ferns",
+        "title": "Y0/FMCC/W1 – Ferns",
         "date": "2025-10-01",
-        "tags": ["FMCC", "UAL", "Year 0", "coding", "p5"]
+        "tags": [
+            "FMCC",
+            "UAL",
+            "Year 0",
+            "coding",
+            "p5"
+        ]
     },
     {
         "slug": "hello-world",
         "title": "My first blog post is about making a blog.",
         "date": "2025-09-30",
-        "tags": ["Uncategorised"]
+        "tags": [
+            "Uncategorised"
+        ]
     }
 ]

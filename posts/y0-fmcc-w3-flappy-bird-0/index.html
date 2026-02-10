@@ -20,15 +20,15 @@
     <main class="site-main">
         <article>
             <div class="post-header">
-                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W2 – Flappy Bird 0</h1>
                 <div class="post-meta">October 12, 2025 · FMCC, UAL, Year 0, coding, p5</div>
             </div>
             <div class="post-content">
-                <p>This week I am looking at interaction in p5. I wanted to code a simple 'jump' game. Something that could be done in less than an hour so: Flappy Bird.</p>
-                <h2>Setup</h2>
-                <p>I first declare some needed variables:</p>
-<pre><code>const speed = 3;
+                <p>This week I am looking at interaction in p5. I wanted to code a simple &#39;jump&#39; game. Something that could be done in less than an hour so: Flappy Bird.</p>
+<h2>Setup</h2>
+<p>I first declare some needed variables:</p>
+<pre><code class="language-js">const speed = 3;
 let score = 0;
 let highscore = 0;
 
@@ -39,26 +39,29 @@ function setup() {
 
   thefloor = height;
   theceiling = 0;
-}</code></pre>
-                <p>Speed will be used to determine the difficulty of the game. Pipes will move at this speed. I set it as a constant but if I wanted to make the difficulty variable I could declare it using 'let'.</p>
-                <h2>Player Object</h2>
-                <p>I first created the player object. I called it 'frog' because it jumps though I should have probably called it bird.</p>
-                <p>To create an object in JavaScript is simple. I simply need to declare it as a class and write the constructor method.</p>
-<pre><code>class freg{
+}
+</code></pre>
+<p>Speed will be used to determine the difficulty of the game. Pipes will move at this speed. I set it as a constant but if I wanted to make the difficulty variable I could declare it using &#39;let&#39;.</p>
+<h2>Player Object</h2>
+<p>I first created the player object. I called it &#39;frog&#39; because it jumps though I should have probably called it bird.</p>
+<p>To create an object in JavaScript is simple. I simply need to declare it as a class and write the constructor method.</p>
+<pre><code class="language-js">class freg{
   constructor(){
     this.x = width/2;
     this.y = height/2;
     this.yvel = 0;
     this.pressed = false;
   }
-}</code></pre>
-                <p>I am giving my player a position (x,y) and y-velocity. I am also setting a variable to determine whether an input was given.</p>
-                <p>I will next add a drawself() method</p>
-<pre><code>drawself(){
+}
+</code></pre>
+<p>I am giving my player a position (x,y) and y-velocity. I am also setting a variable to determine whether an input was given.</p>
+<p>I will next add a drawself() method</p>
+<pre><code class="language-js">drawself(){
   circle(this.x,this.y,32);
-}</code></pre>
-                <p>and a step() method. This will run every frame.</p>
-<pre><code>step(){
+}
+</code></pre>
+<p>and a step() method. This will run every frame.</p>
+<pre><code class="language-js">step(){
   this.yvel -= 0.2; //gravity
   if(keyIsPressed &amp;&amp; !this.pressed){
     this.pressed = true;
@@ -74,11 +77,12 @@ function setup() {
     this.die();
   };
   this.drawself(); //draw
-}</code></pre>
-                <p>The step method includes gravity calculation and input handling. When a key is being pressed and the flag for already having pressed that key is not set, it will grant the player some upwards velocity.</p>
-                <p>The step method also handles crashing into the ceiling and floor.</p>
-                <p>The final thing it does is call the 'die' method.</p>
-<pre><code>die(){
+}
+</code></pre>
+<p>The step method includes gravity calculation and input handling. When a key is being pressed and the flag for already having pressed that key is not set, it will grant the player some upwards velocity.</p>
+<p>The step method also handles crashing into the ceiling and floor.</p>
+<p>The final thing it does is call the &#39;die&#39; method.</p>
+<pre><code class="language-js">die(){
   score = 0;
   this.y = height/2;
   this.yvel = 0;
@@ -86,12 +90,13 @@ function setup() {
   pipes.x = width;
   pipes.hei = random(height);
   pipes.cleared = false;
-}</code></pre>
-                <p>Dying will reset the score and position of the player/pipes.</p>
-                <h2>Pipes</h2>
-                <p>I'm defining pipes as a single object with height, width and gap. These will affect the pipe object as such:</p>
-                <figure><img src="../../assets/images/posts/91f1e8424443_pipes.png" alt="Pipe diagram"><figcaption>Made using Aseprite</figcaption></figure>
-<pre><code>class pipe{
+}
+</code></pre>
+<p>Dying will reset the score and position of the player/pipes.</p>
+<h2>Pipes</h2>
+<p>I&#39;m defining pipes as a single object with height, width and gap. These will affect the pipe object as such:</p>
+<figure><img src="/assets/images/posts/91f1e8424443_pipes.png" alt="Pipe diagram"><figcaption>Made using Aseprite</figcaption></figure>
+<pre><code class="language-js">class pipe{
   constructor(hei,gap){
     this.hei = hei;
     this.gap = gap;
@@ -100,14 +105,16 @@ function setup() {
     this.wid = 64;
     this.cleared = false;
   }
-}</code></pre>
-                <p>The draw function is slightly more involved than drawing the player. It draws two rectangles for each pipe (top and bottom).</p>
-<pre><code>drawself(){
+}
+</code></pre>
+<p>The draw function is slightly more involved than drawing the player. It draws two rectangles for each pipe (top and bottom).</p>
+<pre><code class="language-js">drawself(){
   rect(this.x,0,this.wid,this.hei-this.gap/2);
   rect(this.x,this.hei+this.gap/2,this.wid,height);
-}</code></pre>
-                <p>The step function handles collision checking and increasing the score when the player successfully flies through the gap. It also moves the pipe to the right of the canvas when it is fully off-screen to the left.</p>
-<pre><code>step(){
+}
+</code></pre>
+<p>The step function handles collision checking and increasing the score when the player successfully flies through the gap. It also moves the pipe to the right of the canvas when it is fully off-screen to the left.</p>
+<pre><code class="language-js">step(){
   this.drawself(); //draw
   this.x -= speed;
 
@@ -136,33 +143,36 @@ function setup() {
     this.cleared = true;
     score++;
   }
-}</code></pre>
-                <p>Causing the pipes to wrap around means that there doesn't need to be multiple pipe objects, just one which reduces memory usage and lag.</p>
-                <h2>Final Steps</h2>
-                <p>All that remains is to assign the two objects to variables in the setup function</p>
-<pre><code>function setup() {
+}
+</code></pre>
+<p>Causing the pipes to wrap around means that there doesn&#39;t need to be multiple pipe objects, just one which reduces memory usage and lag.</p>
+<h2>Final Steps</h2>
+<p>All that remains is to assign the two objects to variables in the setup function</p>
+<pre><code class="language-js">function setup() {
   ...
   frog = new freg();
   pipes = new pipe(200,128);
-}</code></pre>
-                <p>And step them in the draw function. I will also add some logic to deal with scoring.</p>
-<pre><code>function draw() {
+}
+</code></pre>
+<p>And step them in the draw function. I will also add some logic to deal with scoring.</p>
+<pre><code class="language-js">function draw() {
   background(220);
 
   highscore = max(score,highscore);
   textSize(100);
   text(score,width/2,64);
   textSize(32);
-  text("HI: "+highscore,width/2,128)
+  text(&quot;HI: &quot;+highscore,width/2,128)
 
   frog.step();
   pipes.step();
-}</code></pre>
-                <p>The game is complete.</p>
-                <figure><img src="../../assets/images/posts/d48e18c6720a_y0fmccw3.png" alt="Flappy Bird game"><figcaption>Made using p5.js</figcaption></figure>
-                <h2>Link to Project/Code</h2>
-                <p><a href="https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h">https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h</a></p>
-                <p>Thanks,<br>Woojin Jang</p>
+}
+</code></pre>
+<p>The game is complete.</p>
+<figure><img src="/assets/images/posts/d48e18c6720a_y0fmccw3.png" alt="Flappy Bird game" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<h2>Link to Project/Code</h2>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h">https://editor.p5js.org/woojinJang_/sketches/RV2tZzt4h</a></p>
+<p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>

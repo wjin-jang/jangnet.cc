@@ -20,21 +20,21 @@
     <main class="site-main">
         <article>
             <div class="post-header">
-                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W4 – Bee Game</h1>
                 <div class="post-meta">October 30, 2025 · FMCC, UAL, Year 0, art, coding, p5</div>
             </div>
             <div class="post-content">
-                <p>I'm going to attempt a more complex game in p5.js using sprites and multiple levels. My game will be about a bee who needs to collect honey from flowers before they go back to their hive. It will be played on a grid.</p>
-                <figure><img src="../../assets/images/posts/e055723ca69f_y0fmccw4-2.png" alt="Bee game sprites"><figcaption>Made using Aseprite</figcaption></figure>
-                <p>The first thing I did was prepare a set of sprites.</p>
-                <h2>Grid Setup</h2>
-                <figure><img src="../../assets/images/posts/74bfaa0d0a49_image-5.png" alt="Grid setup"><figcaption>Made using p5.js</figcaption></figure>
-                <p>I first set up a grid using nested (or two dimensional) arrays. And tested drawing sprites to the screen, aligned to the grid.</p>
-                <p>The flowers seen in the image are generated using p5's noise function. I made it scroll by shifting the noise coordinates by the frameCount. It makes a cool effect but I'm not going to use it for my game.</p>
-                <h2>Input Setup</h2>
-                <p>p5 has a built-in KeyIsPressed() function but I won't be able to use it within a class method. So I've decided to make my own input variables keypress and <code>keydown</code></p>
-<pre><code>//declare variables
+                <p>I&#39;m going to attempt a more complex game in p5.js using sprites and multiple levels. My game will be about a bee who needs to collect honey from flowers before they go back to their hive. It will be played on a grid.</p>
+<figure><img src="/assets/images/posts/e055723ca69f_y0fmccw4-2.png" alt="Bee game sprites"><figcaption>Made using Aseprite</figcaption></figure>
+<p>The first thing I did was prepare a set of sprites.</p>
+<h2>Grid Setup</h2>
+<figure><img src="/assets/images/posts/74bfaa0d0a49_image-5.png" alt="Grid setup" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p>I first set up a grid using nested (or two dimensional) arrays. And tested drawing sprites to the screen, aligned to the grid.</p>
+<p>The flowers seen in the image are generated using p5&#39;s noise function. I made it scroll by shifting the noise coordinates by the frameCount. It makes a cool effect but I&#39;m not going to use it for my game.</p>
+<h2>Input Setup</h2>
+<p>p5 has a built-in KeyIsPressed() function but I won&#39;t be able to use it within a class method. So I&#39;ve decided to make my own input variables keypress and <code>keydown</code></p>
+<pre><code class="language-js">//declare variables
 let keydown = false;
 let keypress = false;
 
@@ -48,12 +48,13 @@ function draw(){
   }
   if(!keyIsPressed){ keydown = false; }
   [...]
-}</code></pre>
-                <p><code>keypress</code> is true on the first frame the key is registered whilst <code>keydown</code> is true while the key is held down.</p>
-                <h2>Player Object</h2>
-                <p>I'm using a familiar structure for game objects with constructor, step and drawself methods. These mirror 'Events' in GameMaker Studio.</p>
-                <p>I declare the Player object as a class with x, y, and moves. x and y represent the player's grid coordinates not the screen coordinates.</p>
-<pre><code>class player {
+}
+</code></pre>
+<p><code>keypress</code> is true on the first frame the key is registered whilst <code>keydown</code> is true while the key is held down.</p>
+<h2>Player Object</h2>
+<p>I&#39;m using a familiar structure for game objects with constructor, step and drawself methods. These mirror &#39;Events&#39; in GameMaker Studio.</p>
+<p>I declare the Player object as a class with x, y, and moves. x and y represent the player&#39;s grid coordinates not the screen coordinates.</p>
+<pre><code class="language-js">class player {
   constructor(x,y,moves){
     this.x = x;
     this.y = y;
@@ -61,9 +62,10 @@ function draw(){
     this.ty = y;
     this.moves = moves;
   }
-}</code></pre>
-                <p>I can then use the step event to let the user move the player character around by pressing the arrow keys on their keyboard.</p>
-<pre><code>step(){
+}
+</code></pre>
+<p>I can then use the step event to let the user move the player character around by pressing the arrow keys on their keyboard.</p>
+<pre><code class="language-js">step(){
   //handle inputs
   let keyUp = keypress &amp;&amp; keyCode == 38;
   let keyDown = keypress &amp;&amp; keyCode == 40;
@@ -74,44 +76,50 @@ function draw(){
   this.y += keyDown - keyUp;
 
   this.drawself();
-}</code></pre>
-                <p>I then draw the character to the screen, translating the grid coordinates to screen coordinates.</p>
-<pre><code>drawself(){
+}
+</code></pre>
+<p>I then draw the character to the screen, translating the grid coordinates to screen coordinates.</p>
+<pre><code class="language-js">drawself(){
   image(img_bee,this.x*gridElW,this.y*gridElH-hover);
-}</code></pre>
-                <figure><img src="../../assets/images/posts/05b1004faacf_y0fmccw4-0.gif" alt="Bee movement"><figcaption>Made using p5.js</figcaption></figure>
-                <p>The player now moves around the screen, but it feels very jumpy. I'm adding two new variables to solve this target x and target y. Instead of directly changing the bee's x and y coordinates we will change their target and interpolate them to make a smooth animation.</p>
-<pre><code>[...]
+}
+</code></pre>
+<figure><img src="/assets/images/posts/05b1004faacf_y0fmccw4-0.gif" alt="Bee movement" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p>The player now moves around the screen, but it feels very jumpy. I&#39;m adding two new variables to solve this target x and target y. Instead of directly changing the bee&#39;s x and y coordinates we will change their target and interpolate them to make a smooth animation.</p>
+<pre><code class="language-js">[...]
 this.tx += keyRight - keyLeft;
 this.ty += keyDown - keyUp;
 
 this.x = lerp(this.x,this.tx,0.5);
 this.y = lerp(this.y,this.ty,0.5);
-[...]</code></pre>
-                <p>I will also add a slight hover to the bee so that it 'flies' over the ground. This is purely visual so it can go directly into the <code>drawself()</code> method.</p>
-<pre><code>drawself(){
+[...]
+</code></pre>
+<p>I will also add a slight hover to the bee so that it &#39;flies&#39; over the ground. This is purely visual so it can go directly into the <code>drawself()</code> method.</p>
+<pre><code class="language-js">drawself(){
   let hover = sin(frameCount*0.1)*2+2
   image(img_bee,this.x*gridElW,this.y*gridElH-hover);
-}</code></pre>
-                <figure><img src="../../assets/images/posts/44ada471b13f_y0fmccw40.gif" alt="Smooth bee movement" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
-                <p>The bee's movement is now far smoother and much more pleasing to look at. This also helps the player track their character as well.</p>
-                <h2>Collision Checks</h2>
-                <p>I want to implement a quick and simple collision check when the player inputs a movement key. This can be done by checking the grid element the player is attempting to move to to see if it's collidable.</p>
-<pre><code>let checkX = min(max(0,floor(this.tx)+dx),grid.length-1);
-let checkY = min(max(0,floor(this.ty)+dy),grid[checkX].length-1);</code></pre>
-                <p>I need to clamp the checked values so that I don't try to access values outside the grid array.</p>
-<pre><code>let collisionCheck = grid[checkX][checkY];
+}
+</code></pre>
+<figure><img src="/assets/images/posts/44ada471b13f_y0fmccw40.gif" alt="Smooth bee movement" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p>The bee&#39;s movement is now far smoother and much more pleasing to look at. This also helps the player track their character as well.</p>
+<h2>Collision Checks</h2>
+<p>I want to implement a quick and simple collision check when the player inputs a movement key. This can be done by checking the grid element the player is attempting to move to to see if it&#39;s collidable.</p>
+<pre><code class="language-js">let checkX = min(max(0,floor(this.tx)+dx),grid.length-1);
+let checkY = min(max(0,floor(this.ty)+dy),grid[checkX].length-1);
+</code></pre>
+<p>I need to clamp the checked values so that I don&#39;t try to access values outside the grid array.</p>
+<pre><code class="language-js">let collisionCheck = grid[checkX][checkY];
 
 if(collisionCheck == img_rock || collisionCheck == img_rock1){
   dx = 0;
   dy = 0;
-}</code></pre>
-                <p>If the position checked is a rock, then it stops the movement from happening.</p>
-                <h2>Loading Levels</h2>
-                <p>As a side-project I did some more tinkering with using the p5 noise function to generate levels.</p>
-                <figure><img src="../../assets/images/posts/28f2f389400f_y0fmccw4-5.png" alt="Procedural level" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
-                <p>I used different values of perlin noise to decide whether to generate grass, flowers, water or rocks.</p>
-<pre><code>for(let x = 0; x &lt; gridSizeX; x++){
+}
+</code></pre>
+<p>If the position checked is a rock, then it stops the movement from happening.</p>
+<h2>Loading Levels</h2>
+<p>As a side-project I did some more tinkering with using the p5 noise function to generate levels.</p>
+<figure><img src="/assets/images/posts/28f2f389400f_y0fmccw4-5.png" alt="Procedural level" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p>I used different values of perlin noise to decide whether to generate grass, flowers, water or rocks.</p>
+<pre><code class="language-js">for(let x = 0; x &lt; gridSizeX; x++){
   grid[x] = [];
   for(let y = 0; y &lt; gridSizeY; y++){
     grid[x][y] = img_grass;
@@ -119,23 +127,42 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
     if(noise(x*0.2,y*0.2) &gt; 0.50){ grid[x][y] = img_flower; }
     if(noise(x*0.2,y*0.2) &gt; 0.60){ grid[x][y] = img_water; }
   }
-}</code></pre>
-                <p>Actually loading a level is far simpler. I wrote a function to match a pixel to an array.</p>
-<pre><code>function matchPixel(arr1,arr2) {
+}
+</code></pre>
+<p>Actually loading a level is far simpler. I wrote a function to match a pixel to an array.</p>
+<pre><code class="language-js">function matchPixel(arr1,arr2) {
   return (arr1[0] == arr2[0] &amp;&amp; arr1[1] == arr2[1] &amp;&amp; arr1[2] == arr2[2] &amp;&amp; arr1[3] == arr2[3])
-}</code></pre>
-                <p>This has to be done because JavaScript does not allow for comparing two arrays directly.</p>
-                <figure><img src="../../assets/images/posts/7d4b91a46339_lvl1literal.png" alt="Level as pixel image" loading="lazy"></figure>
-                <p>Levels are stored as images with each pixel representing a tile on the grid.</p>
-                <table>
-                    <tr><td><strong>Colour</strong></td><td><strong>Tile</strong></td></tr>
-                    <tr><td>GREEN ('#00FF00')</td><td>Grass</td></tr>
-                    <tr><td>WHITE ('#FFFFFF')</td><td>Flower</td></tr>
-                    <tr><td>BLACK ('#000000')</td><td>Rock</td></tr>
-                    <tr><td>YELLOW ('#FFFF00')</td><td>Hive</td></tr>
-                </table>
-                <p>I use a row of if statements to load the correct tile for each pixel.</p>
-<pre><code>function loadLevel(level) {
+}
+</code></pre>
+<p>This has to be done because JavaScript does not allow for comparing two arrays directly.</p>
+<figure><img src="/assets/images/posts/7d4b91a46339_lvl1literal.png" alt="Level as pixel image" loading="lazy"></figure>
+<p>Levels are stored as images with each pixel representing a tile on the grid.</p>
+<table>
+<thead>
+<tr>
+<th>Colour</th>
+<th>Tile</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GREEN (&#39;#00FF00&#39;)</td>
+<td>Grass</td>
+</tr>
+<tr>
+<td>WHITE (&#39;#FFFFFF&#39;)</td>
+<td>Flower</td>
+</tr>
+<tr>
+<td>BLACK (&#39;#000000&#39;)</td>
+<td>Rock</td>
+</tr>
+<tr>
+<td>YELLOW (&#39;#FFFF00&#39;)</td>
+<td>Hive</td>
+</tr>
+</tbody></table>
+<p>I use a row of if statements to load the correct tile for each pixel.</p>
+<pre><code class="language-js">function loadLevel(level) {
   let gridSizeX = level.width;
   let gridSizeY = level.height;
 
@@ -158,11 +185,12 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
       }
     }
   }
-}</code></pre>
-                <figure><img src="../../assets/images/posts/1a1beb52d458_y0fmccw4-6.png" alt="Loaded level" loading="lazy"></figure>
-                <p>This makes it very easy to create new levels and new tile types can be created (up to 16.7 million tile types).</p>
-                <h2>Interacting with Tiles</h2>
-<pre><code>if(dx+dy != 0){
+}
+</code></pre>
+<figure><img src="/assets/images/posts/1a1beb52d458_y0fmccw4-6.png" alt="Loaded level" loading="lazy"></figure>
+<p>This makes it very easy to create new levels and new tile types can be created (up to 16.7 million tile types).</p>
+<h2>Interacting with Tiles</h2>
+<pre><code class="language-js">if(dx+dy != 0){
   if(collisionCheck == img_flower){
     this.moves += 4;
   }
@@ -178,19 +206,21 @@ if(collisionCheck == img_rock || collisionCheck == img_rock1){
     dx = 0;
     dy = 0;
   }
-}</code></pre>
-                <p>I check if the player is on a flower and add 5 movement points, if the player has 0 or less moves remaining and kill it, and if the player is on a hive and load the next level.</p>
-<pre><code>die(){
+}
+</code></pre>
+<p>I check if the player is on a flower and add 5 movement points, if the player has 0 or less moves remaining and kill it, and if the player is on a hive and load the next level.</p>
+<pre><code class="language-js">die(){
   this.tx = 1;
   this.ty = 1;
   this.moves = 5;
-}</code></pre>
-                <p>The death function simply resets the bee's position and movement points.</p>
-                <h2>Final Game</h2>
-                <figure><img src="../../assets/images/posts/e1e7eb595fb1_y0fmccw4-7.gif" alt="Final bee game" loading="lazy"></figure>
-                <p>There are many areas of potential improvement, but the game is basically complete. I used just a few simple levels to show off the basic gameplay but more complex features and better designed levels can easily be added in.</p>
-                <p><a href="https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar">https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar</a></p>
-                <p>Thanks,<br>Woojin Jang</p>
+}
+</code></pre>
+<p>The death function simply resets the bee&#39;s position and movement points.</p>
+<h2>Final Game</h2>
+<figure><img src="/assets/images/posts/e1e7eb595fb1_y0fmccw4-7.gif" alt="Final bee game" loading="lazy"></figure>
+<p>There are many areas of potential improvement, but the game is basically complete. I used just a few simple levels to show off the basic gameplay but more complex features and better designed levels can easily be added in.</p>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar">https://editor.p5js.org/woojinJang_/sketches/eIPFKNUar</a></p>
+<p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>

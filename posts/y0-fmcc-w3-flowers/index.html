@@ -20,35 +20,37 @@
     <main class="site-main">
         <article>
             <div class="post-header">
-                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W3 – Flowers</h1>
                 <div class="post-meta">October 20, 2025 · FMCC, UAL, Year 0, art, coding, p5</div>
             </div>
             <div class="post-content">
-                <p>I tried using p5's image library and WEBGL to create expressive scenes in 3D.</p>
-                <p>The first thing I did was to load my images into an array.</p>
-                <figure><img src="../../assets/images/posts/e7c8b973e39a_collage-1.png" alt="Flower sprites"><figcaption>Made using Aseprite</figcaption></figure>
-                <p>I imported a few transparent images I found of flowers from Google into Aseprite and converted them to indexed colour using the EDG32 palette by <a href="https://x.com/ENDESGA">ENDESGA</a>. This makes the flowers look like a cohesive set.</p>
-<pre><code>let flowers = [];
+                <p>I tried using p5&#39;s image library and WEBGL to create expressive scenes in 3D.</p>
+<p>The first thing I did was to load my images into an array.</p>
+<figure><img src="/assets/images/posts/e7c8b973e39a_collage-1.png" alt="Flower sprites"><figcaption>Made using Aseprite</figcaption></figure>
+<p>I imported a few transparent images I found of flowers from Google into Aseprite and converted them to indexed colour using the EDG32 palette by <a href="https://x.com/ENDESGA">ENDESGA</a>. This makes the flowers look like a cohesive set.</p>
+<pre><code class="language-js">let flowers = [];
 
 function preload(){
-  flowers[0] = loadImage('./flowers/green1.png');
-  flowers[1] = loadImage('./flowers/orange1.png');
-  flowers[2] = loadImage('./flowers/pink1.png');
-  flowers[3] = loadImage('./flowers/purple1.png');
-  flowers[4] = loadImage('./flowers/red1.png');
-  flowers[5] = loadImage('./flowers/red2.png');
-  flowers[6] = loadImage('./flowers/red3.png');
-  flowers[7] = loadImage('./flowers/white1.png');
-  flowers[8] = loadImage('./flowers/white2.png');
-  flowers[9] = loadImage('./flowers/yellow1.png');
-}</code></pre>
-                <p>Then I set the canvas to use WEBGL.</p>
-<pre><code>createCanvas(800, 800, WEBGL);</code></pre>
-                <p>I use nested loops to draw a bunch of concentric spinning rings of flowers. I disabled the depth mask so I didn't have to deal with draw order.</p>
-<pre><code>function draw() {
+  flowers[0] = loadImage(&#39;./flowers/green1.png&#39;);
+  flowers[1] = loadImage(&#39;./flowers/orange1.png&#39;);
+  flowers[2] = loadImage(&#39;./flowers/pink1.png&#39;);
+  flowers[3] = loadImage(&#39;./flowers/purple1.png&#39;);
+  flowers[4] = loadImage(&#39;./flowers/red1.png&#39;);
+  flowers[5] = loadImage(&#39;./flowers/red2.png&#39;);
+  flowers[6] = loadImage(&#39;./flowers/red3.png&#39;);
+  flowers[7] = loadImage(&#39;./flowers/white1.png&#39;);
+  flowers[8] = loadImage(&#39;./flowers/white2.png&#39;);
+  flowers[9] = loadImage(&#39;./flowers/yellow1.png&#39;);
+}
+</code></pre>
+<p>Then I set the canvas to use WEBGL.</p>
+<pre><code class="language-js">createCanvas(800, 800, WEBGL);
+</code></pre>
+<p>I use nested loops to draw a bunch of concentric spinning rings of flowers. I disabled the depth mask so I didn&#39;t have to deal with draw order.</p>
+<pre><code class="language-js">function draw() {
 
-  background('#e43b44');
+  background(&#39;#e43b44&#39;);
 
   const gl = this._renderer.GL;
   gl.depthMask(false);
@@ -68,11 +70,12 @@ function preload(){
       pop();
     }
   }
-}</code></pre>
-                <h2>Final</h2>
-                <figure><img src="../../assets/images/posts/e5cc26b149fc_y0fmccw3-1.png" alt="3D flower scene"><figcaption>Made using p5.js</figcaption></figure>
-                <p><a href="https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi">https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi</a></p>
-                <p>Thanks,<br>Woojin Jang</p>
+}
+</code></pre>
+<h2>Final</h2>
+<figure><img src="/assets/images/posts/e5cc26b149fc_y0fmccw3-1.png" alt="3D flower scene" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p><a href="https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi">https://editor.p5js.org/woojinJang_/full/Ob8MY9Koi</a></p>
+<p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>

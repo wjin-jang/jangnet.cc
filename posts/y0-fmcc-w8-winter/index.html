@@ -20,23 +20,24 @@
     <main class="site-main">
         <article>
             <div class="post-header">
-                <a href="/" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
                 <h1>Y0/FMCC/W8 – Winter</h1>
                 <div class="post-meta">November 17, 2025 · FMCC, UAL, Year 0</div>
             </div>
             <div class="post-content">
                 <p>I created a star class in p5, using the beginShape(), vertex() and endShape() functions. My main aim was to parameterise everything.</p>
-                <h2>Star Generator</h2>
-                <p>A star can be constructed by alternating points between two circles, one inner and one outer. The inner circle needs to be offset by half the angle of the difference between outer points.</p>
-<pre><code>constructor(position,radius,points,diff,col){
+<h2>Star Generator</h2>
+<p>A star can be constructed by alternating points between two circles, one inner and one outer. The inner circle needs to be offset by half the angle of the difference between outer points.</p>
+<pre><code class="language-js">constructor(position,radius,points,diff,col){
   this.position = position;
   this.radius = radius;
   this.points = points;
   this.diff = diff;
   this.col = col;
-}</code></pre>
-                <p>I construct a star object giving it a position (Vector), radius, number of points, difference between the inner/outer circle and colour.</p>
-<pre><code>drawself(){
+}
+</code></pre>
+<p>I construct a star object giving it a position (Vector), radius, number of points, difference between the inner/outer circle and colour.</p>
+<pre><code class="language-js">drawself(){
   let pointsOuter = [];
   let pointsInner = [];
 
@@ -60,16 +61,17 @@
   }
   vertex(pointsOuter[0].x,pointsOuter[0].y);
   endShape();
-}</code></pre>
-                <p>I use two arrays to make it easier to organise the points. I define points on the inner and outer circles. The inner circle points are offset by half.</p>
-                <p>I use sliders to be able to change parameters while the sketch is running.</p>
-                <figure><img src="../../assets/images/posts/82615e106cd9_image-1.png" alt="Star generator"><figcaption>Made using p5.js</figcaption></figure>
-                <p>I have a program that can generate stars with an arbitrary number of points, radius and difference (pointiness).</p>
-                <p><a href="https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw">https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw</a></p>
-                <h2>Making a Scene</h2>
-                <p>I can export this object and use it in a new project. I want to create a scene/wallpaper using multiple stars.</p>
-                <p>The first thing I do is create an array of star objects.</p>
-<pre><code>let stars = [];
+}
+</code></pre>
+<p>I use two arrays to make it easier to organise the points. I define points on the inner and outer circles. The inner circle points are offset by half.</p>
+<p>I use sliders to be able to change parameters while the sketch is running.</p>
+<figure><img src="/assets/images/posts/82615e106cd9_image-1.png" alt="Star generator"><figcaption>Made using p5.js</figcaption></figure>
+<p>I have a program that can generate stars with an arbitrary number of points, radius and difference (pointiness).</p>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw">https://editor.p5js.org/woojinJang_/sketches/HJfCFfONw</a></p>
+<h2>Making a Scene</h2>
+<p>I can export this object and use it in a new project. I want to create a scene/wallpaper using multiple stars.</p>
+<p>The first thing I do is create an array of star objects.</p>
+<pre><code class="language-js">let stars = [];
 const starsCount = 300;
 
 function setup() {
@@ -79,28 +81,31 @@ function setup() {
     let radius = random(5,30);
     let points = 8;
     let diff = radius*0.95;
-    let col = 'white'
+    let col = &#39;white&#39;
 
     stars.push(new Star(pos,radius,points,diff,col,radius*0.1));
   }
-}</code></pre>
-                <p>I give them a random position on the y axis but spread them evenly on the x axis, this stops stars from clumping together too much and becoming distracting.</p>
-                <p>I set the radius to a random value and tie the speed to the radius, creating a parallax effect.</p>
-                <p>I then add a new method to the star to move it.</p>
-<pre><code>step(){
+}
+</code></pre>
+<p>I give them a random position on the y axis but spread them evenly on the x axis, this stops stars from clumping together too much and becoming distracting.</p>
+<p>I set the radius to a random value and tie the speed to the radius, creating a parallax effect.</p>
+<p>I then add a new method to the star to move it.</p>
+<pre><code class="language-js">step(){
   this.position.y += this.speed;
   if(this.position.y &gt; height+this.radius*2){
     this.position.y = -this.radius*2;
   }
-}</code></pre>
-                <p>When wrapping the star around, I ensure that it is fully off the screen. This stops the stars from 'popping' in and out of the scene.</p>
-                <p>I also add a bit of variance in the inner size of the star using a sin function, creating a sparkling effect.</p>
-<pre><code>let shine = sin(frameCount*0.1)*0.3;</code></pre>
-                <h2>Final Product</h2>
-                <figure><img src="../../assets/images/posts/d72c9eb9ec4e_y0fmccw5-0.png" alt="Winter scene"></figure>
-                <p>I set the background to a calming, wintery blue.</p>
-                <p><a href="https://editor.p5js.org/woojinJang_/full/Kcq3kNo04">https://editor.p5js.org/woojinJang_/full/Kcq3kNo04</a></p>
-                <p>Thanks,<br>Woojin Jang</p>
+}
+</code></pre>
+<p>When wrapping the star around, I ensure that it is fully off the screen. This stops the stars from &#39;popping&#39; in and out of the scene.</p>
+<p>I also add a bit of variance in the inner size of the star using a sin function, creating a sparkling effect.</p>
+<pre><code class="language-js">let shine = sin(frameCount*0.1)*0.3;
+</code></pre>
+<h2>Final Product</h2>
+<figure><img src="/assets/images/posts/d72c9eb9ec4e_y0fmccw5-0.png" alt="Winter scene" loading="lazy"></figure>
+<p>I set the background to a calming, wintery blue.</p>
+<p><a href="https://editor.p5js.org/woojinJang_/full/Kcq3kNo04">https://editor.p5js.org/woojinJang_/full/Kcq3kNo04</a></p>
+<p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
     </main>
