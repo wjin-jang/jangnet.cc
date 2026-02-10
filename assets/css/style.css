@@ -117,7 +117,7 @@ nav a {
     border-right: var(--cell);
     transition: background 0.15s ease, color 0.15s ease;
 }
-nav a:last-child { }
+nav a:last-child { border-right: none; }
 nav a:visited { color: var(--ink); }
 nav a:hover, nav a.active { background: var(--ink); color: var(--paper); }
 
@@ -177,7 +177,7 @@ nav a:hover, nav a.active { background: var(--ink); color: var(--paper); }
     border-bottom: var(--cell);
     border-right: var(--cell);
     text-decoration: none;
-    background: var(--paper);
+    background: var(--ink);
     transition: background 0.15s ease;
 }
 .post-header .back-link img {
@@ -185,9 +185,10 @@ nav a:hover, nav a.active { background: var(--ink); color: var(--paper); }
     height: 100%;
     object-fit: contain;
     image-rendering: auto;
+    filter: invert(1);
 }
-.post-header .back-link:hover { background: var(--ink); }
-.post-header .back-link:hover img { filter: invert(1); }
+.post-header .back-link:hover { background: var(--paper); }
+.post-header .back-link:hover img { filter: none; }
 .post-header h1 {
     font-size: 1.4rem;
     line-height: 1.3;
@@ -220,6 +221,15 @@ nav a:hover, nav a.active { background: var(--ink); color: var(--paper); }
 .page-content > * {
     border-bottom: var(--cell);
     margin: 0;
+}
+
+/* Universal fix: when a content child is itself a container with
+   bordered children, the last grandchild's border-bottom would
+   double the parent's (from > * above). Removing it lets the
+   parent's border serve as the sole line. */
+.post-content > * > :last-child,
+.page-content > * > :last-child {
+    border-bottom: none;
 }
 
 /* Paragraphs — merge sequential (no border between adjacent p) */
@@ -464,7 +474,6 @@ nav a:hover, nav a.active { background: var(--ink); color: var(--paper); }
 .index-tags {
     border-right: var(--cell);
 }
-.index-tags > :last-child { border-bottom: none; }
 .index-posts { min-width: 0; }
 
 
