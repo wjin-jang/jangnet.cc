@@ -4,10 +4,16 @@
   "private": true,
   "description": "Static blog build tool for jangnet.cc",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "start": "node server.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
     "gray-matter": "^4.0.3",
+    "helmet": "^8.0.0",
     "marked": "^15.0.0"
   }
 }

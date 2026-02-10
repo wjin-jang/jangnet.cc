@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .login-form {
+            padding: var(--pad);
+        }
+        .login-form label {
+            display: block;
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            display: block;
+            width: 100%;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 0.4rem 0.5rem;
+            border: var(--cell);
+            background: var(--paper);
+            color: var(--ink);
+            outline: none;
+            margin-bottom: 0.8rem;
+        }
+        .login-form input:focus {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .login-form button {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.4rem var(--pad);
+            border: var(--cell);
+            background: var(--paper);
+            color: var(--ink);
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .login-form button:hover {
+            background: var(--ink);
+            color: var(--paper);
+        }
+        .login-error {
+            padding: 0.35rem var(--pad);
+            background: var(--red-ink);
+            color: var(--paper);
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <div class="page-header">
+            <h1>Player Login</h1>
+        </div>
+        <div class="page-content">
+            <div id="login-error" class="login-error" style="display:none; border-bottom: var(--cell);">Invalid username or password</div>
+            <form class="login-form" method="POST" action="/player/login" style="border-bottom: var(--cell);">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" autocomplete="username" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required>
+                <button type="submit">Log In</button>
+            </form>
+        </div>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script>
+        if (location.search.includes('error=1')) {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

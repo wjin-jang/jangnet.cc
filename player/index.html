@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/player/player.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+            <a class="nav-sep">.</a>
+            <a href="#" id="nav-logout">Logout</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <div class="page-header">
+            <h1>Player</h1>
+        </div>
+        <div class="player-layout">
+            <aside class="player-sidebar" id="sidebar">
+                <div class="sidebar-header">Artists</div>
+                <div class="artist-list" id="artist-list"></div>
+            </aside>
+            <section class="player-content" id="content">
+                <div class="content-placeholder">
+                    <p>Select an artist to browse albums.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+    <div class="now-playing" id="now-playing">
+        <div class="np-art" id="np-art"></div>
+        <div class="np-info">
+            <div class="np-title" id="np-title">—</div>
+            <div class="np-artist" id="np-artist"></div>
+            <div class="np-progress">
+                <span class="np-time" id="np-current">0:00</span>
+                <div class="np-bar" id="np-bar">
+                    <div class="np-bar-fill" id="np-bar-fill"></div>
+                </div>
+                <span class="np-time" id="np-duration">0:00</span>
+            </div>
+        </div>
+        <div class="np-controls">
+            <button class="np-btn" id="btn-prev" title="Previous">&#9664;&#9664;</button>
+            <button class="np-btn np-btn-play" id="btn-play" title="Play">&#9654;</button>
+            <button class="np-btn" id="btn-next" title="Next">&#9654;&#9654;</button>
+        </div>
+    </div>
+    <script src="/player/player.js"></script>
+</body>
+</html>

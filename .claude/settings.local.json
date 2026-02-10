@@ -9,7 +9,8 @@
       "Bash(git push:*)",
       "WebFetch(domain:24000068.myblog.arts.ac.uk)",
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(ls:*)"
     ]
   }
 }
