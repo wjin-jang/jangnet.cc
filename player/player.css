@@ -411,6 +411,17 @@ body {
     opacity: 1;
 }
 
+.queue-label {
+    padding: 0.3rem var(--pad);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    opacity: 0.4;
+    border-bottom: var(--cell);
+}
+
 .p-ctrl-info {
     flex: 1;
     min-width: 0;

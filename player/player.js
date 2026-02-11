@@ -6,11 +6,19 @@
   var library = [];
   var audio = new Audio();
   var currentTrack = null;
-  var queue = [];
-  var queueIndex = -1;
+
+  // Auto queue (from album/playlist playback)
+  var autoQueue = [];
+  var autoQueueIndex = -1;
+  var originalAutoQueue = []; // saved for shuffle-off restore
+
+  // Manual queue (user-added "next up")
+  var manualQueue = [];
+
   var loopMode = 'none';
   var shuffleOn = false;
   var contextCover = null;
+  var autoQueueLabel = ''; // e.g. album name for queue view
 
   var currentView = 'library';
   var viewArgs = {};
@@ -78,16 +86,18 @@
     saveJSON('jn-fav-albums', favAlbums);
   }
 
+  function sameRef(a, b) {
+    return a && b && a.artistIdx === b.artistIdx && a.albumIdx === b.albumIdx && a.trackIdx === b.trackIdx;
+  }
+
   // ── Art Panel ──
 
   var currentCoverKey = null;
 
   function fadeIn(img) {
     pArt.appendChild(img);
-    // Force reflow then add class
     img.offsetHeight;
     img.classList.add('visible');
-    // Remove old images after transition
     var old = pArt.querySelectorAll('img:not(:last-child)');
     setTimeout(function () {
       old.forEach(function (o) { if (o.parentNode) o.remove(); });
@@ -109,7 +119,6 @@
     currentCoverKey = key;
 
     if (key === null) {
-      // Fade out current
       var cur = pArt.querySelector('img.visible');
       if (cur) {
         cur.classList.remove('visible');
@@ -120,7 +129,6 @@
       return;
     }
 
-    // Load small thumbnail immediately
     var thumb = new Image();
     thumb.alt = '';
     thumb.src = coverUrl(ai, ali, 80);
@@ -128,7 +136,6 @@
       if (currentCoverKey === key) fadeIn(thumb);
     };
 
-    // Then load full resolution
     var size = Math.round(Math.max(pArt.offsetWidth, pArt.offsetHeight) * (window.devicePixelRatio || 1));
     size = Math.min(size, 1200);
     if (size > 80) {
@@ -152,29 +159,39 @@
     }
   }
 
-  // ── Loop / Shuffle ──
+  // ── Queue button ──
 
   btnQueue.addEventListener('click', function () {
     if (currentView === 'queue') goBack();
     else navigate('queue');
   });
 
-  function reshuffleQueue() {
-    var cur = queue[queueIndex];
-    var rest = [];
-    for (var i = 0; i < queue.length; i++) {
-      if (i !== queueIndex) rest.push(queue[i]);
-    }
-    shuffleArray(rest);
-    queue = [cur].concat(rest);
-    queueIndex = 0;
-  }
+  // ── Shuffle helpers ──
 
   function shuffleArray(a) {
     for (var i = a.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var t = a[i]; a[i] = a[j]; a[j] = t;
     }
+  }
+
+  function reshuffleAutoQueue() {
+    if (autoQueue.length <= 1) return;
+    var cur = autoQueue[autoQueueIndex];
+    var rest = [];
+    for (var i = 0; i < autoQueue.length; i++) {
+      if (i !== autoQueueIndex) rest.push(autoQueue[i]);
+    }
+    shuffleArray(rest);
+    autoQueue = [cur].concat(rest);
+    autoQueueIndex = 0;
+  }
+
+  function restoreAutoQueueOrder() {
+    if (originalAutoQueue.length === 0) return;
+    var cur = autoQueue[autoQueueIndex];
+    autoQueue = originalAutoQueue.slice();
+    autoQueueIndex = findIdx(autoQueue, cur.artistIdx, cur.albumIdx, cur.trackIdx);
   }
 
   // ── Navigation ──
@@ -355,11 +372,11 @@
 
     navList.onclick = function (e) {
       if (handleBack(e)) return;
-      if (handlePlaylistAdd(e)) return;
+      if (handleAddMenu(e)) return;
       var row = e.target.closest('.track-row');
       if (row) {
         var ti = parseInt(row.getAttribute('data-track'), 10);
-        buildQueue(tracks, findIdx(tracks, ai, ali, ti));
+        buildAutoQueue(tracks, findIdx(tracks, ai, ali, ti), album.name);
         playTrack(ai, ali, ti);
       }
     };
@@ -384,13 +401,13 @@
 
     navList.onclick = function (e) {
       if (handleBack(e)) return;
-      if (handlePlaylistAdd(e)) return;
+      if (handleAddMenu(e)) return;
       var row = e.target.closest('.track-row');
       if (row) {
         var tai = parseInt(row.getAttribute('data-artist'), 10);
         var tali = parseInt(row.getAttribute('data-album'), 10);
         var ti = parseInt(row.getAttribute('data-track'), 10);
-        buildQueue(all, findIdx(all, tai, tali, ti));
+        buildAutoQueue(all, findIdx(all, tai, tali, ti), 'All Tracks');
         playTrack(tai, tali, ti);
       }
     };
@@ -511,7 +528,7 @@
       var ref = pl.tracks[i];
       if (!library[ref.artistIdx] || !library[ref.artistIdx].albums[ref.albumIdx] || !library[ref.artistIdx].albums[ref.albumIdx].tracks[ref.trackIdx]) continue;
       var track = library[ref.artistIdx].albums[ref.albumIdx].tracks[ref.trackIdx];
-      var playing = currentTrack && currentTrack.artistIdx === ref.artistIdx && currentTrack.albumIdx === ref.albumIdx && currentTrack.trackIdx === ref.trackIdx;
+      var playing = sameRef(currentTrack, ref);
       h += '<div class="track-row' + (playing ? ' playing' : '') + '" data-artist="' + ref.artistIdx + '" data-album="' + ref.albumIdx + '" data-track="' + ref.trackIdx + '">';
       h += '<span class="track-num">' + (i + 1) + '</span>';
       h += '<span class="track-title">' + esc(track.title) + '</span>';
@@ -537,7 +554,7 @@
         var tai = parseInt(row.getAttribute('data-artist'), 10);
         var tali = parseInt(row.getAttribute('data-album'), 10);
         var ti = parseInt(row.getAttribute('data-track'), 10);
-        buildQueue(pl.tracks, findIdx(pl.tracks, tai, tali, ti));
+        buildAutoQueue(pl.tracks, findIdx(pl.tracks, tai, tali, ti), pl.name);
         playTrack(tai, tali, ti);
       }
     };
@@ -559,26 +576,47 @@
     h += '<span class="toggle-state">' + (shuffleOn ? 'On' : 'Off') + '</span>';
     h += '</div>';
 
-    if (queue.length === 0) {
+    // Manual queue (Next Up)
+    if (manualQueue.length > 0) {
+      h += '<div class="queue-label">Next up</div>';
+      for (var m = 0; m < manualQueue.length; m++) {
+        var mref = manualQueue[m];
+        if (!library[mref.artistIdx]) continue;
+        var mtrack = library[mref.artistIdx].albums[mref.albumIdx].tracks[mref.trackIdx];
+        h += '<div class="track-row" data-mq="' + m + '">';
+        h += '<span class="track-num">' + (m + 1) + '</span>';
+        h += '<span class="track-title">' + esc(mtrack.title) + '</span>';
+        h += '<span class="track-artist-hint">' + esc(library[mref.artistIdx].name) + '</span>';
+        h += '<span class="track-remove" data-rm-mq="' + m + '">\u00D7</span>';
+        h += '</div>';
+      }
+    }
+
+    // Auto queue
+    if (autoQueue.length > 0) {
+      h += '<div class="queue-label">' + esc(autoQueueLabel || 'Playing from') + '</div>';
+      for (var i = 0; i < autoQueue.length; i++) {
+        var ref = autoQueue[i];
+        if (!library[ref.artistIdx] || !library[ref.artistIdx].albums[ref.albumIdx]) continue;
+        var track = library[ref.artistIdx].albums[ref.albumIdx].tracks[ref.trackIdx];
+        var playing = i === autoQueueIndex;
+        h += '<div class="track-row' + (playing ? ' playing' : '') + '" data-aq="' + i + '">';
+        h += '<span class="track-num">' + (i + 1) + '</span>';
+        h += '<span class="track-title">' + esc(track.title) + '</span>';
+        h += '<span class="track-artist-hint">' + esc(library[ref.artistIdx].name) + '</span>';
+        h += '</div>';
+      }
+    }
+
+    if (autoQueue.length === 0 && manualQueue.length === 0) {
       h += '<div class="nav-empty">No queue. Play a track to start.</div>';
     }
-    for (var i = 0; i < queue.length; i++) {
-      var ref = queue[i];
-      if (!library[ref.artistIdx] || !library[ref.artistIdx].albums[ref.albumIdx]) continue;
-      var track = library[ref.artistIdx].albums[ref.albumIdx].tracks[ref.trackIdx];
-      var playing = i === queueIndex;
-      h += '<div class="track-row' + (playing ? ' playing' : '') + '" data-qi="' + i + '">';
-      h += '<span class="track-num">' + (i + 1) + '</span>';
-      h += '<span class="track-title">' + esc(track.title) + '</span>';
-      h += '<span class="track-artist-hint">' + esc(library[ref.artistIdx].name) + '</span>';
-      h += '</div>';
-    }
+
     navList.innerHTML = h;
     navList.scrollTop = 0;
 
-    // Scroll current track into view
-    var playing = navList.querySelector('.track-row.playing');
-    if (playing) playing.scrollIntoView({ block: 'center' });
+    var playingEl = navList.querySelector('.track-row.playing');
+    if (playingEl) playingEl.scrollIntoView({ block: 'center' });
 
     navList.onclick = function (e) {
       if (handleBack(e)) return;
@@ -591,17 +629,38 @@
           else loopMode = 'none';
         } else if (t === 'shuffle') {
           shuffleOn = !shuffleOn;
-          if (shuffleOn && queue.length > 1 && queueIndex >= 0) reshuffleQueue();
+          if (shuffleOn && autoQueue.length > 1 && autoQueueIndex >= 0) {
+            originalAutoQueue = autoQueue.slice();
+            reshuffleAutoQueue();
+          } else if (!shuffleOn) {
+            restoreAutoQueueOrder();
+          }
         }
         renderQueue();
         return;
       }
-      var row = e.target.closest('.track-row');
-      if (row) {
-        var qi = parseInt(row.getAttribute('data-qi'), 10);
-        queueIndex = qi;
-        var ref = queue[qi];
-        playTrack(ref.artistIdx, ref.albumIdx, ref.trackIdx);
+      // Remove from manual queue
+      var rmMq = e.target.closest('[data-rm-mq]');
+      if (rmMq) {
+        e.stopPropagation();
+        manualQueue.splice(parseInt(rmMq.getAttribute('data-rm-mq'), 10), 1);
+        renderQueue();
+        return;
+      }
+      // Play from manual queue
+      var mqRow = e.target.closest('[data-mq]');
+      if (mqRow) {
+        var mi = parseInt(mqRow.getAttribute('data-mq'), 10);
+        var mref = manualQueue.splice(mi, 1)[0];
+        playTrack(mref.artistIdx, mref.albumIdx, mref.trackIdx);
+        return;
+      }
+      // Play from auto queue
+      var aqRow = e.target.closest('[data-aq]');
+      if (aqRow) {
+        autoQueueIndex = parseInt(aqRow.getAttribute('data-aq'), 10);
+        var aref = autoQueue[autoQueueIndex];
+        playTrack(aref.artistIdx, aref.albumIdx, aref.trackIdx);
       }
     };
   }
@@ -632,7 +691,7 @@
   }
 
   function trackRowHTML(ai, ali, ti, track, artistHint) {
-    var playing = currentTrack && currentTrack.artistIdx === ai && currentTrack.albumIdx === ali && currentTrack.trackIdx === ti;
+    var playing = sameRef(currentTrack, { artistIdx: ai, albumIdx: ali, trackIdx: ti });
     var h = '<div class="track-row' + (playing ? ' playing' : '') + '" data-artist="' + ai + '" data-album="' + ali + '" data-track="' + ti + '">';
     h += '<span class="track-num">' + track.number + '</span>';
     h += '<span class="track-title">' + esc(track.title) + '</span>';
@@ -653,26 +712,16 @@
     }
   }
 
-  // ── Playlist Add ──
+  // ── Add Menu (Queue + Playlists) ──
 
-  function handlePlaylistAdd(e) {
+  function handleAddMenu(e) {
     var btn = e.target.closest('[data-add]');
     if (!btn) return false;
     e.stopPropagation();
-    closePlaylistMenu();
+    closeAddMenu();
 
     var parts = btn.getAttribute('data-add').split('-');
     var ref = { artistIdx: parseInt(parts[0], 10), albumIdx: parseInt(parts[1], 10), trackIdx: parseInt(parts[2], 10) };
-
-    if (playlists.length === 0) {
-      var name = prompt('Create a playlist:');
-      if (name && name.trim()) {
-        playlists.push({ name: name.trim(), tracks: [ref] });
-        saveJSON('jn-playlists', playlists);
-        flash(btn);
-      }
-      return true;
-    }
 
     var rect = btn.getBoundingClientRect();
     var menu = document.createElement('div');
@@ -680,6 +729,14 @@
     menu.style.top = rect.bottom + 2 + 'px';
     menu.style.left = Math.min(rect.right, window.innerWidth - 160) + 'px';
 
+    // Add to queue option
+    var qItem = document.createElement('div');
+    qItem.className = 'playlist-menu-item';
+    qItem.textContent = 'Add to Queue';
+    qItem.setAttribute('data-add-queue', '1');
+    menu.appendChild(qItem);
+
+    // Playlist options
     for (var i = 0; i < playlists.length; i++) {
       var mi = document.createElement('div');
       mi.className = 'playlist-menu-item';
@@ -689,31 +746,36 @@
     }
     var ni = document.createElement('div');
     ni.className = 'playlist-menu-item';
-    ni.textContent = '+ New';
+    ni.textContent = '+ New Playlist';
     ni.setAttribute('data-pl-new', '1');
     menu.appendChild(ni);
 
     menu.addEventListener('click', function (me) {
       me.stopPropagation();
-      var pi = me.target.getAttribute('data-pl');
-      if (pi !== null) {
-        playlists[parseInt(pi, 10)].tracks.push(ref);
-        saveJSON('jn-playlists', playlists);
+      if (me.target.getAttribute('data-add-queue')) {
+        manualQueue.push(ref);
         flash(btn);
-      } else if (me.target.getAttribute('data-pl-new')) {
-        var n = prompt('Playlist name:');
-        if (n && n.trim()) {
-          playlists.push({ name: n.trim(), tracks: [ref] });
+      } else {
+        var pi = me.target.getAttribute('data-pl');
+        if (pi !== null) {
+          playlists[parseInt(pi, 10)].tracks.push(ref);
           saveJSON('jn-playlists', playlists);
           flash(btn);
+        } else if (me.target.getAttribute('data-pl-new')) {
+          var n = prompt('Playlist name:');
+          if (n && n.trim()) {
+            playlists.push({ name: n.trim(), tracks: [ref] });
+            saveJSON('jn-playlists', playlists);
+            flash(btn);
+          }
         }
       }
-      closePlaylistMenu();
+      closeAddMenu();
     });
 
     document.body.appendChild(menu);
     setTimeout(function () {
-      document.addEventListener('click', closePlaylistMenu, { once: true });
+      document.addEventListener('click', closeAddMenu, { once: true });
     }, 0);
     return true;
   }
@@ -723,22 +785,25 @@
     setTimeout(function () { el.textContent = '+'; }, 700);
   }
 
-  function closePlaylistMenu() {
+  function closeAddMenu() {
     var m = document.querySelector('.playlist-menu');
     if (m) m.remove();
   }
 
-  // ── Queue ──
+  // ── Queue Management ──
 
-  function buildQueue(tracks, startIdx) {
-    queue = tracks.slice();
+  function buildAutoQueue(tracks, startIdx, label) {
+    originalAutoQueue = tracks.slice();
+    autoQueueLabel = label || '';
     if (shuffleOn) {
-      var cur = queue.splice(startIdx, 1)[0];
-      shuffleArray(queue);
-      queue.unshift(cur);
-      queueIndex = 0;
+      autoQueue = tracks.slice();
+      var cur = autoQueue.splice(startIdx, 1)[0];
+      shuffleArray(autoQueue);
+      autoQueue.unshift(cur);
+      autoQueueIndex = 0;
     } else {
-      queueIndex = startIdx;
+      autoQueue = tracks.slice();
+      autoQueueIndex = startIdx;
     }
   }
 
@@ -760,6 +825,8 @@
     updateMediaSession(ai, ali, ti);
     highlightTrackRow();
     btnPlay.innerHTML = '&#10074;&#10074;';
+    // Re-render queue view if we're on it
+    if (currentView === 'queue') renderQueue();
   }
 
   function updateMediaSession(ai, ali, ti) {
@@ -797,29 +864,38 @@
       var ai = parseInt(r.getAttribute('data-artist'), 10);
       var ali = parseInt(r.getAttribute('data-album'), 10);
       var ti = parseInt(r.getAttribute('data-track'), 10);
-      r.classList.toggle('playing', currentTrack && ai === currentTrack.artistIdx && ali === currentTrack.albumIdx && ti === currentTrack.trackIdx);
+      r.classList.toggle('playing', sameRef(currentTrack, { artistIdx: ai, albumIdx: ali, trackIdx: ti }));
     });
   }
 
   function playNext() {
-    if (queue.length === 0) return;
     if (loopMode === 'one') { audio.currentTime = 0; audio.play(); return; }
-    queueIndex++;
-    if (queueIndex >= queue.length) {
-      if (loopMode === 'all') queueIndex = 0; else return;
+
+    // Manual queue takes priority
+    if (manualQueue.length > 0) {
+      var next = manualQueue.shift();
+      playTrack(next.artistIdx, next.albumIdx, next.trackIdx);
+      return;
     }
-    var item = queue[queueIndex];
+
+    // Auto queue
+    if (autoQueue.length === 0) return;
+    autoQueueIndex++;
+    if (autoQueueIndex >= autoQueue.length) {
+      if (loopMode === 'all') autoQueueIndex = 0; else return;
+    }
+    var item = autoQueue[autoQueueIndex];
     playTrack(item.artistIdx, item.albumIdx, item.trackIdx);
   }
 
   function playPrev() {
-    if (queue.length === 0) return;
+    if (autoQueue.length === 0) return;
     if (audio.currentTime > 3) { audio.currentTime = 0; return; }
-    queueIndex--;
-    if (queueIndex < 0) {
-      if (loopMode === 'all') queueIndex = queue.length - 1; else { queueIndex = 0; return; }
+    autoQueueIndex--;
+    if (autoQueueIndex < 0) {
+      if (loopMode === 'all') autoQueueIndex = autoQueue.length - 1; else { autoQueueIndex = 0; return; }
     }
-    var item = queue[queueIndex];
+    var item = autoQueue[autoQueueIndex];
     playTrack(item.artistIdx, item.albumIdx, item.trackIdx);
   }
 
