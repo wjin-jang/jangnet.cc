@@ -197,12 +197,11 @@ body {
 
 .album-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 .album-cell {
     border-bottom: var(--cell);
-    border-left: var(--cell);
     cursor: pointer;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
     z-index: 1;
