@@ -54,7 +54,7 @@
     return m + ':' + (sec < 10 ? '0' : '') + sec;
   }
 
-  function coverUrl(ai, ali) { return '/api/cover/' + ai + '/' + ali; }
+  function coverUrl(ai, ali, w) { return '/api/cover/' + ai + '/' + ali + (w ? '?w=' + w : ''); }
   function streamUrl(ai, ali, ti) { return '/api/stream/' + ai + '/' + ali + '/' + ti; }
 
   function loadJSON(k, fb) {
@@ -81,15 +81,46 @@
 
   // ── Art Panel ──
 
+  var currentCoverKey = null;
+
   function updateArt() {
-    var src = null;
+    var ai = null, ali = null;
     if (contextCover) {
-      src = contextCover;
+      // contextCover is set by navigation; extract indices from it
+      ai = contextCover.ai;
+      ali = contextCover.ali;
     } else if (currentTrack) {
       var album = library[currentTrack.artistIdx].albums[currentTrack.albumIdx];
-      if (album.hasCover) src = coverUrl(currentTrack.artistIdx, currentTrack.albumIdx);
+      if (album.hasCover) { ai = currentTrack.artistIdx; ali = currentTrack.albumIdx; }
     }
-    pArt.innerHTML = src ? '<img src="' + src + '" alt="">' : '';
+
+    var key = ai !== null ? ai + '-' + ali : null;
+    if (key === currentCoverKey) return;
+    currentCoverKey = key;
+
+    if (key === null) { pArt.innerHTML = ''; return; }
+
+    // Load small thumbnail immediately
+    var thumb = new Image();
+    thumb.alt = '';
+    thumb.src = coverUrl(ai, ali, 80);
+    pArt.innerHTML = '';
+    pArt.appendChild(thumb);
+
+    // Then load full resolution based on actual panel size
+    var size = Math.round(Math.max(pArt.offsetWidth, pArt.offsetHeight) * (window.devicePixelRatio || 1));
+    size = Math.min(size, 1200);
+    if (size > 80) {
+      var full = new Image();
+      full.alt = '';
+      full.src = coverUrl(ai, ali, size);
+      full.onload = function () {
+        if (currentCoverKey === key) {
+          pArt.innerHTML = '';
+          pArt.appendChild(full);
+        }
+      };
+    }
   }
 
   function updateNowPlaying() {
@@ -264,7 +295,7 @@
     navTitle.textContent = artist.name;
 
     if (artist.albums.length > 0 && artist.albums[0].hasCover) {
-      contextCover = coverUrl(idx, 0);
+      contextCover = { ai: idx, ali: 0 };
     }
 
     var h = backItem('Artists');
@@ -318,7 +349,7 @@
     var album = artist.albums[ali];
     navTitle.textContent = album.name;
 
-    if (album.hasCover) contextCover = coverUrl(ai, ali);
+    if (album.hasCover) contextCover = { ai: ai, ali: ali };
 
     var tracks = [];
     for (var t = 0; t < album.tracks.length; t++) {
