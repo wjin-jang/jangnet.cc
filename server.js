@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 
+const sharp = require('sharp');
 const { requireAuth, handleLogin, handleLogout } = require('./lib/auth');
 const { scanLibrary, buildClientLibrary, validatePath } = require('./lib/scanner');
 
@@ -123,7 +124,23 @@ app.get('/api/cover/:artistIdx/:albumIdx', (req, res) => {
     return res.status(403).json({ error: 'Forbidden' });
   }
 
-  res.sendFile(coverPath);
+  const width = parseInt(req.query.w, 10) || 400;
+  const clampedWidth = Math.min(Math.max(width, 50), 1200);
+
+  sharp(coverPath)
+    .resize(clampedWidth, clampedWidth, { fit: 'cover' })
+    .jpeg({ quality: 75, progressive: true })
+    .toBuffer()
+    .then(buf => {
+      res.set({
+        'Content-Type': 'image/jpeg',
+        'Cache-Control': 'public, max-age=86400',
+      });
+      res.send(buf);
+    })
+    .catch(() => {
+      res.sendFile(coverPath);
+    });
 });
 
 app.get('/api/stream/:artistIdx/:albumIdx/:trackIdx', (req, res) => {
