@@ -33,8 +33,7 @@
   var btnPlay = document.getElementById('btn-play');
   var btnPrev = document.getElementById('btn-prev');
   var btnNext = document.getElementById('btn-next');
-  var btnLoop = document.getElementById('btn-loop');
-  var btnShuffle = document.getElementById('btn-shuffle');
+  var btnQueue = document.getElementById('btn-queue');
   var navTitle = document.getElementById('nav-title');
   var navList = document.getElementById('nav-list');
   var navLogout = document.getElementById('nav-logout');
@@ -155,38 +154,9 @@
 
   // ── Loop / Shuffle ──
 
-  function updateLoopBtn() {
-    if (loopMode === 'none') {
-      btnLoop.classList.remove('active');
-      btnLoop.innerHTML = '&#8635;';
-      btnLoop.title = 'Loop: Off';
-    } else if (loopMode === 'all') {
-      btnLoop.classList.add('active');
-      btnLoop.innerHTML = '&#8635;';
-      btnLoop.title = 'Loop: All';
-    } else {
-      btnLoop.classList.add('active');
-      btnLoop.textContent = '1';
-      btnLoop.title = 'Loop: One';
-    }
-  }
-
-  function updateShuffleBtn() {
-    btnShuffle.classList.toggle('active', shuffleOn);
-    btnShuffle.title = shuffleOn ? 'Shuffle: On' : 'Shuffle: Off';
-  }
-
-  btnLoop.addEventListener('click', function () {
-    if (loopMode === 'none') loopMode = 'all';
-    else if (loopMode === 'all') loopMode = 'one';
-    else loopMode = 'none';
-    updateLoopBtn();
-  });
-
-  btnShuffle.addEventListener('click', function () {
-    shuffleOn = !shuffleOn;
-    if (shuffleOn && queue.length > 1 && queueIndex >= 0) reshuffleQueue();
-    updateShuffleBtn();
+  btnQueue.addEventListener('click', function () {
+    if (currentView === 'queue') goBack();
+    else navigate('queue');
   });
 
   function reshuffleQueue() {
@@ -237,6 +207,7 @@
       case 'fav-albums': renderFavAlbums(); break;
       case 'playlists': renderPlaylists(); break;
       case 'playlist': renderPlaylist(viewArgs.idx); break;
+      case 'queue': renderQueue(); break;
     }
     updateArt();
   }
@@ -572,6 +543,69 @@
     };
   }
 
+  // ── Render: Queue ──
+
+  function renderQueue() {
+    navTitle.textContent = 'Queue';
+
+    var loopLabel = loopMode === 'none' ? 'Off' : loopMode === 'all' ? 'All' : 'One';
+    var h = backItem('Back');
+    h += '<div class="queue-toggle' + (loopMode !== 'none' ? ' active' : '') + '" data-toggle="loop">';
+    h += '<span class="toggle-label">Loop</span>';
+    h += '<span class="toggle-state">' + loopLabel + '</span>';
+    h += '</div>';
+    h += '<div class="queue-toggle' + (shuffleOn ? ' active' : '') + '" data-toggle="shuffle">';
+    h += '<span class="toggle-label">Shuffle</span>';
+    h += '<span class="toggle-state">' + (shuffleOn ? 'On' : 'Off') + '</span>';
+    h += '</div>';
+
+    if (queue.length === 0) {
+      h += '<div class="nav-empty">No queue. Play a track to start.</div>';
+    }
+    for (var i = 0; i < queue.length; i++) {
+      var ref = queue[i];
+      if (!library[ref.artistIdx] || !library[ref.artistIdx].albums[ref.albumIdx]) continue;
+      var track = library[ref.artistIdx].albums[ref.albumIdx].tracks[ref.trackIdx];
+      var playing = i === queueIndex;
+      h += '<div class="track-row' + (playing ? ' playing' : '') + '" data-qi="' + i + '">';
+      h += '<span class="track-num">' + (i + 1) + '</span>';
+      h += '<span class="track-title">' + esc(track.title) + '</span>';
+      h += '<span class="track-artist-hint">' + esc(library[ref.artistIdx].name) + '</span>';
+      h += '</div>';
+    }
+    navList.innerHTML = h;
+    navList.scrollTop = 0;
+
+    // Scroll current track into view
+    var playing = navList.querySelector('.track-row.playing');
+    if (playing) playing.scrollIntoView({ block: 'center' });
+
+    navList.onclick = function (e) {
+      if (handleBack(e)) return;
+      var toggle = e.target.closest('[data-toggle]');
+      if (toggle) {
+        var t = toggle.getAttribute('data-toggle');
+        if (t === 'loop') {
+          if (loopMode === 'none') loopMode = 'all';
+          else if (loopMode === 'all') loopMode = 'one';
+          else loopMode = 'none';
+        } else if (t === 'shuffle') {
+          shuffleOn = !shuffleOn;
+          if (shuffleOn && queue.length > 1 && queueIndex >= 0) reshuffleQueue();
+        }
+        renderQueue();
+        return;
+      }
+      var row = e.target.closest('.track-row');
+      if (row) {
+        var qi = parseInt(row.getAttribute('data-qi'), 10);
+        queueIndex = qi;
+        var ref = queue[qi];
+        playTrack(ref.artistIdx, ref.albumIdx, ref.trackIdx);
+      }
+    };
+  }
+
   // ── HTML Builders ──
 
   function backItem(label) {
@@ -811,9 +845,6 @@
   });
 
   // ── Init ──
-
-  updateLoopBtn();
-  updateShuffleBtn();
 
   fetch('/api/library')
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })

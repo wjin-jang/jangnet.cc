@@ -20,6 +20,7 @@
 html {
     font-size: 16px;
     background: var(--paper);
+    touch-action: manipulation;
 }
 
 body {
@@ -374,11 +375,39 @@ body {
 .p-btn:hover { background: var(--ink); color: var(--paper); }
 .p-btn-play { font-size: 1rem; }
 
-.p-btn-toggle {
-    opacity: 0.25;
-    font-size: 0.9rem;
+.p-btn-queue {
+    border-right: none;
+    border-left: var(--cell);
+    font-size: 0.85rem;
 }
-.p-btn-toggle.active {
+
+/* Queue view toggle items */
+.queue-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0.35rem var(--pad);
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink);
+    border-bottom: var(--cell);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.queue-toggle:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
+.queue-toggle .toggle-label {
+    flex: 1;
+}
+.queue-toggle .toggle-state {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    opacity: 0.5;
+}
+.queue-toggle.active .toggle-state {
     opacity: 1;
 }
 
