@@ -35,21 +35,40 @@
             color: var(--paper);
         }
         .login-form button {
+            display: block;
+            width: 100%;
             font-family: var(--font-heading);
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             padding: 0.4rem var(--pad);
-            border: var(--cell);
+            border: none;
+            border-top: var(--cell);
+            border-bottom: var(--cell);
             background: var(--paper);
             color: var(--ink);
             cursor: pointer;
             transition: background 0.15s ease, color 0.15s ease;
-            margin-bottom: 0.8rem;
+            margin: 0 calc(-1 * var(--pad));
+            width: calc(100% + 2 * var(--pad));
         }
         .login-form button:hover {
             background: var(--ink);
             color: var(--paper);
+        }
+        .login-remember {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+        .login-remember input {
+            accent-color: var(--ink);
         }
         .login-error {
             padding: 0.35rem var(--pad);
@@ -69,11 +88,15 @@
         </div>
         <div class="page-content">
             <div id="login-error" class="login-error" style="display:none; border-bottom: var(--cell);">Invalid username or password</div>
-            <form class="login-form" method="POST" action="/login" style="border-bottom: var(--cell);">
+            <form class="login-form" method="POST" action="/login">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" autocomplete="username" required>
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" autocomplete="current-password" required>
+                <label class="login-remember">
+                    <input type="checkbox" name="remember" value="1">
+                    Remember me
+                </label>
                 <button type="submit">Log In</button>
             </form>
         </div>
