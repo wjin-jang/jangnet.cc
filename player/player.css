@@ -261,6 +261,7 @@ body {
 /* === Now Playing Bar === */
 
 .now-playing {
+    --np-h: 60px;
     position: fixed;
     bottom: 1rem;
     left: 50%;
@@ -269,6 +270,7 @@ body {
     max-width: 1200px;
     display: flex;
     align-items: stretch;
+    height: var(--np-h);
     background: var(--paper);
     border: var(--cell);
     box-shadow: 6px 6px 0 var(--ink);
@@ -276,8 +278,8 @@ body {
 }
 
 .np-art {
-    flex: 0 0 auto;
-    aspect-ratio: 1;
+    flex: 0 0 var(--np-h);
+    height: var(--np-h);
     background: var(--ink);
     border-right: var(--cell);
     overflow: hidden;
@@ -290,7 +292,7 @@ body {
 
 .np-info {
     flex: 1;
-    padding: var(--pad);
+    padding: 0.4rem var(--pad);
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -349,7 +351,8 @@ body {
 .np-btn {
     font-family: var(--font-heading);
     font-size: 0.75rem;
-    aspect-ratio: 1;
+    width: var(--np-h);
+    height: var(--np-h);
     border: none;
     border-right: var(--cell);
     background: var(--paper);
@@ -405,6 +408,7 @@ body {
     }
 
     .now-playing {
+        --np-h: 50px;
         max-width: 100%;
         bottom: 0.5rem;
         width: calc(100% - 1rem);
