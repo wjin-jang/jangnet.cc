@@ -83,10 +83,21 @@
 
   var currentCoverKey = null;
 
+  function fadeIn(img) {
+    pArt.appendChild(img);
+    // Force reflow then add class
+    img.offsetHeight;
+    img.classList.add('visible');
+    // Remove old images after transition
+    var old = pArt.querySelectorAll('img:not(:last-child)');
+    setTimeout(function () {
+      old.forEach(function (o) { if (o.parentNode) o.remove(); });
+    }, 450);
+  }
+
   function updateArt() {
     var ai = null, ali = null;
     if (contextCover) {
-      // contextCover is set by navigation; extract indices from it
       ai = contextCover.ai;
       ali = contextCover.ali;
     } else if (currentTrack) {
@@ -98,16 +109,27 @@
     if (key === currentCoverKey) return;
     currentCoverKey = key;
 
-    if (key === null) { pArt.innerHTML = ''; return; }
+    if (key === null) {
+      // Fade out current
+      var cur = pArt.querySelector('img.visible');
+      if (cur) {
+        cur.classList.remove('visible');
+        setTimeout(function () { pArt.innerHTML = ''; }, 450);
+      } else {
+        pArt.innerHTML = '';
+      }
+      return;
+    }
 
     // Load small thumbnail immediately
     var thumb = new Image();
     thumb.alt = '';
     thumb.src = coverUrl(ai, ali, 80);
-    pArt.innerHTML = '';
-    pArt.appendChild(thumb);
+    thumb.onload = function () {
+      if (currentCoverKey === key) fadeIn(thumb);
+    };
 
-    // Then load full resolution based on actual panel size
+    // Then load full resolution
     var size = Math.round(Math.max(pArt.offsetWidth, pArt.offsetHeight) * (window.devicePixelRatio || 1));
     size = Math.min(size, 1200);
     if (size > 80) {
@@ -115,10 +137,7 @@
       full.alt = '';
       full.src = coverUrl(ai, ali, size);
       full.onload = function () {
-        if (currentCoverKey === key) {
-          pArt.innerHTML = '';
-          pArt.appendChild(full);
-        }
+        if (currentCoverKey === key) fadeIn(full);
       };
     }
   }
