@@ -196,14 +196,11 @@
   function renderLibrary() {
     navTitle.textContent = 'Library';
     var h = '';
-    h += '<div class="nav-section">Browse</div>';
     h += '<div class="nav-item" data-go="artists"><span class="nav-item-text">Artists</span></div>';
     h += '<div class="nav-item" data-go="albums"><span class="nav-item-text">Albums</span></div>';
     h += '<div class="nav-item" data-go="tracks"><span class="nav-item-text">All Tracks</span></div>';
-    h += '<div class="nav-section">Favourites</div>';
     h += '<div class="nav-item" data-go="fav-artists"><span class="nav-item-text">\u2665 Artists</span><span class="nav-count">' + favArtists.length + '</span></div>';
     h += '<div class="nav-item" data-go="fav-albums"><span class="nav-item-text">\u2665 Albums</span><span class="nav-count">' + favAlbums.length + '</span></div>';
-    h += '<div class="nav-section">Playlists</div>';
     for (var i = 0; i < playlists.length; i++) {
       h += '<div class="nav-item" data-go="playlist" data-idx="' + i + '"><span class="nav-item-text">' + esc(playlists[i].name) + '</span><span class="nav-count">' + playlists[i].tracks.length + '</span></div>';
     }
