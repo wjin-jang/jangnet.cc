@@ -6,21 +6,25 @@
   var currentArtistIdx = null;
   var currentAlbumIdx = null;
   var currentTrackIdx = null;
-  var queue = []; // tracks in current album for auto-advance
+  var queue = [];
 
-  // DOM refs
-  var sidebar = document.getElementById('artist-list');
-  var content = document.getElementById('content');
-  var npTitle = document.getElementById('np-title');
-  var npArtist = document.getElementById('np-artist');
-  var npArt = document.getElementById('np-art');
-  var npCurrent = document.getElementById('np-current');
-  var npDuration = document.getElementById('np-duration');
-  var npBarFill = document.getElementById('np-bar-fill');
-  var npBar = document.getElementById('np-bar');
+  // DOM refs — art panel
+  var artCover = document.getElementById('art-cover');
+  var artTitle = document.getElementById('art-title');
+  var artArtist = document.getElementById('art-artist');
+
+  // DOM refs — controls
+  var ctrlBarFill = document.getElementById('ctrl-bar-fill');
+  var ctrlBar = document.getElementById('ctrl-bar');
+  var ctrlCurrent = document.getElementById('ctrl-current');
+  var ctrlDuration = document.getElementById('ctrl-duration');
   var btnPlay = document.getElementById('btn-play');
   var btnPrev = document.getElementById('btn-prev');
   var btnNext = document.getElementById('btn-next');
+
+  // DOM refs — nav panel
+  var navHeader = document.getElementById('nav-header');
+  var navList = document.getElementById('nav-list');
   var navLogout = document.getElementById('nav-logout');
 
   // ── Helpers ──
@@ -46,6 +50,18 @@
     return '/api/stream/' + ai + '/' + ali + '/' + ti;
   }
 
+  // ── Art panel update ──
+
+  function showArt(imgSrc, title, subtitle) {
+    if (imgSrc) {
+      artCover.innerHTML = '<img src="' + imgSrc + '" alt="">';
+    } else {
+      artCover.innerHTML = '';
+    }
+    artTitle.textContent = title || '—';
+    artArtist.textContent = subtitle || '';
+  }
+
   // ── Logout ──
 
   navLogout.addEventListener('click', function (e) {
@@ -69,39 +85,46 @@
       renderArtists();
     })
     .catch(function () {
-      content.innerHTML = '<div class="content-placeholder"><p>Failed to load library. <a href="/login">Login again</a>.</p></div>';
+      navList.innerHTML = '<div style="padding:var(--pad);font-size:0.8rem;">Failed to load. <a href="/login">Login again</a>.</div>';
     });
 
-  // ── Render artists sidebar ──
+  // ── Render artists ──
 
   function renderArtists() {
+    navHeader.textContent = 'Artists';
     var html = '';
     for (var i = 0; i < library.length; i++) {
-      html += '<div class="artist-item" data-idx="' + i + '">' + esc(library[i].name) + '</div>';
+      html += '<div class="nav-item" data-idx="' + i + '">' + esc(library[i].name) + '</div>';
     }
-    sidebar.innerHTML = html;
+    navList.innerHTML = html;
 
-    sidebar.addEventListener('click', function (e) {
-      var item = e.target.closest('.artist-item');
+    navList.addEventListener('click', function handler(e) {
+      var item = e.target.closest('.nav-item');
       if (!item) return;
-      var idx = parseInt(item.getAttribute('data-idx'), 10);
-      selectArtist(idx);
+      var idx = item.getAttribute('data-idx');
+      if (idx !== null) {
+        navList.removeEventListener('click', handler);
+        selectArtist(parseInt(idx, 10));
+      }
     });
   }
 
   // ── Select artist → album grid ──
 
   function selectArtist(idx) {
-    currentArtistIdx = idx;
     var artist = library[idx];
 
-    // Highlight sidebar
-    var items = sidebar.querySelectorAll('.artist-item');
-    for (var i = 0; i < items.length; i++) {
-      items[i].classList.toggle('active', i === idx);
+    navHeader.textContent = artist.name;
+
+    // Update art panel to show first album cover
+    if (artist.albums.length > 0 && artist.albums[0].hasCover) {
+      showArt(coverUrl(idx, 0), artist.name, artist.albums.length + ' albums');
+    } else {
+      showArt(null, artist.name, artist.albums.length + ' albums');
     }
 
-    var html = '<div class="album-grid">';
+    var html = '<div class="nav-item" data-back="artists">&larr; All Artists</div>';
+    html += '<div class="album-grid">';
     for (var a = 0; a < artist.albums.length; a++) {
       var album = artist.albums[a];
       var coverSrc = album.hasCover ? coverUrl(idx, a) : '';
@@ -119,15 +142,23 @@
     }
     html += '</div>';
 
-    content.innerHTML = html;
+    navList.innerHTML = html;
+    navList.scrollTop = 0;
 
-    content.querySelectorAll('.album-cell').forEach(function (cell) {
-      cell.addEventListener('click', function () {
-        var ai = parseInt(this.getAttribute('data-artist'), 10);
-        var ali = parseInt(this.getAttribute('data-album'), 10);
+    navList.onclick = function (e) {
+      var back = e.target.closest('[data-back]');
+      if (back) {
+        renderArtists();
+        showArt(null, '—', '');
+        return;
+      }
+      var cell = e.target.closest('.album-cell');
+      if (cell) {
+        var ai = parseInt(cell.getAttribute('data-artist'), 10);
+        var ali = parseInt(cell.getAttribute('data-album'), 10);
         selectAlbum(ai, ali);
-      });
-    });
+      }
+    };
   }
 
   // ── Select album → track list ──
@@ -138,32 +169,18 @@
     var album = artist.albums[ali];
     var coverSrc = album.hasCover ? coverUrl(ai, ali) : '';
 
+    // Update art panel
+    showArt(coverSrc, album.name, artist.name + (album.year ? ' \u00B7 ' + album.year : ''));
+
+    navHeader.textContent = album.name;
+
     // Build queue
     queue = [];
     for (var t = 0; t < album.tracks.length; t++) {
       queue.push({ artistIdx: ai, albumIdx: ali, trackIdx: t });
     }
 
-    var html = '<div class="album-detail">';
-
-    // Back link
-    html += '<div class="album-back" data-artist="' + ai + '">&larr; Back to ' + esc(artist.name) + '</div>';
-
-    // Cover
-    html += '<div class="album-detail-cover">';
-    if (coverSrc) {
-      html += '<img src="' + coverSrc + '" alt="' + esc(album.name) + '">';
-    }
-    html += '</div>';
-
-    // Header info
-    html += '<div class="album-detail-header">';
-    html += '<div class="album-detail-title">' + esc(album.name) + '</div>';
-    html += '<div class="album-detail-meta">' + esc(artist.name) + (album.year ? ' &middot; ' + album.year : '') + ' &middot; ' + album.tracks.length + ' tracks</div>';
-    html += '</div>';
-
-    // Tracks
-    html += '<div class="track-list">';
+    var html = '<div class="nav-item" data-back-artist="' + ai + '">&larr; ' + esc(artist.name) + '</div>';
     for (var i = 0; i < album.tracks.length; i++) {
       var track = album.tracks[i];
       var isPlaying = currentArtistIdx === ai && currentAlbumIdx === ali && currentTrackIdx === i;
@@ -172,25 +189,24 @@
       html += '<span class="track-title">' + esc(track.title) + '</span>';
       html += '</div>';
     }
-    html += '</div></div>';
 
-    content.innerHTML = html;
+    navList.innerHTML = html;
+    navList.scrollTop = 0;
 
-    // Back button
-    content.querySelector('.album-back').addEventListener('click', function () {
-      var idx = parseInt(this.getAttribute('data-artist'), 10);
-      selectArtist(idx);
-    });
-
-    // Track clicks
-    content.querySelectorAll('.track-row').forEach(function (row) {
-      row.addEventListener('click', function () {
-        var ai = parseInt(this.getAttribute('data-artist'), 10);
-        var ali = parseInt(this.getAttribute('data-album'), 10);
-        var ti = parseInt(this.getAttribute('data-track'), 10);
-        playTrack(ai, ali, ti);
-      });
-    });
+    navList.onclick = function (e) {
+      var back = e.target.closest('[data-back-artist]');
+      if (back) {
+        selectArtist(parseInt(back.getAttribute('data-back-artist'), 10));
+        return;
+      }
+      var row = e.target.closest('.track-row');
+      if (row) {
+        var tai = parseInt(row.getAttribute('data-artist'), 10);
+        var tali = parseInt(row.getAttribute('data-album'), 10);
+        var ti = parseInt(row.getAttribute('data-track'), 10);
+        playTrack(tai, tali, ti);
+      }
+    };
   }
 
   // ── Play track ──
@@ -207,23 +223,16 @@
     audio.src = streamUrl(ai, ali, ti);
     audio.play();
 
-    // Update now-playing bar
-    npTitle.textContent = track.title;
-    npArtist.textContent = artist.name + ' — ' + album.name;
+    // Update art panel
+    var coverSrc = album.hasCover ? coverUrl(ai, ali) : '';
+    showArt(coverSrc, track.title, artist.name + ' \u2014 ' + album.name);
+
     btnPlay.innerHTML = '&#9646;&#9646;';
-
-    if (album.hasCover) {
-      npArt.innerHTML = '<img src="' + coverUrl(ai, ali) + '" alt="">';
-    } else {
-      npArt.innerHTML = '';
-    }
-
-    // Highlight current track row
     highlightTrackRow();
   }
 
   function highlightTrackRow() {
-    var rows = content.querySelectorAll('.track-row');
+    var rows = navList.querySelectorAll('.track-row');
     rows.forEach(function (row) {
       var ai = parseInt(row.getAttribute('data-artist'), 10);
       var ali = parseInt(row.getAttribute('data-album'), 10);
@@ -235,14 +244,14 @@
   // ── Audio events ──
 
   audio.addEventListener('timeupdate', function () {
-    npCurrent.textContent = formatTime(audio.currentTime);
+    ctrlCurrent.textContent = formatTime(audio.currentTime);
     if (audio.duration) {
-      npBarFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      ctrlBarFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
     }
   });
 
   audio.addEventListener('loadedmetadata', function () {
-    npDuration.textContent = formatTime(audio.duration);
+    ctrlDuration.textContent = formatTime(audio.duration);
   });
 
   audio.addEventListener('ended', function () {
@@ -259,9 +268,9 @@
 
   // ── Progress bar seek ──
 
-  npBar.addEventListener('click', function (e) {
+  ctrlBar.addEventListener('click', function (e) {
     if (!audio.duration) return;
-    var rect = npBar.getBoundingClientRect();
+    var rect = ctrlBar.getBoundingClientRect();
     var pct = (e.clientX - rect.left) / rect.width;
     audio.currentTime = pct * audio.duration;
   });
@@ -295,7 +304,6 @@
 
   function playPrev() {
     if (queue.length === 0) return;
-    // If more than 3s in, restart current track
     if (audio.currentTime > 3) {
       audio.currentTime = 0;
       return;

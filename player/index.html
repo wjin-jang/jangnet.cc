@@ -8,40 +8,38 @@
     <link rel="stylesheet" href="/player.css">
 </head>
 <body>
-    <main class="site-main">
-        <div class="player-layout">
-            <aside class="player-sidebar" id="sidebar">
-                <div class="sidebar-header">
-                    <span>Artists</span>
-                    <a href="#" id="nav-logout">Logout</a>
-                </div>
-                <div class="artist-list" id="artist-list"></div>
-            </aside>
-            <section class="player-content" id="content">
-                <div class="content-placeholder">
-                    <p>Select an artist to browse albums.</p>
-                </div>
-            </section>
-        </div>
-    </main>
-    <div class="now-playing" id="now-playing">
-        <div class="np-art" id="np-art"></div>
-        <div class="np-info">
-            <div class="np-title" id="np-title">—</div>
-            <div class="np-artist" id="np-artist"></div>
-            <div class="np-progress">
-                <span class="np-time" id="np-current">0:00</span>
-                <div class="np-bar" id="np-bar">
-                    <div class="np-bar-fill" id="np-bar-fill"></div>
-                </div>
-                <span class="np-time" id="np-duration">0:00</span>
+    <div class="player-layout">
+        <section class="panel panel-art" id="panel-art">
+            <div class="art-cover" id="art-cover"></div>
+            <div class="art-info" id="art-info">
+                <div class="art-title" id="art-title">—</div>
+                <div class="art-artist" id="art-artist"></div>
             </div>
-        </div>
-        <div class="np-controls">
-            <button class="np-btn" id="btn-prev" title="Previous">&#9664;&#9664;</button>
-            <button class="np-btn" id="btn-play" title="Play">&#9654;</button>
-            <button class="np-btn" id="btn-next" title="Next">&#9654;&#9654;</button>
-        </div>
+        </section>
+        <section class="panel panel-controls">
+            <div class="ctrl-progress">
+                <div class="ctrl-bar" id="ctrl-bar">
+                    <div class="ctrl-bar-fill" id="ctrl-bar-fill"></div>
+                </div>
+                <div class="ctrl-times">
+                    <span class="ctrl-time" id="ctrl-current">0:00</span>
+                    <span class="ctrl-time" id="ctrl-duration">0:00</span>
+                </div>
+            </div>
+            <div class="ctrl-buttons">
+                <button class="ctrl-btn" id="btn-prev" title="Previous">&#9664;&#9664;</button>
+                <button class="ctrl-btn ctrl-btn-play" id="btn-play" title="Play">&#9654;</button>
+                <button class="ctrl-btn" id="btn-next" title="Next">&#9654;&#9654;</button>
+            </div>
+            <div class="ctrl-spacer"></div>
+            <div class="ctrl-logout">
+                <a href="#" id="nav-logout">Logout</a>
+            </div>
+        </section>
+        <section class="panel panel-nav" id="panel-nav">
+            <div class="nav-header" id="nav-header">Artists</div>
+            <div class="nav-list" id="nav-list"></div>
+        </section>
     </div>
     <script src="/player.js"></script>
 </body>
