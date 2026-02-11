@@ -83,7 +83,7 @@ body {
         grid-template-rows: auto 1fr var(--ctrl-h);
         grid-template-columns: 1fr;
     }
-    .p-art { grid-area: art; aspect-ratio: 1; width: 100%; max-height: 40vh; }
+    .p-art { grid-area: art; aspect-ratio: 1; width: 100%; }
     .p-nav { grid-area: nav; min-height: 0; }
     .p-ctrl { grid-area: ctrl; }
 }
