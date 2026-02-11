@@ -705,7 +705,7 @@
     updateNowPlaying();
     updateArt();
     highlightTrackRow();
-    btnPlay.innerHTML = '&#9646;&#9646;';
+    btnPlay.innerHTML = '&#10074;&#10074;';
   }
 
   function highlightTrackRow() {
@@ -752,7 +752,7 @@
   });
 
   audio.addEventListener('ended', function () { playNext(); });
-  audio.addEventListener('play', function () { btnPlay.innerHTML = '&#9646;&#9646;'; });
+  audio.addEventListener('play', function () { btnPlay.innerHTML = '&#10074;&#10074;'; });
   audio.addEventListener('pause', function () { btnPlay.innerHTML = '&#9654;'; });
 
   // ── Seek ──
