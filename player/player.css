@@ -119,6 +119,7 @@ body {
     color: var(--paper);
     font-family: var(--font-heading);
     font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     flex-shrink: 0;
