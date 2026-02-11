@@ -4,42 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/player.css">
 </head>
 <body>
-    <div class="player-layout">
-        <section class="panel panel-art" id="panel-art">
-            <div class="art-cover" id="art-cover"></div>
-            <div class="art-info" id="art-info">
-                <div class="art-title" id="art-title">—</div>
-                <div class="art-artist" id="art-artist"></div>
+    <div class="player" id="player">
+        <div class="p-art" id="p-art"></div>
+        <div class="p-nav">
+            <div class="p-nav-head" id="nav-head">
+                <span id="nav-title">Artists</span>
+                <a href="#" id="nav-logout">logout</a>
             </div>
-        </section>
-        <section class="panel panel-controls">
-            <div class="ctrl-progress">
-                <div class="ctrl-bar" id="ctrl-bar">
-                    <div class="ctrl-bar-fill" id="ctrl-bar-fill"></div>
+            <div class="p-nav-list" id="nav-list"></div>
+        </div>
+        <div class="p-ctrl">
+            <button class="p-btn" id="btn-prev" aria-label="Previous">&#9664;&#9664;</button>
+            <button class="p-btn p-btn-play" id="btn-play" aria-label="Play">&#9654;</button>
+            <button class="p-btn" id="btn-next" aria-label="Next">&#9654;&#9654;</button>
+            <div class="p-ctrl-info">
+                <div class="p-ctrl-top">
+                    <span class="p-ctrl-track" id="ctrl-track">—</span>
+                    <span class="p-ctrl-artist" id="ctrl-artist"></span>
                 </div>
-                <div class="ctrl-times">
-                    <span class="ctrl-time" id="ctrl-current">0:00</span>
-                    <span class="ctrl-time" id="ctrl-duration">0:00</span>
+                <div class="p-ctrl-bar-wrap">
+                    <span class="p-ctrl-time" id="ctrl-cur">0:00</span>
+                    <div class="p-ctrl-bar" id="ctrl-bar">
+                        <div class="p-ctrl-fill" id="ctrl-fill"></div>
+                    </div>
+                    <span class="p-ctrl-time" id="ctrl-dur">0:00</span>
                 </div>
             </div>
-            <div class="ctrl-buttons">
-                <button class="ctrl-btn" id="btn-prev" title="Previous">&#9664;&#9664;</button>
-                <button class="ctrl-btn ctrl-btn-play" id="btn-play" title="Play">&#9654;</button>
-                <button class="ctrl-btn" id="btn-next" title="Next">&#9654;&#9654;</button>
-            </div>
-            <div class="ctrl-spacer"></div>
-            <div class="ctrl-logout">
-                <a href="#" id="nav-logout">Logout</a>
-            </div>
-        </section>
-        <section class="panel panel-nav" id="panel-nav">
-            <div class="nav-header" id="nav-header">Artists</div>
-            <div class="nav-list" id="nav-list"></div>
-        </section>
+        </div>
     </div>
     <script src="/player.js"></script>
 </body>

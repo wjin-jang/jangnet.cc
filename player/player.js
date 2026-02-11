@@ -8,22 +8,18 @@
   var currentTrackIdx = null;
   var queue = [];
 
-  // DOM refs — art panel
-  var artCover = document.getElementById('art-cover');
-  var artTitle = document.getElementById('art-title');
-  var artArtist = document.getElementById('art-artist');
-
-  // DOM refs — controls
-  var ctrlBarFill = document.getElementById('ctrl-bar-fill');
+  // DOM refs
+  var pArt = document.getElementById('p-art');
+  var ctrlTrack = document.getElementById('ctrl-track');
+  var ctrlArtist = document.getElementById('ctrl-artist');
+  var ctrlCur = document.getElementById('ctrl-cur');
+  var ctrlDur = document.getElementById('ctrl-dur');
   var ctrlBar = document.getElementById('ctrl-bar');
-  var ctrlCurrent = document.getElementById('ctrl-current');
-  var ctrlDuration = document.getElementById('ctrl-duration');
+  var ctrlFill = document.getElementById('ctrl-fill');
   var btnPlay = document.getElementById('btn-play');
   var btnPrev = document.getElementById('btn-prev');
   var btnNext = document.getElementById('btn-next');
-
-  // DOM refs — nav panel
-  var navHeader = document.getElementById('nav-header');
+  var navTitle = document.getElementById('nav-title');
   var navList = document.getElementById('nav-list');
   var navLogout = document.getElementById('nav-logout');
 
@@ -50,16 +46,21 @@
     return '/api/stream/' + ai + '/' + ali + '/' + ti;
   }
 
-  // ── Art panel update ──
+  // ── Art panel ──
 
-  function showArt(imgSrc, title, subtitle) {
+  function showCover(imgSrc) {
     if (imgSrc) {
-      artCover.innerHTML = '<img src="' + imgSrc + '" alt="">';
+      pArt.innerHTML = '<img src="' + imgSrc + '" alt="">';
     } else {
-      artCover.innerHTML = '';
+      pArt.innerHTML = '';
     }
-    artTitle.textContent = title || '—';
-    artArtist.textContent = subtitle || '';
+  }
+
+  // ── Control info ──
+
+  function showTrackInfo(title, artist) {
+    ctrlTrack.textContent = title || '\u2014';
+    ctrlArtist.textContent = artist || '';
   }
 
   // ── Logout ──
@@ -91,36 +92,33 @@
   // ── Render artists ──
 
   function renderArtists() {
-    navHeader.textContent = 'Artists';
+    navTitle.textContent = 'Artists';
     var html = '';
     for (var i = 0; i < library.length; i++) {
       html += '<div class="nav-item" data-idx="' + i + '">' + esc(library[i].name) + '</div>';
     }
     navList.innerHTML = html;
 
-    navList.addEventListener('click', function handler(e) {
+    navList.onclick = function (e) {
       var item = e.target.closest('.nav-item');
       if (!item) return;
       var idx = item.getAttribute('data-idx');
       if (idx !== null) {
-        navList.removeEventListener('click', handler);
         selectArtist(parseInt(idx, 10));
       }
-    });
+    };
   }
 
   // ── Select artist → album grid ──
 
   function selectArtist(idx) {
     var artist = library[idx];
+    navTitle.textContent = artist.name;
 
-    navHeader.textContent = artist.name;
-
-    // Update art panel to show first album cover
     if (artist.albums.length > 0 && artist.albums[0].hasCover) {
-      showArt(coverUrl(idx, 0), artist.name, artist.albums.length + ' albums');
+      showCover(coverUrl(idx, 0));
     } else {
-      showArt(null, artist.name, artist.albums.length + ' albums');
+      showCover(null);
     }
 
     var html = '<div class="nav-item" data-back="artists">&larr; All Artists</div>';
@@ -149,7 +147,8 @@
       var back = e.target.closest('[data-back]');
       if (back) {
         renderArtists();
-        showArt(null, '—', '');
+        showCover(null);
+        showTrackInfo(null, null);
         return;
       }
       var cell = e.target.closest('.album-cell');
@@ -169,10 +168,8 @@
     var album = artist.albums[ali];
     var coverSrc = album.hasCover ? coverUrl(ai, ali) : '';
 
-    // Update art panel
-    showArt(coverSrc, album.name, artist.name + (album.year ? ' \u00B7 ' + album.year : ''));
-
-    navHeader.textContent = album.name;
+    showCover(coverSrc);
+    navTitle.textContent = album.name;
 
     // Build queue
     queue = [];
@@ -223,9 +220,9 @@
     audio.src = streamUrl(ai, ali, ti);
     audio.play();
 
-    // Update art panel
     var coverSrc = album.hasCover ? coverUrl(ai, ali) : '';
-    showArt(coverSrc, track.title, artist.name + ' \u2014 ' + album.name);
+    showCover(coverSrc);
+    showTrackInfo(track.title, artist.name + ' \u2014 ' + album.name);
 
     btnPlay.innerHTML = '&#9646;&#9646;';
     highlightTrackRow();
@@ -244,14 +241,14 @@
   // ── Audio events ──
 
   audio.addEventListener('timeupdate', function () {
-    ctrlCurrent.textContent = formatTime(audio.currentTime);
+    ctrlCur.textContent = formatTime(audio.currentTime);
     if (audio.duration) {
-      ctrlBarFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      ctrlFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
     }
   });
 
   audio.addEventListener('loadedmetadata', function () {
-    ctrlDuration.textContent = formatTime(audio.duration);
+    ctrlDur.textContent = formatTime(audio.duration);
   });
 
   audio.addEventListener('ended', function () {
