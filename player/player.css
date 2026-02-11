@@ -3,7 +3,7 @@
 body {
     max-width: 1200px;
     padding-bottom: 0;
-    margin-bottom: 4rem;
+    margin-bottom: 6rem;
 }
 
 .player-layout {
@@ -262,23 +262,22 @@ body {
 
 .now-playing {
     position: fixed;
-    bottom: 0;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    width: calc(100% - 2rem);
     max-width: 1200px;
     display: flex;
     align-items: stretch;
     background: var(--paper);
     border: var(--cell);
-    border-bottom: none;
-    box-shadow: 0 -2px 0 var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
     z-index: 100;
-    height: 52px;
 }
 
 .np-art {
-    flex: 0 0 52px;
+    flex: 0 0 auto;
+    aspect-ratio: 1;
     background: var(--ink);
     border-right: var(--cell);
     overflow: hidden;
@@ -291,7 +290,7 @@ body {
 
 .np-info {
     flex: 1;
-    padding: 0.3rem var(--pad);
+    padding: var(--pad);
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -350,7 +349,7 @@ body {
 .np-btn {
     font-family: var(--font-heading);
     font-size: 0.75rem;
-    width: 52px;
+    aspect-ratio: 1;
     border: none;
     border-right: var(--cell);
     background: var(--paper);
@@ -407,14 +406,8 @@ body {
 
     .now-playing {
         max-width: 100%;
-        height: 44px;
-    }
-
-    .np-art {
-        flex: 0 0 44px;
-    }
-
-    .np-btn {
-        width: 44px;
+        bottom: 0.5rem;
+        width: calc(100% - 1rem);
+        box-shadow: 4px 4px 0 var(--ink);
     }
 }
