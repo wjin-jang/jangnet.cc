@@ -196,13 +196,11 @@ body {
 /* === Album Grid === */
 
 .album-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 
 .album-cell {
-    flex: 0 0 auto;
-    width: 200px;
     border-bottom: var(--cell);
     border-left: var(--cell);
     cursor: pointer;
@@ -404,20 +402,9 @@ body {
     top: 0; left: 0;
 }
 
-/* === Portrait adjustments === */
-
-@media (orientation: portrait) {
-    .album-cell {
-        width: 150px;
-    }
-}
-
 /* === Small screens === */
 
 @media (max-width: 480px) {
-    .album-cell {
-        width: 120px;
-    }
     .p-ctrl-artist {
         display: none;
     }
