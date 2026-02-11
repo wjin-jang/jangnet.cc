@@ -118,11 +118,16 @@ body {
     background: var(--ink);
     color: var(--paper);
     font-family: var(--font-heading);
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     flex-shrink: 0;
+}
+.p-nav-head h2 {
+    font: inherit;
+    color: inherit;
+    margin: 0;
 }
 .p-nav-head a {
     color: var(--paper);
