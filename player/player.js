@@ -757,8 +757,38 @@
     audio.play();
     updateNowPlaying();
     updateArt();
+    updateMediaSession(ai, ali, ti);
     highlightTrackRow();
     btnPlay.innerHTML = '&#10074;&#10074;';
+  }
+
+  function updateMediaSession(ai, ali, ti) {
+    if (!('mediaSession' in navigator)) return;
+    var artist = library[ai];
+    var album = artist.albums[ali];
+    var track = album.tracks[ti];
+    var artwork = [];
+    if (album.hasCover) {
+      artwork = [
+        { src: coverUrl(ai, ali, 96), sizes: '96x96', type: 'image/jpeg' },
+        { src: coverUrl(ai, ali, 256), sizes: '256x256', type: 'image/jpeg' },
+        { src: coverUrl(ai, ali, 512), sizes: '512x512', type: 'image/jpeg' }
+      ];
+    }
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title,
+      artist: artist.name,
+      album: album.name,
+      artwork: artwork
+    });
+    navigator.mediaSession.setActionHandler('play', function () { audio.play(); });
+    navigator.mediaSession.setActionHandler('pause', function () { audio.pause(); });
+    navigator.mediaSession.setActionHandler('previoustrack', function () { playPrev(); });
+    navigator.mediaSession.setActionHandler('nexttrack', function () { playNext(); });
+    navigator.mediaSession.setActionHandler('seekto', function (d) {
+      if (d.fastSeek && 'fastSeek' in audio) audio.fastSeek(d.seekTime);
+      else audio.currentTime = d.seekTime;
+    });
   }
 
   function highlightTrackRow() {

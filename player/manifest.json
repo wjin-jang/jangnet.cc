@@ -1,0 +1,15 @@
+{
+  "name": "Music Player",
+  "short_name": "Player",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e9e3d3",
+  "theme_color": "#e9e3d3",
+  "icons": [
+    {
+      "src": "/assets/images/icons/wjinlogo64px.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ]
+}

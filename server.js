@@ -34,6 +34,7 @@ app.use(helmet({
       imgSrc: ["'self'", "data:"],
       mediaSrc: ["'self'"],
       connectSrc: ["'self'"],
+      manifestSrc: ["'self'"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
     },
@@ -71,6 +72,10 @@ const loginLimiter = rateLimit({
 // ── Public static assets (before auth) ──
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+app.get('/manifest.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'player', 'manifest.json'));
+});
 
 // ── Public routes ──
 
