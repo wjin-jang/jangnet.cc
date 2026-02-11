@@ -482,6 +482,107 @@ body {
     top: 0; left: 0;
 }
 
+/* === Settings === */
+
+.settings-section {
+    padding: 0.3rem var(--pad);
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    opacity: 0.4;
+    border-bottom: var(--cell);
+}
+
+.settings-field {
+    padding: 0.35rem var(--pad);
+    border-bottom: var(--cell);
+}
+
+.settings-account {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.settings-input {
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    color: var(--ink);
+    padding: 0.2rem 0;
+    outline: none;
+}
+.settings-input::placeholder {
+    color: var(--ink);
+    opacity: 0.3;
+}
+
+.settings-btn {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+}
+
+.settings-badge {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-left: 0.4rem;
+    flex-shrink: 0;
+}
+
+.settings-check {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.settings-msg {
+    padding: 0.3rem var(--pad);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+}
+.settings-msg:empty { display: none; }
+.settings-msg.success { color: #2a7a2a; }
+.settings-msg.error { color: #a03030; }
+
+.settings-action {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    opacity: 0.3;
+    cursor: pointer;
+    margin-left: 0.4rem;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease;
+}
+.settings-action:hover { opacity: 1; }
+
+.settings-user {
+    display: flex;
+    align-items: center;
+}
+
 /* === Small screens === */
 
 @media (max-width: 480px) {

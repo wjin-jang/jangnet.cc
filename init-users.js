@@ -10,7 +10,7 @@ async function main() {
 
   const hash = await bcrypt.hash(password, COST_FACTOR);
 
-  const users = [{ username, hash }];
+  const users = [{ username, hash, admin: true }];
   const dest = path.join(__dirname, 'users.json');
 
   fs.writeFileSync(dest, JSON.stringify(users, null, 2));

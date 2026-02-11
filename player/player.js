@@ -19,6 +19,7 @@
   var shuffleOn = false;
   var contextCover = null;
   var autoQueueLabel = ''; // e.g. album name for queue view
+  var accountInfo = null;
 
   var currentView = 'library';
   var viewArgs = {};
@@ -225,6 +226,7 @@
       case 'playlists': renderPlaylists(); break;
       case 'playlist': renderPlaylist(viewArgs.idx); break;
       case 'queue': renderQueue(); break;
+      case 'settings': renderSettings(); break;
     }
     updateArt();
   }
@@ -243,6 +245,7 @@
       h += '<div class="nav-item" data-go="playlist" data-idx="' + i + '"><span class="nav-item-text">' + esc(playlists[i].name) + '</span><span class="nav-count">' + playlists[i].tracks.length + '</span></div>';
     }
     h += '<div class="nav-item" data-action="new-playlist"><span class="nav-item-text">+ New Playlist</span></div>';
+    h += '<div class="nav-item" data-go="settings"><span class="nav-item-text">Settings</span></div>';
     navList.innerHTML = h;
     navList.scrollTop = 0;
 
@@ -665,6 +668,141 @@
     };
   }
 
+  // ── Render: Settings ──
+
+  function showMsg(id, text, ok) {
+    var el = document.getElementById(id);
+    if (el) { el.textContent = text; el.className = 'settings-msg ' + (ok ? 'success' : 'error'); }
+  }
+
+  function renderSettings() {
+    navTitle.textContent = 'Settings';
+    var h = backItem('Library');
+    h += '<div class="settings-section">Account</div>';
+    h += '<div class="settings-field settings-account">';
+    h += '<span>' + esc(accountInfo ? accountInfo.username : '') + '</span>';
+    if (accountInfo && accountInfo.admin) h += '<span class="settings-badge">admin</span>';
+    h += '</div>';
+
+    h += '<div class="settings-section">Change Password</div>';
+    h += '<div class="settings-field"><input type="password" class="settings-input" id="set-cur-pw" placeholder="Current password"></div>';
+    h += '<div class="settings-field"><input type="password" class="settings-input" id="set-new-pw" placeholder="New password (4+ chars)"></div>';
+    h += '<div class="settings-field"><button class="settings-btn" id="set-change-pw">Change Password</button></div>';
+    h += '<div class="settings-msg" id="set-pw-msg"></div>';
+
+    if (accountInfo && accountInfo.admin) {
+      h += '<div class="settings-section">Users</div>';
+      h += '<div id="admin-users-list"></div>';
+      h += '<div class="settings-section">Add User</div>';
+      h += '<div class="settings-field"><input type="text" class="settings-input" id="set-new-user" placeholder="Username"></div>';
+      h += '<div class="settings-field"><input type="password" class="settings-input" id="set-new-user-pw" placeholder="Password (4+ chars)"></div>';
+      h += '<div class="settings-field"><label class="settings-check"><input type="checkbox" id="set-new-user-admin"> Admin</label></div>';
+      h += '<div class="settings-field"><button class="settings-btn" id="set-create-user">Create User</button></div>';
+      h += '<div class="settings-msg" id="set-user-msg"></div>';
+    }
+
+    navList.innerHTML = h;
+    navList.scrollTop = 0;
+
+    if (accountInfo && accountInfo.admin) loadAdminUsers();
+
+    document.getElementById('set-change-pw').addEventListener('click', function () {
+      var cur = document.getElementById('set-cur-pw').value;
+      var np = document.getElementById('set-new-pw').value;
+      fetch('/api/account/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword: cur, newPassword: np })
+      })
+      .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+      .then(function (r) {
+        showMsg('set-pw-msg', r.ok ? 'Password changed' : (r.data.error || 'Error'), r.ok);
+        if (r.ok) { document.getElementById('set-cur-pw').value = ''; document.getElementById('set-new-pw').value = ''; }
+      });
+    });
+
+    if (accountInfo && accountInfo.admin) {
+      document.getElementById('set-create-user').addEventListener('click', function () {
+        var u = document.getElementById('set-new-user').value;
+        var p = document.getElementById('set-new-user-pw').value;
+        var a = document.getElementById('set-new-user-admin').checked;
+        fetch('/api/admin/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p, admin: a })
+        })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+        .then(function (r) {
+          showMsg('set-user-msg', r.ok ? 'User created' : (r.data.error || 'Error'), r.ok);
+          if (r.ok) {
+            document.getElementById('set-new-user').value = '';
+            document.getElementById('set-new-user-pw').value = '';
+            document.getElementById('set-new-user-admin').checked = false;
+            loadAdminUsers();
+          }
+        });
+      });
+    }
+
+    navList.onclick = function (e) {
+      if (handleBack(e)) return;
+    };
+  }
+
+  function loadAdminUsers() {
+    var container = document.getElementById('admin-users-list');
+    if (!container) return;
+    fetch('/api/admin/users')
+      .then(function (r) { return r.json(); })
+      .then(function (users) {
+        var h = '';
+        for (var i = 0; i < users.length; i++) {
+          h += '<div class="nav-item settings-user">';
+          h += '<span class="nav-item-text">' + esc(users[i].username) + '</span>';
+          if (users[i].admin) h += '<span class="settings-badge">admin</span>';
+          h += '<span class="settings-action" data-reset="' + i + '">reset</span>';
+          if (users[i].username !== accountInfo.username) {
+            h += '<span class="nav-delete" data-del-user="' + i + '">\u00D7</span>';
+          }
+          h += '</div>';
+        }
+        container.innerHTML = h;
+        container.onclick = function (e) {
+          var rb = e.target.closest('[data-reset]');
+          if (rb) {
+            var idx = parseInt(rb.getAttribute('data-reset'), 10);
+            var np = prompt('New password for ' + users[idx].username + ':');
+            if (np) {
+              fetch('/api/admin/users/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: users[idx].username, newPassword: np })
+              })
+              .then(function (r) { return r.json(); })
+              .then(function (d) { showMsg('set-user-msg', d.ok ? 'Password reset' : (d.error || 'Error'), !!d.ok); });
+            }
+            return;
+          }
+          var db = e.target.closest('[data-del-user]');
+          if (db) {
+            var idx = parseInt(db.getAttribute('data-del-user'), 10);
+            if (confirm('Delete user "' + users[idx].username + '"?')) {
+              fetch('/api/admin/users/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: users[idx].username })
+              })
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                showMsg('set-user-msg', d.ok ? 'User deleted' : (d.error || 'Error'), !!d.ok);
+                if (d.ok) loadAdminUsers();
+              });
+            }
+          }
+        };
+      });
+  }
+
   // ── HTML Builders ──
 
   function backItem(label) {
@@ -951,6 +1089,10 @@
   });
 
   // ── Init ──
+
+  fetch('/api/account')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) { accountInfo = data; });
 
   fetch('/api/library')
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })

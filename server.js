@@ -7,7 +7,11 @@ const path = require('path');
 const fs = require('fs');
 
 const sharp = require('sharp');
-const { requireAuth, handleLogin, handleLogout } = require('./lib/auth');
+const {
+  requireAuth, requireAdmin, handleLogin, handleLogout,
+  getAccountInfo, changePassword,
+  listUsers, createUser, resetPassword, deleteUser,
+} = require('./lib/auth');
 const { scanLibrary, buildClientLibrary, validatePath } = require('./lib/scanner');
 
 const MUSIC_ROOT = path.resolve(process.env.MUSIC_ROOT || 'C:\\Users\\woojin\\Music\\flac');
@@ -104,6 +108,17 @@ app.get('/player.js', (req, res) => {
 });
 
 app.post('/logout', handleLogout);
+
+// ── Account API ──
+
+app.get('/api/account', getAccountInfo);
+app.post('/api/account/password', changePassword);
+
+// Admin-only
+app.get('/api/admin/users', requireAdmin, listUsers);
+app.post('/api/admin/users', requireAdmin, createUser);
+app.post('/api/admin/users/reset-password', requireAdmin, resetPassword);
+app.post('/api/admin/users/delete', requireAdmin, deleteUser);
 
 // ── API routes ──
 
