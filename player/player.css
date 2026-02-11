@@ -6,29 +6,22 @@ body {
     margin-bottom: 4rem;
 }
 
-.nav-sep {
-    pointer-events: none;
-    padding: 0.35rem 0.3rem;
-    border-right: var(--cell);
-    font-family: var(--font-heading);
-    font-size: 0.75rem;
-    color: var(--ink);
-    text-decoration: none;
-}
-
 .player-layout {
     display: grid;
     grid-template-columns: 220px 1fr;
-    min-height: 60vh;
+    min-height: 70vh;
 }
 
 .player-sidebar {
     border-right: var(--cell);
     overflow-y: auto;
-    max-height: 70vh;
+    max-height: 80vh;
 }
 
 .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-family: var(--font-heading);
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -40,6 +33,16 @@ body {
     position: sticky;
     top: 0;
     z-index: 5;
+}
+.sidebar-header a {
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 0.65rem;
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+.sidebar-header a:hover {
+    opacity: 1;
 }
 
 .artist-item {
@@ -67,7 +70,7 @@ body {
 
 .player-content {
     overflow-y: auto;
-    max-height: 70vh;
+    max-height: 80vh;
 }
 
 .content-placeholder {
@@ -265,18 +268,17 @@ body {
     width: 100%;
     max-width: 1200px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     background: var(--paper);
     border: var(--cell);
     border-bottom: none;
     box-shadow: 0 -2px 0 var(--ink);
     z-index: 100;
-    gap: 0;
+    height: 52px;
 }
 
 .np-art {
-    flex: 0 0 50px;
-    height: 50px;
+    flex: 0 0 52px;
     background: var(--ink);
     border-right: var(--cell);
     overflow: hidden;
@@ -291,6 +293,9 @@ body {
     flex: 1;
     padding: 0.3rem var(--pad);
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .np-title {
     font-family: var(--font-heading);
@@ -313,7 +318,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.2rem;
+    margin-top: 0.15rem;
 }
 .np-time {
     font-family: var(--font-mono);
@@ -339,13 +344,13 @@ body {
 
 .np-controls {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     border-left: var(--cell);
 }
 .np-btn {
     font-family: var(--font-heading);
-    font-size: 0.7rem;
-    padding: 0.5rem 0.6rem;
+    font-size: 0.75rem;
+    width: 52px;
     border: none;
     border-right: var(--cell);
     background: var(--paper);
@@ -353,6 +358,10 @@ body {
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 }
 .np-btn:last-child {
     border-right: none;
@@ -360,10 +369,6 @@ body {
 .np-btn:hover {
     background: var(--ink);
     color: var(--paper);
-}
-.np-btn-play {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
 }
 
 /* === Responsive === */
@@ -402,10 +407,14 @@ body {
 
     .now-playing {
         max-width: 100%;
+        height: 44px;
     }
 
     .np-art {
-        flex: 0 0 40px;
-        height: 40px;
+        flex: 0 0 44px;
+    }
+
+    .np-btn {
+        width: 44px;
     }
 }

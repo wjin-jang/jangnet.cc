@@ -3,27 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player – woojin's music</title>
+    <title>Player</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/player.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="site-title"><a href="/">woojin's music</a></div>
-        <div class="site-subtitle">private player</div>
-        <nav>
-            <a href="https://blog.jangnet.cc/">Blog</a>
-            <a class="nav-sep">.</a>
-            <a href="#" id="nav-logout">Logout</a>
-        </nav>
-    </header>
     <main class="site-main">
-        <div class="page-header">
-            <h1>Player</h1>
-        </div>
         <div class="player-layout">
             <aside class="player-sidebar" id="sidebar">
-                <div class="sidebar-header">Artists</div>
+                <div class="sidebar-header">
+                    <span>Artists</span>
+                    <a href="#" id="nav-logout">Logout</a>
+                </div>
                 <div class="artist-list" id="artist-list"></div>
             </aside>
             <section class="player-content" id="content">
@@ -48,7 +39,7 @@
         </div>
         <div class="np-controls">
             <button class="np-btn" id="btn-prev" title="Previous">&#9664;&#9664;</button>
-            <button class="np-btn np-btn-play" id="btn-play" title="Play">&#9654;</button>
+            <button class="np-btn" id="btn-play" title="Play">&#9654;</button>
             <button class="np-btn" id="btn-next" title="Next">&#9654;&#9654;</button>
         </div>
     </div>
