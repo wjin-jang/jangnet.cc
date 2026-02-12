@@ -576,14 +576,14 @@ body {
     width: 55%;
     height: 55%;
     object-fit: contain;
-    image-rendering: pixelated;
+    image-rendering: auto;
 }
 
 .p-icon {
     display: inline-block;
     height: 1em;
     width: auto;
-    image-rendering: pixelated;
+    image-rendering: auto;
     vertical-align: -0.1em;
 }
 
@@ -594,7 +594,7 @@ body {
     width: 1em;
     height: 1em;
     object-fit: contain;
-    image-rendering: pixelated;
+    image-rendering: auto;
 }
 
 .p-nav-head .p-icon { filter: invert(1); }

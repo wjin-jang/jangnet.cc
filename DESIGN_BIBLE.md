@@ -6,12 +6,13 @@ This document defines the visual design system. All UI work must conform to thes
 
 ## Palette
 
-Two colours. No exceptions.
+Two colours, plus one functional variant. No exceptions.
 
 - **Paper:** `#e9e3d3` — background, light surfaces.
 - **Ink:** `#101033` — text, borders, dark surfaces.
+- **Code-bg:** `#f5f2ea` — code block backgrounds only. A subtle paper variant for distinguishing code from prose.
 
-These are the only two colours in the entire system. No greys, no tints, no accent colours, no `rgba()` with partial alpha to fake intermediate shades. If something needs to feel lighter or secondary, use dithering (see below) or reduce font size — do not reach for `opacity` to create grey text or faded elements.
+These are the only colours in the entire system. No greys, no tints, no accent colours, no `rgba()` with partial alpha to fake intermediate shades. If something needs to feel lighter or secondary, use dithering (see below) or reduce font size — do not reach for `opacity` to create grey text or faded elements.
 
 Where contrast or visual hierarchy is needed between ink-on-paper elements, use **weight** (bold vs regular), **size** (smaller text for metadata), **case** (uppercase for labels), or **inversion** (ink background with paper text) — never a third colour or transparency.
 
@@ -104,11 +105,11 @@ Images fill their item edge-to-edge.
 
 ## Icons
 
-All icons are low-resolution pixel art, scaled up with hard edges.
+All icons are pixel art PNGs, scaled with smooth interpolation (`image-rendering: auto`) so they look clean at any size.
 
-- Icons must use `image-rendering: pixelated` to preserve sharp pixel edges when scaled.
-- No SVG icons. No icon fonts. No smooth vector graphics.
-- Icons use only the two palette colours (ink and paper). No anti-aliasing, no grey pixels.
+- Do not use `image-rendering: pixelated` — it looks bad at irregular scales.
+- No SVG icons. No icon fonts. No Unicode symbols as icons.
+- Icons use only the two palette colours (ink and paper).
 - Icon containers are sized to grid multiples.
 - On hover/inversion, icons use `filter: invert(1)` to swap ink↔paper.
 
@@ -133,6 +134,7 @@ Where texture or visual weight is needed without introducing a third colour, use
 - Dots are ink-coloured on a paper background.
 - Dithering replaces what would otherwise be grey fills or opacity-based shading.
 - Use consistent dot size and spacing throughout.
+- **Never place text over dithering.** Dithered areas are for empty/decorative regions only (e.g. depth markers, progress bar tracks). If an area contains readable text, use a solid background (paper, ink, or code-bg).
 
 ---
 
@@ -151,7 +153,7 @@ No curves. Everything is rectilinear.
 
 | Rule | Requirement |
 |---|---|
-| Palette | Two colours only: `#e9e3d3` (paper) and `#101033` (ink). No opacity for fake greys. |
+| Palette | Two colours + code-bg: `#e9e3d3` (paper), `#101033` (ink), `#f5f2ea` (code-bg). No opacity for fake greys. |
 | Typography | Monospace only. Space Mono + Fira Code. Headings are uppercase inverted bars. |
 | Grid | All elements snap to master grid. Item widths match their parent. |
 | Panels | Bordered, shadowed containers. Body is a panel. Multiple panels allowed. |
@@ -159,7 +161,7 @@ No curves. Everything is rectilinear.
 | Items | Full-width rows. Variable height. Can subdivide horizontally or nest lists. |
 | Borders | No duplicate borders. One weight (2px). Hard box shadows, no blur. |
 | Images | Edge-to-edge within cells. No border-radius. |
-| Icons | Pixel art, `image-rendering: pixelated`, two-colour only, no SVG. |
+| Icons | Pixel art PNGs, `image-rendering: auto`, two-colour only, no SVG, no Unicode symbols. |
 | Inversion | Hover/active states swap ink↔paper fully. No intermediate states. |
-| Dithering | Dot-grid patterns for texture. Replaces grey/opacity. |
+| Dithering | Dot-grid patterns for texture. Replaces grey/opacity. Never over text. |
 | Shape | No curves anywhere. All rectangles, all straight lines. |
