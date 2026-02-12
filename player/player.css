@@ -138,14 +138,11 @@ body {
 .p-nav-head a {
     color: var(--paper);
     text-decoration: none;
-    opacity: 0.5;
     font-family: var(--font-heading);
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transition: opacity 0.15s ease;
 }
-.p-nav-head a:hover { opacity: 1; }
 
 .p-nav-list {
     flex: 1;
@@ -183,7 +180,6 @@ body {
 .nav-count {
     font-family: var(--font-mono);
     font-size: 0.6rem;
-    opacity: 0.5;
     margin-left: 0.4rem;
     flex-shrink: 0;
 }
@@ -192,7 +188,6 @@ body {
     padding: var(--pad);
     font-family: var(--font-body);
     font-size: 0.75rem;
-    opacity: 0.5;
 }
 .nav-empty a {
     color: var(--ink);
@@ -202,25 +197,27 @@ body {
 
 .nav-fav, .album-fav {
     flex-shrink: 0;
-    opacity: 0.15;
+    opacity: 0;
     cursor: pointer;
     margin-left: 0.3rem;
     font-size: 0.7rem;
     transition: opacity 0.15s ease;
 }
-.nav-fav:hover, .album-fav:hover { opacity: 0.6; }
+.nav-item:hover .nav-fav, .album-item:hover .album-fav { opacity: 1; }
+.nav-fav:hover, .album-fav:hover { opacity: 1; }
 .nav-fav.active, .album-fav.active { opacity: 1; }
 
 /* === Delete / Action buttons in nav === */
 
 .nav-delete {
     flex-shrink: 0;
-    opacity: 0.2;
+    opacity: 0;
     cursor: pointer;
     margin-left: 0.4rem;
     font-size: 0.9rem;
     transition: opacity 0.15s ease;
 }
+.nav-item:hover .nav-delete { opacity: 1; }
 .nav-delete:hover { opacity: 1; }
 
 /* === Album List Items (no cover art) === */
@@ -253,7 +250,6 @@ body {
 .album-item-meta {
     font-family: var(--font-mono);
     font-size: 0.6rem;
-    opacity: 0.6;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -282,7 +278,6 @@ body {
     font-size: 0.7rem;
     flex: 0 0 2rem;
     text-align: right;
-    opacity: 0.7;
 }
 .track-title {
     font-family: var(--font-heading);
@@ -295,7 +290,6 @@ body {
 .track-artist-hint {
     font-family: var(--font-body);
     font-size: 0.6rem;
-    opacity: 0.5;
     flex-shrink: 0;
     white-space: nowrap;
 }
@@ -303,22 +297,24 @@ body {
     flex-shrink: 0;
     width: 1.2rem;
     text-align: center;
-    opacity: 0.2;
+    opacity: 0;
     cursor: pointer;
     font-family: var(--font-heading);
     font-size: 0.85rem;
     transition: opacity 0.15s ease;
 }
+.track-row:hover .track-add { opacity: 1; }
 .track-add:hover { opacity: 1; }
 .track-remove {
     flex-shrink: 0;
     width: 1.2rem;
     text-align: center;
-    opacity: 0.2;
+    opacity: 0;
     cursor: pointer;
     font-size: 0.9rem;
     transition: opacity 0.15s ease;
 }
+.track-row:hover .track-remove { opacity: 1; }
 .track-remove:hover { opacity: 1; }
 
 /* === Playlist Dropdown Menu === */
@@ -405,10 +401,6 @@ body {
 .queue-toggle .toggle-state {
     font-family: var(--font-mono);
     font-size: 0.6rem;
-    opacity: 0.5;
-}
-.queue-toggle.active .toggle-state {
-    opacity: 1;
 }
 
 .queue-label {
@@ -418,7 +410,6 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink);
-    opacity: 0.4;
     border-bottom: var(--cell);
 }
 
@@ -449,7 +440,6 @@ body {
 .p-ctrl-artist {
     font-family: var(--font-body);
     font-size: 0.65rem;
-    opacity: 0.7;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -468,15 +458,14 @@ body {
 .p-ctrl-bar {
     flex: 1;
     height: 4px;
-    background: var(--ink);
-    opacity: 0.2;
+    background: radial-gradient(circle, var(--ink) 1px, transparent 1px);
+    background-size: 4px 4px;
     cursor: pointer;
     position: relative;
 }
 .p-ctrl-fill {
     height: 100%;
     background: var(--ink);
-    opacity: 1;
     width: 0%;
     position: absolute;
     top: 0; left: 0;
@@ -491,7 +480,6 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink);
-    opacity: 0.4;
     border-bottom: var(--cell);
 }
 
@@ -522,7 +510,6 @@ body {
 }
 .settings-input::placeholder {
     color: var(--ink);
-    opacity: 0.3;
 }
 
 .settings-btn {
@@ -541,7 +528,6 @@ body {
     font-family: var(--font-mono);
     font-size: 0.55rem;
     text-transform: uppercase;
-    opacity: 0.5;
     margin-left: 0.4rem;
     flex-shrink: 0;
 }
@@ -563,24 +549,63 @@ body {
     font-size: 0.6rem;
 }
 .settings-msg:empty { display: none; }
-.settings-msg.success { color: #2a7a2a; }
-.settings-msg.error { color: #a03030; }
+.settings-msg.success { color: var(--ink); }
+.settings-msg.error { background: var(--ink); color: var(--paper); }
 
 .settings-action {
     font-family: var(--font-mono);
     font-size: 0.55rem;
     text-transform: uppercase;
-    opacity: 0.3;
+    opacity: 0;
     cursor: pointer;
     margin-left: 0.4rem;
     flex-shrink: 0;
     transition: opacity 0.15s ease;
 }
+.settings-user:hover .settings-action { opacity: 1; }
 .settings-action:hover { opacity: 1; }
 
 .settings-user {
     display: flex;
     align-items: center;
+}
+
+/* === Icons === */
+
+.p-btn img {
+    width: 55%;
+    height: 55%;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.p-icon {
+    display: inline-block;
+    height: 1em;
+    width: auto;
+    image-rendering: pixelated;
+    vertical-align: -0.1em;
+}
+
+.nav-fav img, .album-fav img,
+.nav-delete img,
+.track-add img, .track-remove img {
+    display: block;
+    width: 1em;
+    height: 1em;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.p-nav-head .p-icon { filter: invert(1); }
+
+.p-btn:hover img,
+.nav-item:hover img,
+.nav-item.active img,
+.album-item:hover img,
+.track-row:hover img,
+.track-row.playing img {
+    filter: invert(1);
 }
 
 /* === Small screens === */

@@ -69,11 +69,9 @@
             border-radius: 0 !important;
             border: none !important;
             margin: 0;
-            filter: grayscale(20%) contrast(1.05);
-            transition: filter 0.25s ease, transform 0.25s ease;
+            transition: transform 0.25s ease;
         }
         .album-cell:hover .album-art img {
-            filter: grayscale(0%) contrast(1.1);
             transform: scale(1.03);
         }
 
@@ -117,7 +115,7 @@
         .album-stamp {
             position: absolute;
             inset: 0;
-            background: rgba(16, 16, 51, 0.92);
+            background: var(--ink);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;

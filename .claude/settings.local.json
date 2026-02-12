@@ -13,7 +13,9 @@
       "Bash(ls:*)",
       "Bash(ssh:*)",
       "WebFetch(domain:blog.jangnet.cc)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(grep:*)",
+      "Bash(printf:*)"
     ]
   }
 }

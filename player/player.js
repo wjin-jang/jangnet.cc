@@ -30,6 +30,8 @@
   var favAlbums = loadJSON('jn-fav-albums', []);
   var playlists = loadJSON('jn-playlists', []);
 
+  var ICO = '/assets/images/icons/';
+
   // ── DOM ──
 
   var pArt = document.getElementById('p-art');
@@ -239,8 +241,8 @@
     h += '<div class="nav-item" data-go="artists"><span class="nav-item-text">Artists</span></div>';
     h += '<div class="nav-item" data-go="albums"><span class="nav-item-text">Albums</span></div>';
     h += '<div class="nav-item" data-go="tracks"><span class="nav-item-text">All Tracks</span></div>';
-    h += '<div class="nav-item" data-go="fav-artists"><span class="nav-item-text">\u2665 Artists</span><span class="nav-count">' + favArtists.length + '</span></div>';
-    h += '<div class="nav-item" data-go="fav-albums"><span class="nav-item-text">\u2665 Albums</span><span class="nav-count">' + favAlbums.length + '</span></div>';
+    h += '<div class="nav-item" data-go="fav-artists"><span class="nav-item-text"><img src="' + ICO + 'heart.png" alt="" class="p-icon"> Artists</span><span class="nav-count">' + favArtists.length + '</span></div>';
+    h += '<div class="nav-item" data-go="fav-albums"><span class="nav-item-text"><img src="' + ICO + 'heart.png" alt="" class="p-icon"> Albums</span><span class="nav-count">' + favAlbums.length + '</span></div>';
     for (var i = 0; i < playlists.length; i++) {
       h += '<div class="nav-item" data-go="playlist" data-idx="' + i + '"><span class="nav-item-text">' + esc(playlists[i].name) + '</span><span class="nav-count">' + playlists[i].tracks.length + '</span></div>';
     }
@@ -278,7 +280,7 @@
       var fav = isFavArtist(i);
       h += '<div class="nav-item" data-idx="' + i + '">';
       h += '<span class="nav-item-text">' + esc(library[i].name) + '</span>';
-      h += '<span class="nav-fav' + (fav ? ' active' : '') + '" data-fav-artist="' + i + '">\u2665</span>';
+      h += '<span class="nav-fav' + (fav ? ' active' : '') + '" data-fav-artist="' + i + '"><img src="' + ICO + 'heart.png" alt=""></span>';
       h += '</div>';
     }
     navList.innerHTML = h;
@@ -419,7 +421,7 @@
   // ── Render: Fav Artists ──
 
   function renderFavArtists() {
-    navTitle.textContent = '\u2665 Artists';
+    navTitle.innerHTML = '<img src="' + ICO + 'heart.png" alt="" class="p-icon"> Artists';
     var h = backItem('Library');
     if (favArtists.length === 0) {
       h += '<div class="nav-empty">No favourite artists yet.</div>';
@@ -442,7 +444,7 @@
   // ── Render: Fav Albums ──
 
   function renderFavAlbums() {
-    navTitle.textContent = '\u2665 Albums';
+    navTitle.innerHTML = '<img src="' + ICO + 'heart.png" alt="" class="p-icon"> Albums';
     var h = backItem('Library');
     if (favAlbums.length === 0) {
       h += '<div class="nav-empty">No favourite albums yet.</div>';
@@ -481,7 +483,7 @@
       h += '<div class="nav-item" data-idx="' + i + '">';
       h += '<span class="nav-item-text">' + esc(playlists[i].name) + '</span>';
       h += '<span class="nav-count">' + playlists[i].tracks.length + '</span>';
-      h += '<span class="nav-delete" data-del="' + i + '">\u00D7</span>';
+      h += '<span class="nav-delete" data-del="' + i + '"><img src="' + ICO + 'delete.png" alt=""></span>';
       h += '</div>';
     }
     h += '<div class="nav-item" data-action="new-playlist"><span class="nav-item-text">+ New Playlist</span></div>';
@@ -536,7 +538,7 @@
       h += '<span class="track-num">' + (i + 1) + '</span>';
       h += '<span class="track-title">' + esc(track.title) + '</span>';
       h += '<span class="track-artist-hint">' + esc(library[ref.artistIdx].name) + '</span>';
-      h += '<span class="track-remove" data-rm="' + i + '">\u00D7</span>';
+      h += '<span class="track-remove" data-rm="' + i + '"><img src="' + ICO + 'delete.png" alt=""></span>';
       h += '</div>';
     }
     navList.innerHTML = h;
@@ -590,7 +592,7 @@
         h += '<span class="track-num">' + (m + 1) + '</span>';
         h += '<span class="track-title">' + esc(mtrack.title) + '</span>';
         h += '<span class="track-artist-hint">' + esc(library[mref.artistIdx].name) + '</span>';
-        h += '<span class="track-remove" data-rm-mq="' + m + '">\u00D7</span>';
+        h += '<span class="track-remove" data-rm-mq="' + m + '"><img src="' + ICO + 'delete.png" alt=""></span>';
         h += '</div>';
       }
     }
@@ -762,7 +764,7 @@
           if (users[i].admin) h += '<span class="settings-badge">admin</span>';
           h += '<span class="settings-action" data-reset="' + i + '">reset</span>';
           if (users[i].username !== accountInfo.username) {
-            h += '<span class="nav-delete" data-del-user="' + i + '">\u00D7</span>';
+            h += '<span class="nav-delete" data-del-user="' + i + '"><img src="' + ICO + 'delete.png" alt=""></span>';
           }
           h += '</div>';
         }
@@ -823,7 +825,7 @@
     h += '<div class="album-item-name">' + esc(album.name) + '</div>';
     h += '<div class="album-item-meta">' + esc(artist.name) + (album.year ? ' \u00B7 ' + album.year : '') + ' \u00B7 ' + album.trackCount + ' tracks</div>';
     h += '</div>';
-    h += '<span class="album-fav' + (fav ? ' active' : '') + '" data-fav-album="' + ai + '-' + ali + '">\u2665</span>';
+    h += '<span class="album-fav' + (fav ? ' active' : '') + '" data-fav-album="' + ai + '-' + ali + '"><img src="' + ICO + 'heart.png" alt=""></span>';
     h += '</div>';
     return h;
   }
@@ -834,7 +836,7 @@
     h += '<span class="track-num">' + track.number + '</span>';
     h += '<span class="track-title">' + esc(track.title) + '</span>';
     if (artistHint) h += '<span class="track-artist-hint">' + esc(artistHint) + '</span>';
-    h += '<span class="track-add" data-add="' + ai + '-' + ali + '-' + ti + '">+</span>';
+    h += '<span class="track-add" data-add="' + ai + '-' + ali + '-' + ti + '"><img src="' + ICO + 'add.png" alt=""></span>';
     h += '</div>';
     return h;
   }
@@ -919,8 +921,8 @@
   }
 
   function flash(el) {
-    el.textContent = '\u2713';
-    setTimeout(function () { el.textContent = '+'; }, 700);
+    el.innerHTML = '<img src="' + ICO + 'done.png" alt="">';
+    setTimeout(function () { el.innerHTML = '<img src="' + ICO + 'add.png" alt="">'; }, 700);
   }
 
   function closeAddMenu() {
@@ -962,7 +964,7 @@
     updateArt();
     updateMediaSession(ai, ali, ti);
     highlightTrackRow();
-    btnPlay.innerHTML = '&#10074;&#10074;';
+    btnPlay.innerHTML = '<img src="' + ICO + 'pause.png" alt="Pause">';
     // Re-render queue view if we're on it
     if (currentView === 'queue') renderQueue();
   }
@@ -1049,8 +1051,8 @@
   });
 
   audio.addEventListener('ended', function () { playNext(); });
-  audio.addEventListener('play', function () { btnPlay.innerHTML = '&#10074;&#10074;'; });
-  audio.addEventListener('pause', function () { btnPlay.innerHTML = '&#9654;'; });
+  audio.addEventListener('play', function () { btnPlay.innerHTML = '<img src="' + ICO + 'pause.png" alt="Pause">'; });
+  audio.addEventListener('pause', function () { btnPlay.innerHTML = '<img src="' + ICO + 'play.png" alt="Play">'; });
 
   // ── Seek ──
 
