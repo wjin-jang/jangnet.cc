@@ -1101,6 +1101,32 @@
     .then(function (data) {
       library = data;
       renderView();
+      // Auto-play album from ?play=Artist/Album
+      var params = new URLSearchParams(window.location.search);
+      var playParam = params.get('play');
+      if (playParam) {
+        var slash = playParam.indexOf('/');
+        if (slash >= 0) {
+          var pArtist = playParam.substring(0, slash).toLowerCase();
+          var pAlbum = playParam.substring(slash + 1).toLowerCase();
+          for (var ai = 0; ai < library.length; ai++) {
+            if (library[ai].name.toLowerCase() !== pArtist) continue;
+            for (var ali = 0; ali < library[ai].albums.length; ali++) {
+              if (library[ai].albums[ali].name.toLowerCase() !== pAlbum) continue;
+              var tracks = [];
+              for (var t = 0; t < library[ai].albums[ali].tracks.length; t++) {
+                tracks.push({ artistIdx: ai, albumIdx: ali, trackIdx: t });
+              }
+              buildAutoQueue(tracks, 0, library[ai].albums[ali].name);
+              playTrack(ai, ali, 0);
+              navigate('album', { ai: ai, ali: ali });
+              window.history.replaceState({}, '', '/');
+              ai = library.length; // break outer
+              break;
+            }
+          }
+        }
+      }
     })
     .catch(function () {
       navList.innerHTML = '<div class="nav-empty">Failed to load. <a href="/login">Login again</a>.</div>';

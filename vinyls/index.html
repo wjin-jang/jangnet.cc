@@ -159,6 +159,11 @@
             margin-bottom: 0.15rem;
         }
 
+        a.album-cell {
+            text-decoration: none;
+            color: inherit;
+        }
+
         @media (max-width: 600px) {
             .album-cell { width: 170px; }
             .album-info { min-height: 3.2rem; }
@@ -207,7 +212,7 @@
             .then(albums => {
                 const container = document.getElementById('shelves');
                 const cells = albums.map(a => `
-                    <div class="album-cell">
+                    <a class="album-cell" href="https://music.jangnet.cc/?play=${encodeURIComponent(a.artist)}/${encodeURIComponent(a.title)}" target="_blank">
                         <div class="album-art">
                             <img src="/assets/images/${encodeURIComponent(a.img)}" alt="${esc(a.title)}" loading="lazy">
                             <div class="album-stamp">
@@ -223,7 +228,7 @@
                             <div class="album-artist">${esc(a.artist)}</div>
                             <div class="album-meta">${a.year}</div>
                         </div>
-                    </div>
+                    </a>
                 `).join('');
 
                 container.innerHTML = `
@@ -246,7 +251,7 @@
                 .then(albums => {
                     const container = document.getElementById(containerId);
                     const cells = albums.map(a => `
-                        <div class="album-cell">
+                        <a class="album-cell" href="https://music.jangnet.cc/?play=${encodeURIComponent(a.artist)}/${encodeURIComponent(a.title)}" target="_blank">
                             <div class="album-art">
                                 <img src="/assets/images/${encodeURIComponent(a.img)}" alt="${esc(a.title)}" loading="lazy">
                                 <div class="album-stamp">
@@ -262,7 +267,7 @@
                                 <div class="album-artist">${esc(a.artist)}</div>
                                 <div class="album-meta">${a.year}</div>
                             </div>
-                        </div>
+                        </a>
                     `).join('');
 
                     container.innerHTML = `<div class="shelf-track">${cells}</div>`;
