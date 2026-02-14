@@ -85,7 +85,7 @@
             });
         });
 
-        fetch('/assets/data/posts.json').then(function (r) { return r.json(); }).then(function (posts) {
+        fetch('/assets/data/posts.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (posts) {
             posts.forEach(function (p) {
                 var a = document.createElement('a');
                 a.className = 'post-entry';

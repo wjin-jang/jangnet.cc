@@ -29,7 +29,7 @@
         var d = iso.split('-');
         return MONTHS[parseInt(d[1], 10) - 1] + ' ' + parseInt(d[2], 10) + ', ' + d[0];
     }
-    fetch('/assets/data/posts.json').then(function (r) { return r.json(); }).then(function (posts) {
+    fetch('/assets/data/posts.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (posts) {
         var ul = document.querySelector('.post-list');
         posts.forEach(function (p) {
             var li = document.createElement('li');
