@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W1 – Angels – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W1 – Angels</h1>
+                <div class="post-meta">October 20, 2025 · UAL, Year 0, reflection, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <p>This week we are looking at colour space. The most commonly used and understood colour representation for digital images is RGB. This uses three values, usually 8 bits per value to represent the brightness of red, green and blue components of an image.</p>
+<p>RGB can be easily represented as hexadecimal with two characters corresponding to each component. You can learn to intuit the hex code of any colour by looking at it. the first digit of each component from 0-F is rough, then finer adjustments can be made with the second. You can instinctually estimate the amount of red, green, and blue in a colour to impress your friends.</p>
+<p>This is however, very difficult to do so there are more human friendly colour formats. HSV is one of them. HSV is made of three components, just like RGB.</p>
+<p>Hue, ranging from 0 - 360, describes the angle on the colour wheel.<br>Saturation, ranging from 0 -100, describes how vivid the colour is.<br>Value, ranging from 0 - 100, describes how bright the colour is.</p>
+<p>HSV makes it much easier to compute complementary and harmonious colours. It also allows us to easily acquire tints and shades of a colour.</p>
+<p>I&#39;ve created a version of my p5js clock from [[y0-fmcc-w6-tempus-fugit]] that randomly picks a colour in the HSB space and builds a complementary palette on top.</p>
+<pre><code class="language-js">function generateColors(base_hue,base_sat,base_brt) {
+  let bg = color(base_hue,base_sat,base_brt);
+  
+  //pupils: split complementary
+  let splitComp = 10;
+  
+  let pupilDormant = color(abs((base_hue + 180 + splitComp) % 360),base_sat*0.3,base_brt);
+  let pupilActive = color(abs((base_hue + 180 - splitComp) % 360),100,50); 
+  
+  let txt = pupilActive;
+  let sclera = color(abs((base_hue + 30)),base_sat,base_brt+25); //analogous + brightened
+  
+  return new style(bg,txt,pupilDormant,pupilActive,sclera,`${round(base_hue)} ${round(base_sat)} ${round(base_brt)}`);
+}
+</code></pre>
+<p>I used a bit of a hack to get it working. Not the most elegant solution.</p>
+<pre><code class="language-js">styles[styleIndex] = generateColors(random(360),random(100),random(100));
+</code></pre>
+<p>I always make sure to use the modulo function to wrap the hue around. It does still take a bit of discretion to find what looks good. Personally I prefer my hand-picked palettes but there are some surprisingly pleasant combinations.</p>
+<p>The clock can be found here:</p>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/ndfuP0Tjk">https://editor.p5js.org/woojinJang_/sketches/ndfuP0Tjk</a></p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>

@@ -55,6 +55,28 @@
         ]
     },
     {
+        "slug": "y0-fmcc2-w1-angels",
+        "title": "Y0/FMCC2/W1 – Angels",
+        "date": "2025-10-20",
+        "tags": [
+            "UAL",
+            "Year 0",
+            "reflection",
+            "FMCC2"
+        ]
+    },
+    {
+        "slug": "y0-fmcc2-w1-kmeans",
+        "title": "Y0/FMCC2/W1 – K-means Clustering",
+        "date": "2025-10-20",
+        "tags": [
+            "UAL",
+            "Year 0",
+            "reflection",
+            "FMCC2"
+        ]
+    },
+    {
         "slug": "y0-icp-w3-speculative-futures",
         "title": "Y0/ICP/W3 – Speculative Futures",
         "date": "2025-10-20",

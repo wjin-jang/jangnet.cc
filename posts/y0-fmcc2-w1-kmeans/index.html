@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W1 – K-means Clustering – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W1 – K-means Clustering</h1>
+                <div class="post-meta">October 20, 2025 · UAL, Year 0, reflection, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <figure><img src="/assets/images/posts/combined_5x5.png" alt="A collage of 25 album covers with their colour palettes displayed"><figcaption>Made using p5.js, Album covers by various artists</figcaption></figure>
+<p>K-means Clustering is an algorithm that organises points into space into an arbitrary amount of clusters. One application of this is to extract a colour palette from an image.</p>
+<p>The K-means algorithm is as such:</p>
+<ol>
+<li>Place centroids randomly in space.</li>
+<li>Assign each point to its closest centroid.</li>
+<li>Move centroid to the average position of its cluster</li>
+<li>Repeat until the points stop moving (or move very little) or until the maximum number of iterations is reached.</li>
+</ol>
+<p>I created a Cluster object to make this easier.</p>
+<pre><code class="language-js">class Cluster {
+  constructor(pos) {
+    this.position = pos;
+    this.points = [];
+  }
+
+  move() {
+    if (this.points.length === 0) return 0;
+
+    let sum = createVector(0, 0, 0);
+    for (let p of this.points) {
+      sum.add(p);
+    }
+    let newpos = p5.Vector.div(sum, this.points.length);
+    let movement = p5.Vector.dist(newpos, this.position);
+    this.position = newpos;
+
+    return movement;
+  }
+}
+</code></pre>
+<h2>Extraction</h2>
+<p>I extract all the unique colours from the image.</p>
+<pre><code class="language-js">let colourSet = new Set();
+for (let x = 0; x &lt; img.width; x++) {
+	for (let y = 0; y &lt; img.height; y++) {
+		let pixel = img.get(x, y);
+		let key = `${pixel[0]},${pixel[1]},${pixel[2]}`;
+		if (!colourSet.has(key)) {
+			colourSet.add(key);
+			colours.push(color(pixel[0], pixel[1], pixel[2]));
+		}
+	}
+}
+</code></pre>
+<p>I use a <em>set</em> so there are no duplicates. Since sets use a hash table, it&#39;s much faster than an array.</p>
+<h2>Initialisation</h2>
+<p>I initialise the clusters. I choose a random colour from the image. This tends to give much cleaner results since the clusters won&#39;t be too far from other points.</p>
+<pre><code class="language-js">for (let i = 0; i &lt; k; i++) {
+  let randIndex = floor(random(colours.length));
+  clusters.push(new Cluster(colours[randIndex].copy()));
+}
+</code></pre>
+<h2>Main Loop</h2>
+<p>I then run the K-means algorithm</p>
+<pre><code class="language-js">let iteration = 0;
+let iterationsMax = 65536;
+let movement = 999;
+
+while (movement &gt; 0.001 &amp;&amp; iteration &lt; iterationsMax) {
+  movement = 0;
+
+for (let i in clusters) {
+  clusters[i].points = [];
+}
+
+for (let i in colours) {
+  let closest = 0;
+  let smallestDistance = Infinity;
+  for (let j in clusters) {
+	let distance = colours[i].dist(clusters[j].position);
+	if (distance &lt; smallestDistance) {
+	  smallestDistance = distance;
+	  closest = j;
+	}
+  }
+  clusters[closest].points.push(colours[i]);
+}
+
+for (let i in clusters) {
+	movement += clusters[i].move();
+}
+
+iteration++;
+}
+</code></pre>
+<h2>Display</h2>
+<p>For this project, I wanted to use a wide variety of images. My server already hosts a wide catalogue of album covers so I decided to leverage that for this project.</p>
+<pre><code class="language-js">const k = 5;
+const imgdir = &#39;https://music.jangnet.cc/api/randomcover&#39;
+</code></pre>
+<p>The images and their extracted palettes are displayed. (Note: I resize the original <code>img</code> variable to speed up the palette extraction. I use <code>fullimg</code> to store the image pre-crushing)</p>
+<pre><code class="language-js">function draw() {
+  background(220);
+  image(fullimg, 0, 0);
+  
+  let totalParts = 31;
+  let unit = height / totalParts;
+  let swatchSize = unit * 5;
+  let gap = unit;
+
+  for (let i = 0; i &lt; clusters.length; i++) {
+    let rgb = clusters[i].position;
+    fill(rgb[0], rgb[1], rgb[2]);
+    noStroke();
+    let y = gap + i * (swatchSize + gap);
+    rect(10, y, swatchSize, swatchSize);
+  }
+}
+</code></pre>
+<h2>Perceptual Colour Space and OKLAB</h2>
+<p>So far, I have placed these images in a RGB colour space. RGB doesn&#39;t map well with perceived colour difference. We can massively upgrade this algorithm by using OKLAB. A colour space where euclidean distance matters for how perceptually similar colours are.</p>
+<h2>Final</h2>
+<p>Refresh for a new album cover<br><a href="https://editor.p5js.org/woojinJang_/full/Hcs1K1vaE">https://editor.p5js.org/woojinJang_/full/Hcs1K1vaE</a></p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>

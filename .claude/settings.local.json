@@ -15,7 +15,8 @@
       "WebFetch(domain:blog.jangnet.cc)",
       "Bash(curl:*)",
       "Bash(grep:*)",
-      "Bash(printf:*)"
+      "Bash(printf:*)",
+      "Bash(bash update.sh)"
     ]
   }
 }
