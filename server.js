@@ -83,6 +83,17 @@ app.get('/manifest.json', (req, res) => {
 
 // ── Public routes ──
 
+app.get('/api/randomcover', (req, res) => {
+  const vinyls = JSON.parse(fs.readFileSync(path.join(__dirname, 'assets', 'data', 'vinyls.json'), 'utf8'));
+  const digital = JSON.parse(fs.readFileSync(path.join(__dirname, 'assets', 'data', 'digital.json'), 'utf8'));
+  const all = vinyls.concat(digital);
+  const pick = all[Math.floor(Math.random() * all.length)];
+  const imgPath = path.join(__dirname, 'assets', 'images', pick.img);
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Cache-Control', 'no-store');
+  res.sendFile(imgPath);
+});
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'player', 'login.html'));
 });
