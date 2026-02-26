@@ -1,5 +1,26 @@
 [
     {
+        "slug": "personal-end-of-1st-semester",
+        "title": "Personal/End of First Semester",
+        "date": "2026-02-26",
+        "tags": [
+            "Personal",
+            "FMCC",
+            "ICP"
+        ]
+    },
+    {
+        "slug": "y0-icop-w2-cybernetics",
+        "title": "Y0/ICoP/W2 - Cybernetics",
+        "date": "2026-02-24",
+        "tags": [
+            "UAL",
+            "art",
+            "coding",
+            "ICoP"
+        ]
+    },
+    {
         "slug": "y0-fmcc2-w1-angels",
         "title": "Y0/FMCC2/W1 – Angels",
         "date": "2026-02-16",
