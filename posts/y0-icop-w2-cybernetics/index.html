@@ -30,7 +30,8 @@
 </code></pre>
 <p>Anyway, we are drawing with robots today. Last week I prepared a sketch in p5js looking to imitate the style of Vera Molnar. </p>
 <figure><img src="/assets/images/posts/y0icopw2cybernetics-0.jpg" alt=""A sketch of a geometric pattern.""></figure>
-<p>I drew a mockup pattern, based on the beauty of a sine wave with its amplitude multiplied randomly across each shape. Beauty and chaos.<br><figure><img src="/assets/images/posts/y0icopw2cybernetics-1.png" alt="Shapes fitting a sine wave" loading="lazy"><figcaption>Made using p5.js</figcaption></figure></p>
+<p>I drew a mockup pattern, based on the beauty of a sine wave with its amplitude multiplied randomly across each shape. Beauty and chaos. </p>
+<figure><img src="/assets/images/posts/y0icopw2cybernetics-1.png" alt="Shapes fitting a sine wave" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
 <p>A quick mockup in p5.js shows my intended design. Then it came time to send the path to the AxiDraw machine.<br>I knew looking at my design that it would take a long time, so just for testing, I simplified it. Instead of drawing a shape, it simply created a line between points.</p>
 <pre><code class="language-js">function drawWaves() {
   background(255);
@@ -52,8 +53,10 @@
   }
 }
 </code></pre>
-<p>To interface with the robot, we used Inkscape and an AxiDraw plugin. It was difficult to line up the drawing arm properly. I didn&#39;t understand how the robot decided where to draw from. It was quite a revelation when I realised that the robot doesn&#39;t care about its absolute position. It simply draws from wherever it happens to be.<br><figure><img src="/assets/images/posts/y0icopw2cybernetics-2.png" alt="Simplified design, a decaying sine wave" loading="lazy"><figcaption>Made using p5.js</figcaption></figure></p>
-<p>My code is configurable, so that the amplitude, frequency and variance can be adjusted to create various images. I actually preferred the new design. By simplifying I could actually showcase the most interesting part of this algorithm artistically, the ordered chaos emerging from the mixing of a sine wave and random variation.<br><figure><img src="/assets/images/posts/y0icopw2cybernetics-3.jpg" alt="Heartbit, layered waves mimicing a digital heartbeat" loading="lazy"><figcaption>Made using p5.js</figcaption></figure></p>
+<p>To interface with the robot, we used Inkscape and an AxiDraw plugin. It was difficult to line up the drawing arm properly. I didn&#39;t understand how the robot decided where to draw from. It was quite a revelation when I realised that the robot doesn&#39;t care about its absolute position. It simply draws from wherever it happens to be. </p>
+<figure><img src="/assets/images/posts/y0icopw2cybernetics-2.png" alt="Simplified design, a decaying sine wave" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p>My code is configurable, so that the amplitude, frequency and variance can be adjusted to create various images. I actually preferred the new design. By simplifying I could actually showcase the most interesting part of this algorithm artistically, the ordered chaos emerging from the mixing of a sine wave and random variation. </p>
+<figure><img src="/assets/images/posts/y0icopw2cybernetics-3.jpg" alt="Heartbit, layered waves mimicing a digital heartbeat" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
 <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>
