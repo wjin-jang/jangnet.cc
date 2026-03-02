@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W3 - Transformations – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W3 - Transformations</h1>
+                <div class="post-meta">February 28, 2026 · UAL, Year 0, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <figure><img src="/assets/images/posts/y0fmcc2w3-0.gif" alt="A cube made of a volumetric grid of lines rotating, pulsing rainbow"><figcaption>Made using Three.js</figcaption></figure>
+<p>This week I&#39;ve been learning Three.js. The sketch is inspired by Vera Molnár&#39;s <em>Interruptions</em> (1969), one of her earliest computer-generated plotter drawings. In it, she fills a grid with line segments of equal length and applies random rotation to each one, creating a dense, chaotic field from an otherwise uniform structure. I wanted to explore the same idea but extended into three dimensions.</p>
+<h2>Setup</h2>
+<p>Every Three.js sketch needs three things: a scene, a camera, and a renderer.</p>
+<pre><code class="language-js">const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
+</code></pre>
+<p>A lot of this code was copy-pasted from the Three.js manual, specifically <a href="https://threejs.org/manual/#en/creating-a-scene">https://threejs.org/manual/#en/creating-a-scene</a>. I have tried to understand everything going on.</p>
+<h2>The Grid</h2>
+<p>I create a 16×16×16 volumetric grid of line segments, each randomly oriented.</p>
+<pre><code class="language-js">for(let x = 0; x &lt; volGridWidth; x++){
+  for(let y = 0; y &lt; volGridHeight; y++){
+    for(let z = 0; z &lt; volGridDepth; z++){
+      let points = [];
+      let angle = Math.random(6.28);
+      //set local geometry to line of length voxelSize
+      points.push( new THREE.Vector3( voxelSize*-0.5, 0, 0 ) );
+      points.push( new THREE.Vector3( voxelSize*0.5, 0, 0 ) );
+      //create line object
+      let geometry = new THREE.BufferGeometry().setFromPoints( points );
+      let material = new THREE.LineBasicMaterial( { color: 0xffffff } );
+      let line = new THREE.Line( geometry, material );
+      //apply random rotations in three axis
+      line.rotateX(Math.random()*6.28); //6.28 approx 2*PI
+      line.rotateY(Math.random()*6.28);
+      line.rotateZ(Math.random()*6.28);
+      line.position.set( x * voxelSize, y * voxelSize, z * voxelSize ); //set position to grid
+      
+      volGrid.push(line); 
+      scene.add( line );
+    }
+  }
+}
+</code></pre>
+<p>Each line starts as a horizontal segment and is rotated randomly on all three axes. This similar to Molnár&#39;s <em>Interruptions</em> logic, but in 3D. </p>
+<h2>Animation</h2>
+<p>Three.js uses <code>setAnimationLoop</code> instead of p5&#39;s <code>draw()</code>.</p>
+<pre><code class="language-js">function animate( time ) {
+  volGrid.forEach( line =&gt; {
+    line.rotateY(0.02);
+    line.material.color.set(`hsl(${(line.position.y * 8) + (time / 10)}, 100%, 50%)`) //pulsing hue effect
+  });
+
+  renderer.render( scene, camera );
+}
+renderer.setAnimationLoop( animate );
+</code></pre>
+<p>Each frame every line rotates on the Y axis. The colour is an HSL value where the hue is driven by the line&#39;s Y position plus a time offset resulting in a rainbow wave that travels down the cube, adding motion to Molnár&#39;s work.</p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W2 – Vectors – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W2 – Vectors</h1>
+                <div class="post-meta">February 28, 2026 · UAL, Year 0, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <figure><img src="/assets/images/posts/y0fmcc2w2-0.gif" alt="Balls falling to the ground, being thrown around"><figcaption>Made using p5.js</figcaption></figure>
+<p>This week we are looking at Vectors in Euclidean space. I built a sketch where coloured balls bounce around the canvas, colliding with each other and the walls.</p>
+<h2>Setup</h2>
+<p>Each ball has a position, velocity, and acceleration. Forces are accumulated into the acceleration each frame, applied to velocity, then cleared.</p>
+<pre><code class="language-js">update() {
+  this.vel.add(this.acc);
+  this.pos.add(this.vel);
+  this.acc.mult(0);
+  ...
+}
+
+applyForce(force){
+  this.acc.add(force);
+}
+</code></pre>
+<p>This is a standard Euler integration setup. Gravity is applied every frame as a constant downward force, controllable via a slider ranging from -1 to 1. Negative gravity floats the balls upward.</p>
+<h2>Wall Collisions</h2>
+<p>When a ball hits a wall, its velocity on that axis is flipped and scaled by a collision strength factor.</p>
+<pre><code class="language-js">collideWalls(){
+  if(this.pos.y &gt; height - this.size*0.5){
+    this.vel.y *= -COLLISION_STRENGTH.value();
+    this.pos.y = height - this.size*0.5;
+  }
+  ...
+}
+</code></pre>
+<p>The position is also corrected to prevent the ball from clipping through. A collision strength of <code>1</code> is perfectly elastic; lower values lose energy on each bounce.</p>
+<h2>Ball Collisions</h2>
+<p>Ball-to-ball collision uses an equal-mass elastic collision along the collision normal.</p>
+<pre><code class="language-js">collide(other) {
+  let normal = p5.Vector.sub(this.pos, other.pos);
+  let distance = normal.mag();
+  let overlap = this.size - distance;
+  
+  normal.normalize();
+  
+  let moveAmount = normal.copy().mult(overlap / 2);
+  this.pos.add(moveAmount);
+  other.pos.sub(moveAmount);
+
+  let v1n = this.vel.dot(normal);
+  let v2n = other.vel.dot(normal);
+
+  this.vel.add(normal.copy().mult((v2n - v1n) * COLLISION_STRENGTH.value()));
+  other.vel.add(normal.copy().mult((v1n - v2n) * COLLISION_STRENGTH.value()));
+}
+</code></pre>
+<p>First, the overlap is resolved by pushing both balls apart equally. Then the velocity components along the normal are projected using dot products and exchanged. This gives convincing billiard-ball style collisions.</p>
+<p>The collision detection is O(n²) — every ball checks every other ball. This is fine for a few hundred balls but would need a spatial hash or quadtree to scale further.</p>
+<h2>Mouse Repulsion</h2>
+<p>Holding the mouse button pushes nearby balls away. The force falls off linearly within an 80px radius.</p>
+<pre><code class="language-js">applyMouseRepulsion() {
+  let fromMouse = p5.Vector.sub(this.pos, createVector(mouseX, mouseY));
+  let distance = fromMouse.mag();
+  let radius = 80;
+  if (distance &lt; radius) {
+    fromMouse.normalize();
+    fromMouse.mult((1 - distance / radius) * PUSH_STRENGTH.value());
+    this.applyForce(fromMouse);
+  }
+}
+</code></pre>
+<p>Push strength is controlled by a slider. Clicking also spawns 8 new balls near the cursor each time.</p>
+<h2>Colour</h2>
+<p>The balls are coloured from a random album cover loaded from my music server. The image is resized to a low-res grid and each pixel&#39;s colour is assigned to a ball. After processing, the image is crushed to 1×1 and its luminance measured to set the background colour, so there&#39;s always decent contrast regardless of what loads.</p>
+<pre><code class="language-js">let luminance = (evaluateImg[0]*0.299 + evaluateImg[1]*0.587 + evaluateImg[2]*0.114) / 256;
+bgColor = luminance &gt; 0.5 ? 15 : 220;
+</code></pre>
+<p>As a fun bonus, holding any key activates a homing force that pulls each ball back toward its pixel&#39;s original position — so the whole thing can reassemble into the album cover.</p>
+<figure><img src="/assets/images/posts/y0fmcc2w2-1.gif" alt="Balls assembling to form the cover of Kanye West's My Beautiful Dark Twisted Fantasy" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/6P4YWtZ4v">https://editor.p5js.org/woojinJang_/sketches/6P4YWtZ4v</a></p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>
