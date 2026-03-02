@@ -73,7 +73,7 @@ applyForce(force){
 }
 </code></pre>
 <p>First, the overlap is resolved by pushing both balls apart equally. Then the velocity components along the normal are projected using dot products and exchanged. This gives convincing billiard-ball style collisions.</p>
-<p>The collision detection is O(n²) — every ball checks every other ball. This is fine for a few hundred balls but would need a spatial hash or quadtree to scale further.</p>
+<p>The collision detection is O(n²) every ball checks every other ball. This is fine for a few hundred balls but would need a spatial hash or quadtree to scale further.</p>
 <h2>Mouse Repulsion</h2>
 <p>Holding the mouse button pushes nearby balls away. The force falls off linearly within an 80px radius.</p>
 <pre><code class="language-js">applyMouseRepulsion() {
@@ -93,7 +93,7 @@ applyForce(force){
 <pre><code class="language-js">let luminance = (evaluateImg[0]*0.299 + evaluateImg[1]*0.587 + evaluateImg[2]*0.114) / 256;
 bgColor = luminance &gt; 0.5 ? 15 : 220;
 </code></pre>
-<p>As a fun bonus, holding any key activates a homing force that pulls each ball back toward its pixel&#39;s original position — so the whole thing can reassemble into the album cover.</p>
+<p>As a fun bonus, holding any key activates a homing force that pulls each ball back toward its pixel&#39;s original position so the whole thing can reassemble into the album cover.</p>
 <figure><img src="/assets/images/posts/y0fmcc2w2-1.gif" alt="Balls assembling to form the cover of Kanye West's My Beautiful Dark Twisted Fantasy" loading="lazy"><figcaption>Made using p5.js</figcaption></figure>
 <p><a href="https://editor.p5js.org/woojinJang_/sketches/6P4YWtZ4v">https://editor.p5js.org/woojinJang_/sketches/6P4YWtZ4v</a></p>
 <p>Thanks,<br>Woojin Jang</p>
