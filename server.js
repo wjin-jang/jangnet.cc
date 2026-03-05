@@ -94,6 +94,27 @@ app.get('/api/randomcover', (req, res) => {
   res.sendFile(imgPath);
 });
 
+app.get('/api/randomsong', (req, res) => {
+  // Collect all tracks as {ai, ali, ti} references
+  const all = [];
+  for (let ai = 0; ai < library.length; ai++) {
+    const artist = library[ai];
+    for (let ali = 0; ali < artist.albums.length; ali++) {
+      const album = artist.albums[ali];
+      for (let ti = 0; ti < album.tracks.length; ti++) {
+        all.push({ ai, ali, ti });
+      }
+    }
+  }
+
+  if (all.length === 0) {
+    return res.status(404).json({ error: 'No tracks found' });
+  }
+
+  const pick = all[Math.floor(Math.random() * all.length)];
+  res.redirect(`/api/stream/${pick.ai}/${pick.ali}/${pick.ti}`);
+});
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'player', 'login.html'));
 });
