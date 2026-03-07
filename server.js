@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 
 const sharp = require('sharp');
+const ffmpeg = require('fluent-ffmpeg');
 const {
   requireAuth, requireAdmin, handleLogin, handleLogout,
   getAccountInfo, changePassword,
@@ -112,7 +113,24 @@ app.get('/api/randomsong', (req, res) => {
   }
 
   const pick = all[Math.floor(Math.random() * all.length)];
-  res.redirect(`/api/stream/${pick.ai}/${pick.ali}/${pick.ti}`);
+  const track = library[pick.ai].albums[pick.ali].tracks[pick.ti];
+
+  if (!validatePath(track.absolutePath, MUSIC_ROOT)) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'no-store' });
+
+  ffmpeg(track.absolutePath)
+    .noVideo()
+    .audioCodec('libmp3lame')
+    .audioBitrate('192k')
+    .format('mp3')
+    .on('error', (err) => {
+      console.error('ffmpeg error:', err.message);
+      if (!res.headersSent) res.status(500).json({ error: 'Conversion failed' });
+    })
+    .pipe(res, { end: true });
 });
 
 app.get('/login', (req, res) => {
