@@ -121,16 +121,19 @@ app.get('/api/randomsong', (req, res) => {
 
   res.set({ 'Content-Type': 'audio/mpeg', 'Cache-Control': 'no-store' });
 
-  ffmpeg(track.absolutePath)
+  const cmd = ffmpeg(track.absolutePath)
     .noVideo()
     .audioCodec('libmp3lame')
     .audioBitrate('192k')
     .format('mp3')
     .on('error', (err) => {
-      console.error('ffmpeg error:', err.message);
-      if (!res.headersSent) res.status(500).json({ error: 'Conversion failed' });
+      if (!err.message.includes('Output stream closed') && !err.message.includes('SIGKILL')) {
+        console.error('ffmpeg error:', err.message);
+      }
     })
     .pipe(res, { end: true });
+
+  res.on('close', () => cmd.ffmpegProc && cmd.ffmpegProc.kill('SIGKILL'));
 });
 
 app.get('/login', (req, res) => {
