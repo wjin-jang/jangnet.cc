@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Y0/FMCC2/W3 - Transformations – woojin's blog</title>
     <link rel="stylesheet" href="/assets/css/style.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
 </head>
 <body>
     <header class="site-header">
@@ -25,7 +33,7 @@
                 <div class="post-meta">March 2, 2026 · UAL, Year 0, FMCC2</div>
             </div>
             <div class="post-content">
-                <figure><img src="/assets/images/posts/y0fmcc2w3-0.gif" alt="A cube made of a volumetric grid of lines rotating, pulsing rainbow"><figcaption>Made using Three.js</figcaption></figure>
+                <figure><script type="module" src="main.js"></script><figcaption>Made using Three.js</figcaption></figure>
 <p>This week I&#39;ve been learning Three.js. The sketch is inspired by Vera Molnár&#39;s <em>Interruptions</em> (1969), one of her earliest computer-generated plotter drawings. In it, she fills a grid with line segments of equal length and applies random rotation to each one, creating a dense, chaotic field from an otherwise uniform structure. I wanted to explore the same idea but extended into three dimensions.</p>
 <h2>Setup</h2>
 <p>Every Three.js sketch needs three things: a scene, a camera, and a renderer.</p>
