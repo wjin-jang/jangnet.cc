@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W3 - Trigonometry – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W3 - Trigonometry</h1>
+                <div class="post-meta">March 11, 2026 · UAL, Year 0, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <figure><div id="threejs_animation"><script type="module" src="main.js"></script></div><figcaption>Made using Three.js</figcaption></figure>
+                <p>This week I am looking at making graphics with trig functions. </p>
+<p>I&#39;d like to make a splash effect, like a drop of water falling in a pond. I need to create geometry for every wave. I&#39;ll use a line geometry. I cosine and sine to get the coordinates of a circle given radius and angle. </p>
+<pre><code class="language-js">function createWaveGeometry( radius ) {
+  let points = [];
+  let circleResolution = 0.001;
+
+  for(let angle = 0; angle &lt; 2*Math.PI; angle += circleResolution){
+    let freq = 60;
+    let amp = 200/radius;
+    let period = 0;
+
+    let y = Math.sin(angle * freq + period) * amp;
+    let x = radius*Math.cos(angle);
+    let z = radius*Math.sin(angle);
+    
+    points.push( new THREE.Vector3( x , y , z ) );
+  }
+  
+  let geometry = new THREE.BufferGeometry().setFromPoints( points );
+  
+  return geometry
+}
+</code></pre>
+<p>I let the amplitude be a function inverse to the radius so that the amplitude falls off as it gets further from the centre. </p>
+<pre><code class="language-js">let waves = [];
+
+for(let x = 0; x &lt; 24; x++){
+  let geometry = createWaveGeometry( x*radiusMultiplier );
+  let material = createWaveMaterial( x*radiusMultiplier );
+  let wave = new THREE.Line( geometry, material );
+
+  scene.add( wave )
+  waves.push( {obj: wave, radius: x*radiusMultiplier } )
+}
+</code></pre>
+<p>I make an arbitrary number of waves, just based on what looks good.</p>
+<pre><code class="language-js">function createWaveMaterial( radius ) {
+  let material = new THREE.LineBasicMaterial( { color : `hsl(${radius*0.8}, 100%, 50%)` } );
+  return material;
+}
+</code></pre>
+<p>I set the wave colour based on its distance from the centre. This reflects something like an earthquake seismograph. </p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>
