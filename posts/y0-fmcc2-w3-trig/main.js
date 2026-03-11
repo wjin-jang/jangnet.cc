@@ -10,7 +10,6 @@ const renderWidth = document.getElementById("threejs_animation").clientWidth
 renderer.setSize( renderWidth, renderWidth*renderRatio );
 document.getElementById("threejs_animation").appendChild( renderer.domElement );
 
-const controls = new OrbitControls( camera, renderer.domElement );
 const radiusMultiplier = 12;
 
 let waves = [];
