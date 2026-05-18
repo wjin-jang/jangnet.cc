@@ -20,9 +20,9 @@ const margin = 50;
 const loader = new THREE.TextureLoader();
 
 const FLOCKS = [
-    { sprite: 'fish.png', count: 80 },
-    { sprite: 'goldfish.png', count: 80 },
-    { sprite: 'longfish.png', count: 80 },
+    { sprite: './assets/fish.png', count: 80 },
+    { sprite: './assets/goldfish.png', count: 80 },
+    { sprite: './assets/longfish.png', count: 80 },
 ];
 
 let allFish = [];
@@ -67,9 +67,8 @@ function createGradientBackground(stops) {
 
 scene.background = createGradientBackground([
     { color: '#161619', position: 0.0 },
-    { color: '#2F3C6A', position: 0.25 },
-    { color: '#455CAF', position: 0.5 },
-    { color: '#858A72', position: 0.6 },
+    { color: '#455CAF', position: 0.7 },
+    { color: '#858A72', position: 0.8 },
     { color: '#EBF4F5', position: 1.0 },
 ]);
 

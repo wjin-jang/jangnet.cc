@@ -116,7 +116,6 @@ separation(fishes) {
 <div class="header-row"><h2>Part Three</h2><h2>Applying Forces</h2></div>
 <p>Finally, the update method calls every function and adds their result to the acceleration. The mesh position is updated.</p>
 <pre><code class="language-js">update(fishes, tankSize) {
-
 	const alignment = this.alignment(fishes).multiplyScalar(1.5);
 	const cohesion = this.cohesion(fishes).multiplyScalar(1.0);
 	const separation = this.separation(fishes).multiplyScalar(1.5);
@@ -131,7 +130,7 @@ separation(fishes) {
 	this.acc.set(0, 0, 0);
 	
 	this.mesh.position.copy(this.pos);
-    }
+}
 </code></pre>
 <div class="header-row"><h2>Part Four</h2><h2>Multiple Flocks</h2></div>
 <p>I gave each fish a &#39;flock ID&#39; which determines its texture and behaviour. </p>

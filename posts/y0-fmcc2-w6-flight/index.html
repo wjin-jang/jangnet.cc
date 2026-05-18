@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y0/FMCC2/W6 - Flight – woojin's blog</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-title"><a href="/">woojin's blog</a></div>
+        <div class="site-subtitle">my creative works</div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About Me</a>
+            <a href="/archive/">Index</a>
+            <a href="/vinyls/">My Music</a>
+        </nav>
+    </header>
+    <main class="site-main">
+        <article>
+            <div class="post-header">
+                <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
+                <h1>Y0/FMCC2/W6 - Flight</h1>
+                <div class="post-meta">April 20, 2026 · UAL, Year 0, FMCC2</div>
+            </div>
+            <div class="post-content">
+                <figure><img src="/assets/images/posts/y0fmcc2w6-0.png" alt="A plane flying over an archipelago"><figcaption>Made using p5.js</figcaption></figure>
+<p>p5&#39;s noise function can take two coordinates and return a float value between 0 and 1. This value is interesting because it represents a smooth gradient. This lends itself well to terrain generation.</p>
+<pre><code class="language-js">function draw() {
+  background(220);
+  
+  for(let gx = 0; gx &lt; gridSizeX; gx++){
+    for(let gy = 0; gy &lt; gridSizeY; gy++){
+      let noiseScale = 0.1;
+      let img = img_water;
+      
+      if(noise(
+        (gx + player.mapX*0.1)*noiseScale,
+        (gy + player.mapY*0.1)*noiseScale) &gt; 0.6)
+      { img = img_beach }
+      if(noise(
+        (gx + player.mapX*0.1)*noiseScale,
+        (gy + player.mapY*0.1)*noiseScale) &gt; 0.65)
+      { img = img_tree }
+      
+      image(img,gx*gridelSize, gy*gridelSize);
+    }
+  }
+  player.step();
+  player.show();
+}
+</code></pre>
+<p>I iterate over a grid and determine whether to place water, sand or land using the noise function&#39;s output as a heightmap. The player&#39;s position is used to offset the noise function, to make it appear as if we are moving through the world.</p>
+<p><a href="https://editor.p5js.org/woojinJang_/sketches/72qR0m5ig">https://editor.p5js.org/woojinJang_/sketches/72qR0m5ig</a></p>
+<p>Thanks,<br>Woojin Jang</p>
+            </div>
+        </article>
+    </main>
+    <footer class="site-footer">
+        &copy; 2026 woojin jang
+    </footer>
+    <script src="/assets/js/code.js"></script>
+</body>
+</html>

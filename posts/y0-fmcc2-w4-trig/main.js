@@ -23,13 +23,10 @@ for(let x = 0; x < 24; x++){
   waves.push( {obj: wave, radius: x*radiusMultiplier } )
 }
 
-camera.position.x = 0.01;
-camera.position.y = 0.01;
-camera.position.z = 0.01;
+camera.position.set(200,100,200);
+camera.lookAt(0,-200,0);
 
 function animate( time ) {
-  camera.rotateY(0.001);
-  
   renderer.render( scene, camera );
 
   //console.log(`${camera.position.x} ${camera.position.y} ${camera.position.z}`)
