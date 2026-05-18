@@ -67,18 +67,16 @@ function createGradientBackground(stops) {
 
 scene.background = createGradientBackground([
     { color: '#161619', position: 0.0 },
-    { color: '#202539', position: 0.1 },
     { color: '#2F3C6A', position: 0.25 },
     { color: '#455CAF', position: 0.5 },
     { color: '#858A72', position: 0.6 },
-    { color: '#B8BFB4', position: 0.8 },
     { color: '#EBF4F5', position: 1.0 },
 ]);
 
 function animate() {
     allFish.forEach(fish => fish.update(allFish, TANK_SIZE));
     //controls.update();
-    renderer.render(scene, camera);   // ← replaces renderer.render(scene, camera)
+    renderer.render(scene, camera);
 }
 
 renderer.setAnimationLoop(animate);

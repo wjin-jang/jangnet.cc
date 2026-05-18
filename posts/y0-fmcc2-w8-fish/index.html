@@ -36,6 +36,185 @@
             <div class="post-content">
                 <figure><div id="threejs_animation"><script type="module" src="main.js"></script></div><figcaption>Made using Three.js</figcaption></figure>
 <p>I created a fish tank simulation in Three.js using the principles of boids. The fish have alignment, separation, cohesion and avoidance behaviours. </p>
+<div class="header-row"><h2>Part One</h2><h2>Creating A Class</h2></div>
+<p>I made a fish class to act as a boid. It has position, velocity and acceleration all using Three.js&#39; Vector3.</p>
+<pre><code class="language-js">export class Fish {
+	constructor(pos) {
+		this.pos = pos;
+		this.vel = new THREE.Vector3(
+			(Math.random() - 0.5) * 2,
+			(Math.random() - 0.5) * 2,
+			(Math.random() - 0.5) * 2
+		);
+		this.acc = new THREE.Vector3(0, 0, 0);
+	}
+}
+</code></pre>
+<p>I gave the fish a flat plane geometry and basic textured material.</p>
+<pre><code class="language-js">this.geometry = new THREE.PlaneGeometry(9, 4);
+this.material = new THREE.MeshBasicMaterial({
+	map: texture,
+	transparent: true,
+	alphaTest: 0.1,
+	side: THREE.DoubleSide
+});
+
+this.mesh = new THREE.Mesh(this.geometry, this.material);
+this.mesh.position.copy(this.pos);
+</code></pre>
+<div class="header-row"><h2>Part Two</h2><h2>Calculating Forces</h2></div>
+<p>I created methods to calculate the alignment, cohesion, and separation forces. All three require iterating through all other fishes, which does pose some performance concerns. At a smaller number of fishes it should perform fine. </p>
+<pre><code class="language-js">alignment(fishes) {
+	const neighbours = this._neighbours(fishes);
+	if (!neighbours.length) return new THREE.Vector3();
+	
+	const steering = new THREE.Vector3();
+	neighbours.forEach(f =&gt; steering.add(f.vel));
+	steering.divideScalar(neighbours.length);
+	steering.setLength(MAX_SPEED);
+	steering.sub(this.vel);
+	steering.clampLength(0, MAX_FORCE);
+	return steering;
+}
+
+  
+
+cohesion(fishes) {
+	const neighbours = this._neighbours(fishes);
+	if (!neighbours.length) return new THREE.Vector3();
+	
+	const steering = new THREE.Vector3();
+	neighbours.forEach(f =&gt; steering.add(f.pos));
+	steering.divideScalar(neighbours.length);
+	steering.sub(this.pos);
+	steering.setLength(MAX_SPEED);
+	steering.sub(this.vel);
+	steering.clampLength(0, MAX_FORCE);
+	return steering;
+}
+
+  
+
+separation(fishes) {
+	const neighbours = this._neighbours(fishes);
+	if (!neighbours.length) return new THREE.Vector3();
+	
+	const steering = new THREE.Vector3();
+	neighbours.forEach(f =&gt; {
+			const d = this.pos.distanceTo(f.pos);
+			const diff = new THREE.Vector3().subVectors(this.pos, f.pos);
+			diff.divideScalar(d * d);
+			steering.add(diff);
+	});
+	steering.divideScalar(neighbours.length);
+	steering.setLength(MAX_SPEED);
+	steering.sub(this.vel);
+	steering.clampLength(0, MAX_FORCE);
+	return steering;
+}
+</code></pre>
+<div class="header-row"><h2>Part Three</h2><h2>Applying Forces</h2></div>
+<p>Finally, the update method calls every function and adds their result to the acceleration. The mesh position is updated.</p>
+<pre><code class="language-js">update(fishes, tankSize) {
+
+	const alignment = this.alignment(fishes).multiplyScalar(1.5);
+	const cohesion = this.cohesion(fishes).multiplyScalar(1.0);
+	const separation = this.separation(fishes).multiplyScalar(1.5);
+	
+	this.acc
+		.add(alignment)
+		.add(cohesion)
+		.add(separation);
+	
+	this.vel.add(this.acc).clampLength(0, MAX_SPEED);
+	this.pos.add(this.vel);
+	this.acc.set(0, 0, 0);
+	
+	this.mesh.position.copy(this.pos);
+    }
+</code></pre>
+<div class="header-row"><h2>Part Four</h2><h2>Multiple Flocks</h2></div>
+<p>I gave each fish a &#39;flock ID&#39; which determines its texture and behaviour. </p>
+<pre><code class="language-js">_neighbours(fishes) {
+	// Same flock only
+	return fishes.filter(f =&gt; f !== this
+		&amp;&amp; f.flockId === this.flockId
+		&amp;&amp; this.pos.distanceTo(f.pos) &lt; PERCEPTION_RADIUS);
+}
+
+_outsiders(fishes) {
+	// Different flocks within a larger radius	
+	return fishes.filter(f =&gt; f.flockId !== this.flockId
+		&amp;&amp; this.pos.distanceTo(f.pos) &lt; PERCEPTION_RADIUS * 1.5);
+}
+</code></pre>
+<p>The FIsh object gets a method to determine its neighbours and outsiders given all fishes. Now, it only iterates through its neighbours and an additional function is added to make it avoid outsiders.</p>
+<pre><code class="language-js">avoidOtherFlocks(fishes) {
+	const outsiders = this._outsiders(fishes);
+	if (!outsiders.length) return new THREE.Vector3();
+	
+	const steering = new THREE.Vector3();
+	outsiders.forEach(f =&gt; {
+		const d = this.pos.distanceTo(f.pos);
+		const diff = new THREE.Vector3().subVectors(this.pos, f.pos);
+		diff.divideScalar(d * d);
+		steering.add(diff);
+	});
+	steering.divideScalar(outsiders.length);
+	steering.setLength(MAX_SPEED);
+	steering.sub(this.vel);
+	steering.clampLength(0, MAX_FORCE * 2);  
+	return steering;
+}
+
+avoidWalls(tankSize) {
+	const margin = 50;
+	const force = MAX_FORCE * 3;
+	const steering = new THREE.Vector3();
+	
+	if (this.pos.x &lt; margin) steering.x += force * (1 - this.pos.x / margin);
+	if (this.pos.x &gt; tankSize.x - margin) steering.x -= force * (1 - (tankSize.x - this.pos.x) / margin);
+	if (this.pos.y &lt; margin) steering.y += force * (1 - this.pos.y / margin);
+	if (this.pos.y &gt; tankSize.y - margin) steering.y -= force * (1 - (tankSize.y - this.pos.y) / margin);
+	if (this.pos.z &lt; margin) steering.z += force * (1 - this.pos.z / margin);
+	if (this.pos.z &gt; tankSize.z - margin) steering.z -= force * (1 - (tankSize.z - this.pos.z) / margin);
+
+	return steering;
+}
+</code></pre>
+<p>I also added a function to avoid walls. This force gets stronger the closer the fish gets to the wall. </p>
+<div class="header-row"><h2>Part Five</h2><h2>Background</h2></div>
+<p>I created a function to make a gradient texture to use as the background. This function takes structs of position and colour and adds them as stops, creating a smooth gradient between colours.</p>
+<pre><code class="language-js">function createGradientBackground(stops) {
+	const canvas = document.createElement(&#39;canvas&#39;);
+	canvas.width = 1;
+	canvas.height = 256;
+	
+	const ctx = canvas.getContext(&#39;2d&#39;);
+	const gradient = ctx.createLinearGradient(0, 0, 0, 256);
+	
+	stops.forEach(stop =&gt; {
+		gradient.addColorStop(stop.position, stop.color);
+	});
+	
+	ctx.fillStyle = gradient;
+	ctx.fillRect(0, 0, 1, 256);
+	
+	const texture = new THREE.CanvasTexture(canvas);
+	texture.colorSpace = THREE.SRGBColorSpace;
+	texture.minFilter = THREE.LinearFilter;
+	
+	return texture;
+}
+
+scene.background = createGradientBackground([
+	{ color: &#39;#161619&#39;, position: 0.0 },
+	{ color: &#39;#2F3C6A&#39;, position: 0.25 },
+	{ color: &#39;#455CAF&#39;, position: 0.5 },
+	{ color: &#39;#858A72&#39;, position: 0.6 },
+	{ color: &#39;#EBF4F5&#39;, position: 1.0 },
+]);
+</code></pre>
 <p>Thanks,<br>Woojin Jang</p>
             </div>
         </article>

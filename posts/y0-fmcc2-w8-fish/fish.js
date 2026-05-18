@@ -7,7 +7,6 @@ const MAX_FORCE = 0.05;
 export class Fish {
     constructor(pos, flockId, texture) {
         this.pos = pos;
-        this.flockId = flockId;
         this.vel = new THREE.Vector3(
             (Math.random() - 0.5) * 2,
             (Math.random() - 0.5) * 2,
@@ -15,6 +14,8 @@ export class Fish {
         );
         this.acc = new THREE.Vector3(0, 0, 0);
 
+        this.flockId = flockId;
+        
         this.geometry = new THREE.PlaneGeometry(9, 4);
         this.material = new THREE.MeshBasicMaterial({
             map: texture,
@@ -117,8 +118,6 @@ export class Fish {
 
         return steering;
     }
-
-    // ── Update ─────────────────────────────────────────────────────────────────
 
     update(fishes, tankSize) {
         const alignment = this.alignment(fishes).multiplyScalar(1.5);
