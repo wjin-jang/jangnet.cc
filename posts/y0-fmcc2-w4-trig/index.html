@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y0/FMCC2/W3 - Trigonometry – woojin's blog</title>
+    <title>Y0/FMCC2/W4 - Trigonometry – woojin's blog</title>
     <link rel="stylesheet" href="/assets/css/style.css">
-    <script type="importmap">
+        <script type="importmap">
       {
         "imports": {
           "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
@@ -13,6 +13,7 @@
         }
       }
     </script>
+
 </head>
 <body>
     <header class="site-header">
@@ -29,12 +30,12 @@
         <article>
             <div class="post-header">
                 <a href="/" onclick="if(history.length>1){history.back();return false}" class="back-link"><img src="/assets/images/icons/exit.png" alt="Back"></a>
-                <h1>Y0/FMCC2/W3 - Trigonometry</h1>
+                <h1>Y0/FMCC2/W4 - Trigonometry</h1>
                 <div class="post-meta">March 11, 2026 · UAL, Year 0, FMCC2</div>
             </div>
             <div class="post-content">
                 <figure><div id="threejs_animation"><script type="module" src="main.js"></script></div><figcaption>Made using Three.js</figcaption></figure>
-                <p>This week I am looking at making graphics with trig functions. </p>
+<p>This week I am looking at making graphics with trig functions. </p>
 <p>I&#39;d like to make a splash effect, like a drop of water falling in a pond. I need to create geometry for every wave. I&#39;ll use a line geometry. I cosine and sine to get the coordinates of a circle given radius and angle. </p>
 <pre><code class="language-js">function createWaveGeometry( radius ) {
   let points = [];

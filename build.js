@@ -39,6 +39,7 @@ function resolveImageHref(href) {
 
 // Track image count per render for lazy loading
 let imageIndex = 0;
+let hasThreeJs = false;
 
 const renderer = {
     // Custom heading: "## Title | Subtitle" → header-row div
@@ -72,6 +73,22 @@ const renderer = {
 };
 
 marked.use({ renderer, breaks: true });
+marked.use({
+    extensions: [{
+        name: 'threejs',
+        level: 'block',
+        start(src) { return src.indexOf('!THREEjs'); },
+        tokenizer(src) {
+            if (src.startsWith('!THREEjs')) {
+                return { type: 'threejs', raw: '!THREEjs' };
+            }
+        },
+        renderer() {
+            hasThreeJs = true;
+            return `<figure><div id="threejs_animation"><script type="module" src="main.js"><\/script></div><figcaption>Made using Three.js</figcaption></figure>\n`;
+        }
+    }]
+});
 
 // ── Templates ───────────────────────────────────────────────────────
 
@@ -85,6 +102,14 @@ function formatDate(iso) {
 function postTemplate(meta, contentHtml) {
     const dateStr = formatDate(meta.date);
     const tagsStr = meta.tags.join(', ');
+    const importMap = hasThreeJs ? `    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>\n` : '';
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,6 +117,7 @@ function postTemplate(meta, contentHtml) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${meta.title} \u2013 woojin's blog</title>
     <link rel="stylesheet" href="/assets/css/style.css">
+    ${importMap}
 </head>
 <body>
     <header class="site-header">
@@ -198,8 +224,9 @@ for (const post of posts) {
     ensureDir(outDir);
 
     imageIndex = 0;
+    hasThreeJs = false;
     const html = marked.parse(post.content);
-    const fullHtml = postTemplate(post.meta, html);
+    const fullHtml = postTemplate(post.meta, html, hasThreeJs);
 
     fs.writeFileSync(path.join(outDir, 'index.html'), fullHtml, 'utf-8');
     console.log(`  post: ${slug}`);

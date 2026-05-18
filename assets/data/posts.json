@@ -1,7 +1,17 @@
 [
     {
-        "slug": "y0-fmcc2-w3-trig",
-        "title": "Y0/FMCC2/W3 - Trigonometry",
+        "slug": "y0-fmcc2-w8-fish",
+        "title": "Y0/FMCC2/W8 - Fish",
+        "date": "2026-05-18",
+        "tags": [
+            "UAL",
+            "Year 0",
+            "FMCC2"
+        ]
+    },
+    {
+        "slug": "y0-fmcc2-w4-trig",
+        "title": "Y0/FMCC2/W4 - Trigonometry",
         "date": "2026-03-11",
         "tags": [
             "UAL",
