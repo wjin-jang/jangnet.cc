@@ -50,16 +50,6 @@
         ]
     },
     {
-        "slug": "personal-end-of-1st-semester",
-        "title": "Personal/End of First Semester",
-        "date": "2026-02-26",
-        "tags": [
-            "Personal",
-            "FMCC",
-            "ICP"
-        ]
-    },
-    {
         "slug": "y0-icop-w2-cybernetics",
         "title": "Y0/ICoP/W2 - Cybernetics",
         "date": "2026-02-24",
@@ -175,15 +165,6 @@
         "tags": [
             "Life",
             "Personal"
-        ]
-    },
-    {
-        "slug": "personal-nes-os",
-        "title": "Personal/Art/NES OS",
-        "date": "2025-10-01",
-        "tags": [
-            "Personal",
-            "art"
         ]
     },
     {
